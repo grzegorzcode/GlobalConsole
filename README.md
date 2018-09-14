@@ -30,7 +30,7 @@ Documentation
 Please take a look into ``docs`` directory. You will find everything you need. 
 Online version:
 
-`https://grzegorzcode.github.io/GlobalConsole <https://grzegorzcode.github.io/GlobalConsole>`_ 
+[https://grzegorzcode.github.io/GlobalConsole](https://grzegorzcode.github.io/GlobalConsole) 
 
 ----------------
 Installation 
