@@ -1,0 +1,3 @@
+credname,username,password,/path/to/key,key_password,key,no,GC_KEY
+credname2,username2,password2,,,password,no,GC_KEY
+credname3,username3,password3,,,password,no,GC_KEY

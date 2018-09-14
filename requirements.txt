@@ -1,0 +1,9 @@
+colorama
+inquirer
+openpyxl
+paramiko
+pycrypto
+pycryptodome
+scp
+tabulate
+tinydb

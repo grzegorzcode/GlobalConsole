@@ -1,0 +1,7 @@
+globalconsole
+=============
+
+.. toctree::
+   :maxdepth: 4
+
+   globalconsole

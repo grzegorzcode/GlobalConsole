@@ -1,0 +1,20 @@
+conn connect -Y
+#
+check set 43G  8.0G
+check show
+run os df -h /tmp
+#
+check set sda2
+check show
+run os df -h /tmp
+#
+check set /root -r
+check show
+run os pwd
+#
+run os hostname
+#
+run os whoami
+#
+conn close -Y
+

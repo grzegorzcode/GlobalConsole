@@ -1,0 +1,6 @@
+conn connect -Y
+var show -r
+var edit -V table -v sysibm.sysdummy1
+var show -r
+run db2 select * from {{table}}
+conn close -Y

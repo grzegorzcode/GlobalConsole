@@ -1,0 +1,1836 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to GlobalConsole’s documentation! &#8212; GlobalConsole v2.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-globalconsole-s-documentation">
+<h1>Welcome to GlobalConsole’s documentation!<a class="headerlink" href="#welcome-to-globalconsole-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<hr class="docutils" />
+<p>GlobalConsole</p>
+<hr class="docutils" />
+<p>GlobalConsole is a tool designed to run commands on many Linux/Unix machines at the same time.
+What distinguishes GlobalConsole from similar software is ability to handle DB2 database environments.
+You can:</p>
+<ul class="simple">
+<li>run os commands</li>
+<li>run db2 specific commands</li>
+<li>use scp over connected servers</li>
+</ul>
+<p>It’s worth to mention, also:</p>
+<ul class="simple">
+<li><strong>multithreaded</strong></li>
+<li>stored passwords can be encrypted</li>
+<li>output of command can be saved within <strong>excel</strong> or <strong>csv</strong> file</li>
+<li>hosts can be picked up using visual editor</li>
+<li>local shell commands are supported</li>
+<li>history of invoked commands is persistent over sessions</li>
+<li>custom variables can be set to improve productivity</li>
+<li>batch mode with checking output’s results is available</li>
+<li>docker scripts to build and run GlobalConsole are provided</li>
+</ul>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>GlobalConsole can be installed on Linux, Windows, OSX.</p>
+<ul class="simple">
+<li>Linux : supports both venv and docker path</li>
+<li>Windows : supports docker path (needs testing and custom <code class="docutils literal notranslate"><span class="pre">gDockerBuild.sh</span></code> and <code class="docutils literal notranslate"><span class="pre">gDockerRun.sh</span></code> scripts)</li>
+<li>OSX : supports both venv and docker path</li>
+</ul>
+<div class="section" id="docker">
+<h3>docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
+<p>GlobalConsole was made with Docker in mind.
+Every release has its own <em>Dockerfile</em>. You don’t have to install all required packages at your workstation.</p>
+<p>To successfully put GlobalConsole in a container:</p>
+<ol class="arabic simple">
+<li>move all files to a desired directory, for example:</li>
+</ol>
+<p><em>/home/user/DockerVMs/GlobalConsole/GC</em></p>
+<ol class="arabic simple" start="2">
+<li>build your image (provided Dockerfile will be used) using <code class="docutils literal notranslate"><span class="pre">gDockerBuild.sh</span></code> script or change its content to your needs:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./gDockerBuild.sh
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">File <strong>Dockerfile</strong> will be used.</p>
+</div>
+<p>you should get something like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker images
+REPOSITORY                   TAG                 IMAGE ID            CREATED              SIZE
+global_console               v2.0.0              35f57b7c4918        <span class="m">16</span> seconds ago       710MB
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>run container using <code class="docutils literal notranslate"><span class="pre">gDockerRun.sh</span></code> script or change its content to your needs:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./gDockerRun.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>use executable <code class="docutils literal notranslate"><span class="pre">GlobalConsole</span></code> to work with GlobalConsole</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">remember to set <strong>GC_KEY</strong> env variable to encrypt/decrypt passwords before starting GlobalConsole
+example: export GC_KEY=MySecretPass</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">GC_KEY</span><span class="o">=</span>MySecretPass
+$ GlobalConsole
+</pre></div>
+</div>
+<p>We start container with volume option, so all changes will be persistent.
+However, your secret_key is save - container session will be removed every single time.</p>
+<p>–</p>
+<p>If you want to remove an old version, simply:</p>
+<ol class="arabic simple">
+<li>remove directory with source directory</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">you may want to copy your important files; content of directories:
+batch, config, creds, download, hosts, logs, spool, upload, vars</p>
+</div>
+<ol class="arabic simple" start="2">
+<li>find you image</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker images
+REPOSITORY                   TAG                 IMAGE ID            CREATED             SIZE
+global_console               v2.0.0              86f270035c22        About an hour ago   728MB
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>delete image</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker rmi 86f270035c22
+</pre></div>
+</div>
+</div>
+<div class="section" id="venv">
+<h3>venv<a class="headerlink" href="#venv" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>install latest python3 (and python3-dev(el) package)</li>
+<li>move all files to a desired directory, for example:</li>
+</ol>
+<p><em>/home/user/DockerVMs/GlobalConsole/GC</em></p>
+<ol class="arabic simple" start="3">
+<li>create python3 virtual environment</li>
+</ol>
+<p>more info <a class="reference external" href="https://docs.python.org/3/library/venv.html">https://docs.python.org/3/library/venv.html</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /home/user/DockerVMs/GlobalConsole/GC/
+
+mkdir venv
+
+python3 -m venv /home/user/DockerVMs/GlobalConsole/GC/venv
+
+<span class="nb">source</span> venv/bin/activate
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>install all required packages</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install -r requirements.txt
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>start GlobalConsole</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /home/user/DockerVMs/GlobalConsole/GC
+
+<span class="nb">source</span> venv/bin/activate
+
+<span class="nb">unset</span> HISTFILE
+
+<span class="nb">export</span> <span class="nv">GC_KEY</span><span class="o">=</span>MySecretPass
+
+./GlobalConsole
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">unset</span> <span class="pre">HISTFILE</span></code> is to disable shell history for a session, therefore your GC_KEY will not be stored</p>
+<p class="last">you can put commands from point 5 to a runnable script</p>
+</div>
+</div>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>You need a simple setup to start using GlobalConsole.</p>
+<p>1. Create csv file with definitions of credentials.
+The file will be called <em>credsVM.csv</em> to end of this chapter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rootVM,root,MySuperPass,/path/to/key,key_password,password,no,GC_KEY
+</pre></div>
+</div>
+<p>where fields means:</p>
+<ul class="simple">
+<li>rootVM : credential’s chosen name</li>
+<li>root : user’s name</li>
+<li>MySuperPass : user’s password</li>
+<li>/path/to/key : path to your ssh private key. make path visible or copy file to <code class="docutils literal notranslate"><span class="pre">creds</span></code> directory if using docker</li>
+<li>key_password : password to ssh private key</li>
+<li>password: should GlobalConsole use <em>password</em> or <em>key</em> as a connection method</li>
+<li>no : is password encrypted</li>
+<li>GC_KEY : name of the bash environmental variable, that will be used to encrypt credentials</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>creds</strong> directory seems to be a good place to store this file</p>
+</div>
+<p>2. Create csv file with definitions of hosts.
+The file will be called <em>hostsVM.csv</em> to end of this chapter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>myhost1,192.168.57.101,22,rootVM,VM
+myhost2,192.168.56.102,22,rootVM,VM
+</pre></div>
+</div>
+<p>where fields means (based on the first row):</p>
+<ul class="simple">
+<li>myhost1 : host’s chosen name</li>
+<li>192.168.57.101 : host’s ip</li>
+<li>22 : host’s ssh port</li>
+<li>rootVM : name of a credential. <strong>it has to be a valid credential’s chosen name</strong>, please take a look on step 1 for more details</li>
+<li>VM : host’s chosen name of a group.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>hosts</strong> directory seems to be a good place to store this file</p>
+</div>
+<ol class="arabic simple" start="3">
+<li>Set your encryption key, start GC and import created files</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">GC_KEY</span><span class="o">=</span>MyEncryptPass
+
+$ GlobalConsole
+
+gc&gt; cred import -f creds/credsVM.csv
+
+gc&gt; cred show
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">1</span> │ rootVM     │ root       │ ********   │ /path/to/key │ ********       │ password │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+
+gc&gt; host import -f hosts/hostsVM.csv
+
+gc&gt; host show
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">1</span> │ myhost1    │ <span class="m">192</span>.168.57.101 │     <span class="m">22</span> │ VM      │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">2</span> │ myhost2    │ <span class="m">192</span>.168.56.102 │     <span class="m">22</span> │ VM      │ rootVM     │ no        │
+╘══════╧════════════╧════════════════╧════════╧═════════╧════════════╧═══════════╛
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>use <code class="docutils literal notranslate"><span class="pre">help</span></code> to see all available commands. every command has help at every level, check:</p>
+<p>gc&gt; help</p>
+<p>gc&gt; cred -h</p>
+<p class="last">gc&gt; cred update -h</p>
+</div>
+<ol class="arabic simple" start="4">
+<li>Connect to hosts, run os command, scan db2 infrastructure, run db2 command</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn connect -Y
+successfully connected to: <span class="m">192</span>.168.57.101 using password
+successfully connected to: <span class="m">192</span>.168.56.102 using password
+myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span> says: localhost.localdomain
+myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span> says: localhost.localdomain
+
+gc&gt; run os  ls -la /tmp <span class="p">|</span> wc -l
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">27</span>
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">23</span>
+
+gc&gt; run scan -Y
+group: VM id: 5645848e-8cd4-5ff5-87fe-2a906d660aa0
+    --host: myhost1 id: 3cd7926b-dbe7-5b70-ba27-d3a386fb5fe5
+        --install: /opt/ibm/db2/V10.5 id: dc388c45-a205-5c5b-a8ec-5232d3ce3eae
+            --instance: db2inst1 id: 70683dff-e5a7-54f6-b7ec-12544d0dab47
+                --db: TEST id: e1936ead-44ef-508a-942a-005bedd3cf78
+                --db: TEST2 id: af2762ee-ac69-5189-ab87-a39545f2a5e2
+            --instance: cogpi id: 65c3a425-c564-5ae8-a70e-dc58d6117576
+                --db: TEST3 id: b4f128ba-4efc-58d7-99a2-41aee7e9a457
+    --host: myhost2 id: e411ae67-8526-5d18-b05a-b5e57b486a6a
+        --install: /opt/ibm/db2/V10.5 id: 7d1c87c7-db3d-590b-a0a9-1cc22c18b674
+            --instance: db2inst1 id: d2f3792d-b148-5127-b7af-1c95d0fa1489
+                --db: TEST id: <span class="m">72210296</span>-5358-5dd5-96c1-21a4473d2a22
+                --db: TEST2 id: 4ccfe200-5ce8-5070-a904-fbc43dedf353
+            --instance: cogpi id: 77e31b62-e1a4-5d82-a67e-bd6195661291
+                --db: TEST3 id: 1fa645c2-69cc-5026-8a5b-67804cee9eb9
+
+gc&gt; run db2 <span class="k">select</span> * from sysibm.sysdummy1
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+....
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Exit program</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">exit</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">you can use <strong>quit</strong>, also</p>
+</div>
+</div>
+<div class="section" id="credentials">
+<h2>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred
+usage: cred &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+work with credentials
+
+positional arguments:
+  <span class="o">{</span>import,update,rem,purge,show,export,encrypt,decrypt<span class="o">}</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can manage your credentials with <code class="docutils literal notranslate"><span class="pre">cred</span></code> command.
+credentials are being stored in <strong>creds/creds.json</strong> file by default.</p>
+<div class="section" id="import-import-csv-file-with-definitions-of-credentials">
+<h3>import : import csv file with definitions of credentials<a class="headerlink" href="#import-import-csv-file-with-definitions-of-credentials" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred import -f creds/credsVM.csv
+</pre></div>
+</div>
+<p><strong>csv file must follow format(no headers):</strong></p>
+<p><strong>credname,username,password,path_to_key,key_password,use_password_or_key, encrypted_yes_or_no,env_var_used_to_encrypt</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>valid options for field <strong>use_password_or_key</strong> : password | key</li>
+<li>if field, for example path_to_key, is empty, use empty string : ..,password,,,use_password_or_key..</li>
+</ul>
+</div>
+<p>Sample file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rootVM,root,MySuperPass,/path/to/key,key_password,password,no,GC_KEY
+usrVM,usr,MyUberPass,/path/to/key,PassToKey,key,no,GC_KEY
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">cred</span> <span class="pre">import</span></code> uses <code class="docutils literal notranslate"><span class="pre">upsert</span></code> operation, so can be used as a global update.
+If given <strong>credname</strong> doesn’t exist, will be added.
+If does exist, all parameters will be updated for this <strong>credname</strong>.</p>
+</div>
+</div>
+<div class="section" id="update-update-definition-of-credential">
+<h3>update : update definition of credential<a class="headerlink" href="#update-update-definition-of-credential" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred show
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">1</span> │ rootVM     │ root       │ ********   │ /path/to/key │ ********       │ password │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+active connections: <span class="m">0</span>
+gc&gt; cred update -c rootVM -p use -v key
+active connections: <span class="m">0</span>
+gc&gt; cred show
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤═══════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use   │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪═══════╪═════════════╪══════════════════╡
+│    <span class="m">1</span> │ rootVM     │ root       │ ********   │ /path/to/key │ ********       │ key   │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧═══════╧═════════════╧══════════════════╛
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">use <code class="docutils literal notranslate"><span class="pre">cred</span> <span class="pre">show</span></code> output headers to obtain names of parameters to change. field <code class="docutils literal notranslate"><span class="pre">id</span></code> is invalid, however</p>
+</div>
+</div>
+<div class="section" id="rem-remove-selected-credential-credname">
+<h3>rem : remove selected credential (credname)<a class="headerlink" href="#rem-remove-selected-credential-credname" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred rem -c rootVM
+</pre></div>
+</div>
+</div>
+<div class="section" id="purge-purge-all-credentials">
+<h3>purge : purge all credentials<a class="headerlink" href="#purge-purge-all-credentials" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred purge -Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="show-show-stored-credentials">
+<h3>show : show stored credentials<a class="headerlink" href="#show-show-stored-credentials" title="Permalink to this headline">¶</a></h3>
+<p>You can hide or show passwords, reverse order of sorting, and choose sorting fields.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred show
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">1</span> │ credname   │ username   │ ********   │ /path/to/key │ ********       │ key      │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">2</span> │ credname2  │ username2  │ ********   │              │ ********       │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">3</span> │ credname3  │ username3  │ ********   │              │ ********       │ password │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+gc&gt; cred show -e
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">1</span> │ credname   │ username   │ password   │ /path/to/key │ key_password   │ key      │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">2</span> │ credname2  │ username2  │ password2  │              │                │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">3</span> │ credname3  │ username3  │ password3  │              │                │ password │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+gc&gt; cred show -e -r
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">3</span> │ credname3  │ username3  │ password3  │              │                │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">2</span> │ credname2  │ username2  │ password2  │              │                │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">1</span> │ credname   │ username   │ password   │ /path/to/key │ key_password   │ key      │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+gc&gt; cred show -e -r -f use username
+╒══════╤════════════╤════════════╤════════════╤══════════════╤════════════════╤══════════╤═════════════╤══════════════════╕
+│   id │ credname   │ username   │ password   │ key          │ key_password   │ use      │ encrypted   │ secret_env_key   │
+╞══════╪════════════╪════════════╪════════════╪══════════════╪════════════════╪══════════╪═════════════╪══════════════════╡
+│    <span class="m">3</span> │ credname3  │ username3  │ password3  │              │                │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">2</span> │ credname2  │ username2  │ password2  │              │                │ password │ no          │ GC_KEY           │
+├──────┼────────────┼────────────┼────────────┼──────────────┼────────────────┼──────────┼─────────────┼──────────────────┤
+│    <span class="m">1</span> │ credname   │ username   │ password   │ /path/to/key │ key_password   │ key      │ no          │ GC_KEY           │
+╘══════╧════════════╧════════════╧════════════╧══════════════╧════════════════╧══════════╧═════════════╧══════════════════╛
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>use output headers to obtain names of parameters to sort on. field <code class="docutils literal notranslate"><span class="pre">id</span></code> is invalid, however</p>
+<p>if no sorting fields, <strong>username</strong> is default</p>
+<p class="last">you can change default table format in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">logging_tab_fmt</span></code></p>
+</div>
+</div>
+<div class="section" id="export-export-definitions-of-credentials-to-csv-file">
+<h3>export : export definitions of credentials to csv file<a class="headerlink" href="#export-export-definitions-of-credentials-to-csv-file" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred <span class="nb">export</span> -f creds/credsExport.csv
+successfully exported to creds/credsExport.csv
+</pre></div>
+</div>
+<p>Format is the same as for <code class="docutils literal notranslate"><span class="pre">cred</span> <span class="pre">import</span></code>.</p>
+</div>
+<div class="section" id="encrypt-encrypt-stored-credentials">
+<h3>encrypt : encrypt stored credentials<a class="headerlink" href="#encrypt-encrypt-stored-credentials" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You have to set environmental variable as a encryption/decryption master key.
+Otherwise you will be prompted during operation to provide one.
+Default is <code class="docutils literal notranslate"><span class="pre">GC_KEY</span></code>, use <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">GC_KEY=YourPass</span></code> before starting GlobalConsole.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred encrypt -Y
+secret key successfully entered using GC_KEY env variable
+ALL NOT ENCRYPTED PASSWORDS WILL BE AFFECTED, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+answer: Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="decrypt-decrypt-stored-credentials">
+<h3>decrypt : decrypt stored credentials<a class="headerlink" href="#decrypt-decrypt-stored-credentials" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; cred decrypt -Y
+ALL ENCRYPTED PASSWORDS WILL BE VISIBLE AS PLAIN TEXT, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+answer: Y
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="hosts">
+<h2>Hosts<a class="headerlink" href="#hosts" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host
+usage: host &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+work with hosts
+
+positional arguments:
+  <span class="o">{</span>import,update,rem,purge,pick,show,export<span class="o">}</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can manage your hosts with <code class="docutils literal notranslate"><span class="pre">host</span></code> command.
+hosts are being stored in <strong>hosts/hosts.json</strong> file by default.</p>
+<div class="section" id="import-import-csv-file-with-definitions-of-hosts">
+<h3>import : import csv file with definitions of hosts<a class="headerlink" href="#import-import-csv-file-with-definitions-of-hosts" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host import -f hosts/hosts.csv
+</pre></div>
+</div>
+<p><strong>csv file must follow format(no headers):</strong></p>
+<p><strong>hostname,ip/host,port,credential_name,group</strong></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">value of field <strong>credential_name</strong> should correspond to defined credentials</p>
+</div>
+<p>Sample file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>myhost3,192.168.57.101,22,myuser,default
+myhost4,192.168.56.102,22,rootVM,default
+myhost5,192.168.56.102,2222,myuser,default
+myhost2,192.168.56.11,22,rootVM,QAL
+myhost1,192.168.56.103,22,myuser,QAA
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">import</span></code> uses <code class="docutils literal notranslate"><span class="pre">upsert</span></code> operation, so can be used as a global update.
+If given <strong>hostname</strong> doesn’t exist, will be added.
+If does exist, all parameters will be updated for this <strong>hostname</strong>.</p>
+</div>
+</div>
+<div class="section" id="update-update-definition-of-host">
+<h3>update : update definition of host<a class="headerlink" href="#update-update-definition-of-host" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host show
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">1</span> │ myhost1    │ <span class="m">192</span>.168.56.103 │     <span class="m">22</span> │ QAA     │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+
+gc&gt; host update -p port -v <span class="m">33</span> -s myhost1
+
+gc&gt; host show
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">1</span> │ myhost1    │ <span class="m">192</span>.168.56.103 │     <span class="m">33</span> │ QAA     │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">2</span> │ myhost2    │ <span class="m">192</span>.168.56.11  │     <span class="m">22</span> │ QAL     │ rootVM     │ no        │
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">use <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">show</span></code> output headers to obtain names of parameters to change. fields <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">indexed</span></code> are invalid, however</p>
+</div>
+</div>
+<div class="section" id="rem-remove-selected-host-hostname">
+<h3>rem : remove selected host (hostname)<a class="headerlink" href="#rem-remove-selected-host-hostname" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host rem -s myhost1
+</pre></div>
+</div>
+</div>
+<div class="section" id="purge-purge-all-hosts">
+<h3>purge : purge all hosts<a class="headerlink" href="#purge-purge-all-hosts" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host purge -Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="pick-pick-hosts">
+<h3>pick : pick hosts<a class="headerlink" href="#pick-pick-hosts" title="Permalink to this headline">¶</a></h3>
+<p>Command below prints if item is picked(can be use to connect on, or run command on it) or not.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch to collapse items under hosts (installations, instance and databases). It’s useful using interactive mode ( <code class="docutils literal notranslate"><span class="pre">-e</span></code> switch ).</p>
+<p class="last">For long list of items use <strong>manual</strong> editing instead of interactive</p>
+</div>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick
+</pre></div>
+</div>
+<p>You must use <code class="docutils literal notranslate"><span class="pre">-e</span></code> switch to enter interactive edit mode. use <strong>STOP</strong> when all changes are made.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -e
+</pre></div>
+</div>
+<p>collapse items:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -e -c
+</pre></div>
+</div>
+<p>You must use <code class="docutils literal notranslate"><span class="pre">-m</span></code> switch to manually select uuids</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -m faf78009-46ea-5b5b-a3d3-0578f168cdc4 ca36b1d9-4f5d-540b-a6f2-deccbf8b5b4d
+</pre></div>
+</div>
+<p>collapse items:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -m faf78009-46ea-5b5b-a3d3-0578f168cdc4 ca36b1d9-4f5d-540b-a6f2-deccbf8b5b4d -c
+</pre></div>
+</div>
+<p>You must use <code class="docutils literal notranslate"><span class="pre">-r</span></code> switch to reset all selections</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -r
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Colors describing connected/not connected can be changed in the <strong>config.ini</strong> file.</p>
+<p class="last">Reset can select or unselect all items, this can be changed in the <strong>config.ini</strong> file, also.</p>
+</div>
+</div>
+<div class="section" id="show-show-stored-hosts">
+<h3>show : show stored hosts<a class="headerlink" href="#show-show-stored-hosts" title="Permalink to this headline">¶</a></h3>
+<p>You can reverse order of sorting, and choose sorting fields.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host show
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">5</span> │ myhost1    │ <span class="m">192</span>.168.56.103 │     <span class="m">22</span> │ QAA     │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">4</span> │ myhost2    │ <span class="m">192</span>.168.56.11  │     <span class="m">22</span> │ QAL     │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">1</span> │ myhost3    │ <span class="m">192</span>.168.57.101 │     <span class="m">22</span> │ default │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">2</span> │ myhost4    │ <span class="m">192</span>.168.56.102 │     <span class="m">22</span> │ default │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">3</span> │ myhost5    │ <span class="m">192</span>.168.56.102 │   <span class="m">2222</span> │ default │ myuser     │ no        │
+╘══════╧════════════╧════════════════╧════════╧═════════╧════════════╧═══════════╛
+gc&gt; host show -r
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">3</span> │ myhost5    │ <span class="m">192</span>.168.56.102 │   <span class="m">2222</span> │ default │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">2</span> │ myhost4    │ <span class="m">192</span>.168.56.102 │     <span class="m">22</span> │ default │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">1</span> │ myhost3    │ <span class="m">192</span>.168.57.101 │     <span class="m">22</span> │ default │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">4</span> │ myhost2    │ <span class="m">192</span>.168.56.11  │     <span class="m">22</span> │ QAL     │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">5</span> │ myhost1    │ <span class="m">192</span>.168.56.103 │     <span class="m">22</span> │ QAA     │ myuser     │ no        │
+╘══════╧════════════╧════════════════╧════════╧═════════╧════════════╧═══════════╛
+gc&gt; host show -r -f def_cred port
+╒══════╤════════════╤════════════════╤════════╤═════════╤════════════╤═══════════╕
+│   id │ hostname   │ host           │   port │ group   │ def_cred   │ indexed   │
+╞══════╪════════════╪════════════════╪════════╪═════════╪════════════╪═══════════╡
+│    <span class="m">2</span> │ myhost4    │ <span class="m">192</span>.168.56.102 │     <span class="m">22</span> │ default │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">4</span> │ myhost2    │ <span class="m">192</span>.168.56.11  │     <span class="m">22</span> │ QAL     │ rootVM     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">3</span> │ myhost5    │ <span class="m">192</span>.168.56.102 │   <span class="m">2222</span> │ default │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">1</span> │ myhost3    │ <span class="m">192</span>.168.57.101 │     <span class="m">22</span> │ default │ myuser     │ no        │
+├──────┼────────────┼────────────────┼────────┼─────────┼────────────┼───────────┤
+│    <span class="m">5</span> │ myhost1    │ <span class="m">192</span>.168.56.103 │     <span class="m">22</span> │ QAA     │ myuser     │ no        │
+╘══════╧════════════╧════════════════╧════════╧═════════╧════════════╧═══════════╛
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>use <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">show</span></code> output headers to obtain names of parameters to sort on.</p>
+<p class="last">if no sorting fields, <strong>hostname</strong> is default</p>
+</div>
+</div>
+<div class="section" id="export-export-definitions-of-hosts-to-csv-file">
+<h3>export : export definitions of hosts to csv file<a class="headerlink" href="#export-export-definitions-of-hosts-to-csv-file" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host <span class="nb">export</span> -f hosts/hostsExport.csv
+successfully exported to hosts/hostsExport.csv
+</pre></div>
+</div>
+<p>Format is the same as for <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">import</span></code>.</p>
+</div>
+</div>
+<div class="section" id="connections">
+<h2>Connections<a class="headerlink" href="#connections" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn
+usage: conn &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+work with connections
+
+positional arguments:
+  <span class="o">{</span>connect,close,show<span class="o">}</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can manage your connections with <code class="docutils literal notranslate"><span class="pre">conn</span></code> command.</p>
+<p>Connection will be being kept alive by sending a package over a number of seconds. You can change default value in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">keep_alive_interval</span></code>.</p>
+<div class="section" id="connect-connect-to-selected-hosts">
+<h3>connect : connect to selected hosts<a class="headerlink" href="#connect-connect-to-selected-hosts" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn connect -Y
+successfully connected to: <span class="m">192</span>.168.56.102 using password
+successfully connected to: <span class="m">192</span>.168.57.101 using password
+myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span> says: localhost.localdomain
+myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span> says: localhost.localdomain
+active connections: <span class="m">2</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">use <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">pick</span> <span class="pre">-e</span></code> or <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">pick</span> <span class="pre">-m</span></code> to select hosts</p>
+</div>
+<p><strong>You can omit</strong> <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">pick</span></code> <strong>and select list of hosts directly:</strong></p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn connect -Y myhost1 myhost2
+successfully connected to: <span class="m">192</span>.168.56.102 using password
+successfully connected to: <span class="m">192</span>.168.57.101 using password
+myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span> says: localhost.localdomain
+myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span> says: localhost.localdomain
+</pre></div>
+</div>
+</div>
+<div class="section" id="close-close-active-connections">
+<h3>close : close active connections<a class="headerlink" href="#close-close-active-connections" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn close -Y
+removed connection to: myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+removed connection to: myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+active connections: <span class="m">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="show-show-active-connections">
+<h3>show : show active connections<a class="headerlink" href="#show-show-active-connections" title="Permalink to this headline">¶</a></h3>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; conn show
+group: VM  <span class="o">[</span>no connected<span class="o">]</span>
+    --host: myhost1  <span class="o">[</span>connected, ip: <span class="m">192</span>.168.57.101, port: <span class="m">22</span><span class="o">]</span>
+    --host: myhost2  <span class="o">[</span>connected, ip: <span class="m">192</span>.168.56.102, port: <span class="m">22</span><span class="o">]</span>
+active connections: <span class="m">2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var
+usage: var &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+work with variables
+
+positional arguments:
+  <span class="o">{</span>show,edit,rem,purge<span class="o">}</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can work with custom variables with <code class="docutils literal notranslate"><span class="pre">var</span></code> command.</p>
+<p>variables created as <em>persistent</em> are stored on a disc, while <em>session</em> variables are stored only in memory.</p>
+<p>They can speed up productivity, look at examples in the <strong>Running commands</strong> section below.</p>
+<div class="section" id="show-show-all-defined-variables">
+<h3>show : show all defined variables<a class="headerlink" href="#show-show-all-defined-variables" title="Permalink to this headline">¶</a></h3>
+<p>You can reverse order of sorting. Rows are sorted on <em>name</em>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var show
+╒════════╤═════════════════╤════════╕
+│ name   │ value           │ keep   │
+╞════════╪═════════════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp       │ y      │
+├────────┼─────────────────┼────────┤
+│ files  │ myfile1,myfile2 │ y      │
+├────────┼─────────────────┼────────┤
+│ table  │ users_tab       │ n      │
+╘════════╧═════════════════╧════════╛
+gc&gt; var show -r
+╒════════╤═════════════════╤════════╕
+│ name   │ value           │ keep   │
+╞════════╪═════════════════╪════════╡
+│ table  │ users_tab       │ n      │
+├────────┼─────────────────┼────────┤
+│ files  │ myfile1,myfile2 │ y      │
+├────────┼─────────────────┼────────┤
+│ <span class="nb">dirs</span>   │ /opt,/tmp       │ y      │
+╘════════╧═════════════════╧════════╛
+</pre></div>
+</div>
+</div>
+<div class="section" id="edit-add-edit-selected-variable">
+<h3>edit : add/edit selected variable<a class="headerlink" href="#edit-add-edit-selected-variable" title="Permalink to this headline">¶</a></h3>
+<p>If given <strong>varname</strong> doesn’t exist, will be added.
+If does exist, value will be updated for this <strong>varname</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var show
+╒════════╤═══════════╤════════╕
+│ name   │ value     │ keep   │
+╞════════╪═══════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp │ y      │
+╘════════╧═══════════╧════════╛
+gc&gt; var edit -V table -v users_tab
+added session variable: table
+gc&gt; var edit -V files -v myfile1,myfile2 -p
+added persistent variable: files
+gc&gt; var show
+╒════════╤═════════════════╤════════╕
+│ name   │ value           │ keep   │
+╞════════╪═════════════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp       │ y      │
+├────────┼─────────────────┼────────┤
+│ files  │ myfile1,myfile2 │ y      │
+├────────┼─────────────────┼────────┤
+│ table  │ users_tab       │ n      │
+╘════════╧═════════════════╧════════╛
+</pre></div>
+</div>
+</div>
+<div class="section" id="rem-remove-variable">
+<h3>rem : remove variable<a class="headerlink" href="#rem-remove-variable" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var show
+╒════════╤═════════════════╤════════╕
+│ name   │ value           │ keep   │
+╞════════╪═════════════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp       │ y      │
+├────────┼─────────────────┼────────┤
+│ files  │ myfile1,myfile2 │ y      │
+├────────┼─────────────────┼────────┤
+│ table  │ users_tab       │ n      │
+╘════════╧═════════════════╧════════╛
+active connections: <span class="m">0</span>
+gc&gt; var rem -V files
+active connections: <span class="m">0</span>
+gc&gt; var rem -V table
+active connections: <span class="m">0</span>
+gc&gt; var show
+╒════════╤═══════════╤════════╕
+│ name   │ value     │ keep   │
+╞════════╪═══════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp │ y      │
+╘════════╧═══════════╧════════╛
+</pre></div>
+</div>
+</div>
+<div class="section" id="purge-purge-all-variables">
+<h3>purge : purge all variables<a class="headerlink" href="#purge-purge-all-variables" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var purge -Y
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="running-commands">
+<h2>Running commands<a class="headerlink" href="#running-commands" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run
+usage: run &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+run commands
+
+positional arguments:
+  <span class="o">{</span>os,scp,db2,scan<span class="o">}</span>
+
+optional arguments:
+  -h, --help         show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can run commands on connected hosts using <strong>ssh</strong> with <code class="docutils literal notranslate"><span class="pre">run</span></code> command.</p>
+<p>You can use <strong>variables</strong> and put results into <strong>excel</strong> or <strong>csv</strong> file.
+Take a look on examples of below.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">to access help of internal <code class="docutils literal notranslate"><span class="pre">run</span></code> commands <strong>os</strong> and <strong>db2</strong>, you must use <code class="docutils literal notranslate"><span class="pre">+h</span></code> instead of <code class="docutils literal notranslate"><span class="pre">-h</span></code>, check:
+<code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">os</span> <span class="pre">+h</span></code>
+<code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">db2</span> <span class="pre">+h</span></code></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>variable name must be placed into {{}} construct</li>
+<li>variables can be used with <code class="docutils literal notranslate"><span class="pre">os</span></code>, <code class="docutils literal notranslate"><span class="pre">db2</span></code> and <code class="docutils literal notranslate"><span class="pre">scp</span></code> commands</li>
+<li>you must specify <code class="docutils literal notranslate"><span class="pre">spool</span></code> parameter with valid filename mask (<a href="#id1"><span class="problematic" id="id2">*</span></a>.csv or <a href="#id3"><span class="problematic" id="id4">*</span></a>.xlsx) to generate file</li>
+<li>generated files are being stored into <strong>spool</strong> directory</li>
+<li>default one row per one output behaviour in xlsx files can be changed in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">spoolxlsxline</span></code>. setting to YES will cause to generate one row for every output’s line.</li>
+<li>output will be printed as soon as it arrives. You can change this in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">wait_for_all_hosts</span></code>, so result of a command will be printed when all servers will deliver</li>
+</ul>
+</div>
+<div class="section" id="os-run-os-commands">
+<h3>os : run OS commands<a class="headerlink" href="#os-run-os-commands" title="Permalink to this headline">¶</a></h3>
+<p>run as a connected user</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os ls -la /tmp <span class="p">|</span> grep yum
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+-rw-------.  <span class="m">1</span> root     root     <span class="m">496566</span> Jul <span class="m">30</span> <span class="m">08</span>:45 yum_save_tx.2018-07-30.08-45.pVxN92.yumtx
+-rw-------.  <span class="m">1</span> root     root     <span class="m">496566</span> Jul <span class="m">31</span> <span class="m">06</span>:25 yum_save_tx.2018-07-31.06-25.akMKeb.yumtx
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+-rw-------.  <span class="m">1</span> root     root     <span class="m">496566</span> Aug  <span class="m">2</span> <span class="m">09</span>:07 yum_save_tx.2018-08-02.09-07.9otbkt.yumtx
+-rw-------.  <span class="m">1</span> root     root     <span class="m">496566</span> Aug  <span class="m">3</span> <span class="m">06</span>:02 yum_save_tx.2018-08-03.06-02.PbcDpc.yumtx
+-rw-------.  <span class="m">1</span> root     root     <span class="m">496566</span> Aug  <span class="m">6</span> <span class="m">08</span>:01 yum_save_tx.2018-08-06.08-01.9JX9a_.yumtx
+</pre></div>
+</div>
+<p>run as a root user (using sudo)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os wc -l /etc/shadow +SU
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">48</span> /etc/shadow
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">23</span> /etc/shadow
+</pre></div>
+</div>
+<p>run as a db2inst1 user (using sudo), using ksh shell</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os ls /db2/home/db2inst1 <span class="p">|</span> wc -l  +SU db2inst1 +SH /bin/ksh
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">4</span>
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">3</span>
+</pre></div>
+</div>
+<p>run as a connected user, put output to an excel file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os df -h /opt  +spool results.xlsx
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+excel file generated to: /home/user/spool/results.xlsx.. spool turned off
+</pre></div>
+</div>
+<img alt="xlsx file" src="img/xlsx.png" />
+<img alt="docs/img/xlsx.png" src="docs/img/xlsx.png" />
+<p>run as a connected user, put output to a csv file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os du -ms /root  +spool results.csv
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">407</span> /root
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">378</span> /root
+csv file generated to: /home/user/spool/results.csv.. spool turned off
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hostname,host,instance,db,result,command
+myhost1,<span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>,NA,NA,407       /root,du -ms /root
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,NA,NA,378       /root,du -ms /root
+</pre></div>
+</div>
+<p>run as a connected user, <strong>use variable</strong>, put output to a csv file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os du -ms <span class="o">{{</span>dirs<span class="o">}}</span> +spool results2.csv
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">4</span>   /tmp
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">1110</span>        /opt
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+<span class="m">4</span>   /tmp
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+<span class="m">1110</span>        /opt
+
+csv file generated to: /home/user/spool/results2.csv.. spool turned off
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hostname,host,instance,db,result,command
+myhost1,<span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>,NA,NA,4 /tmp,du -ms /tmp
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,NA,NA,1110      /opt,du -ms /opt
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,NA,NA,4 /tmp,du -ms /tmp
+myhost1,<span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>,NA,NA,1110      /opt,du -ms /opt
+</pre></div>
+</div>
+</div>
+<div class="section" id="scan-scan-connected-hosts-to-get-db2-infrastructure">
+<h3>scan : scan connected hosts to get DB2 infrastructure<a class="headerlink" href="#scan-scan-connected-hosts-to-get-db2-infrastructure" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">scan</span></code> is required to use <code class="docutils literal notranslate"><span class="pre">db2</span></code> command.</p>
+<p class="last">it scans connected servers to get DB2 infrastructure. use <code class="docutils literal notranslate"><span class="pre">host</span> <span class="pre">pick</span></code> to see newly added elements.</p>
+</div>
+<p>dry run - check output, do not save</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scan -Y -d
+
+<span class="o">[{</span><span class="s1">&#39;installation_checked&#39;</span>: <span class="s1">&#39;x&#39;</span>,
+  <span class="s1">&#39;installation_name&#39;</span>: <span class="s1">&#39;/opt/ibm/db2/V10.5&#39;</span>,
+  <span class="s1">&#39;installation_uuid&#39;</span>: <span class="s1">&#39;7d1c87c7-db3d-590b-a0a9-1cc22c18b674&#39;</span>,
+  <span class="s1">&#39;instances&#39;</span>: <span class="o">[{</span><span class="s1">&#39;databases&#39;</span>: <span class="o">[{</span><span class="s1">&#39;db_checked&#39;</span>: <span class="s1">&#39;x&#39;</span>,
+                                <span class="s1">&#39;db_name&#39;</span>: <span class="s1">&#39;TEST&#39;</span>,
+                                <span class="s1">&#39;db_uuid&#39;</span>: <span class="s1">&#39;72210296-5358-5dd5-96c1-21a4473d2a22&#39;</span><span class="o">}</span>,
+                               <span class="o">{</span><span class="s1">&#39;db_checked&#39;</span>: <span class="s1">&#39;x&#39;</span>,
+                                <span class="s1">&#39;db_name&#39;</span>: <span class="s1">&#39;TEST2&#39;</span>,
+                                <span class="s1">&#39;db_uuid&#39;</span>: <span class="s1">&#39;4ccfe200-5ce8-5070-a904-fbc43dedf353&#39;</span><span class="o">}]</span>,
+...
+</pre></div>
+</div>
+<p>scan infrastructure, store output within host definitions</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scan -Y
+group: VM id: 5645848e-8cd4-5ff5-87fe-2a906d660aa0
+    --host: myhost1 id: 3cd7926b-dbe7-5b70-ba27-d3a386fb5fe5
+        --install: /opt/ibm/db2/V10.5 id: dc388c45-a205-5c5b-a8ec-5232d3ce3eae
+            --instance: db2inst1 id: 70683dff-e5a7-54f6-b7ec-12544d0dab47
+                --db: TEST id: e1936ead-44ef-508a-942a-005bedd3cf78
+                --db: TEST2
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="db2-run-db2-specific-commands">
+<h3>db2 : run DB2 specific commands<a class="headerlink" href="#db2-run-db2-specific-commands" title="Permalink to this headline">¶</a></h3>
+<p>run as connected user</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 <span class="k">select</span> * from sysibm.sysdummy1
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+...
+</pre></div>
+</div>
+<p>run as instance owner</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 <span class="k">select</span> * from sysibm.sysdummy1 +USR instance
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+...
+</pre></div>
+</div>
+<p>run as connected user, os mode - db2 profile loaded, for every database</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 db2 get dbm cfg <span class="p">|</span> grep buffer +OS
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+ Audit buffer size <span class="o">(</span>4KB<span class="o">)</span>                  <span class="o">(</span>AUDIT_BUF_SZ<span class="o">)</span> <span class="o">=</span> <span class="m">0</span>
+ No. of int. communication buffers<span class="o">(</span>4KB<span class="o">)(</span>FCM_NUM_BUFFERS<span class="o">)</span> <span class="o">=</span> AUTOMATIC<span class="o">(</span><span class="m">4096</span><span class="o">)</span>
+ Communication buffer <span class="nb">exit</span> library list <span class="o">(</span>COMM_EXIT_LIST<span class="o">)</span> <span class="o">=</span>
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+ Audit buffer size <span class="o">(</span>4KB<span class="o">)</span>                  <span class="o">(</span>AUDIT_BUF_SZ<span class="o">)</span> <span class="o">=</span> <span class="m">0</span>
+ No. of int. communication buffers<span class="o">(</span>4KB<span class="o">)(</span>FCM_NUM_BUFFERS<span class="o">)</span> <span class="o">=</span> AUTOMATIC<span class="o">(</span><span class="m">4096</span><span class="o">)</span>
+ Communication buffer <span class="nb">exit</span> library list <span class="o">(</span>COMM_EXIT_LIST<span class="o">)</span> <span class="o">=</span>
+...
+</pre></div>
+</div>
+<p>run as connected user, os mode - db2 profile loaded, for every instance, use instance name in a command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 ls /db2/home/<span class="o">{}</span>/myfile1.txt +OS +IN
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+/db2/home/db2inst1/myfile1.txt
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+/db2/home/cogpi/myfile1.txt
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+/db2/home/db2inst1/myfile1.txt
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+/db2/home/cogpi/myfile1.txt
+</pre></div>
+</div>
+<p>run as connected user, os mode - db2 profile loaded, set env variable,  for every database</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 <span class="nb">echo</span> <span class="nv">$GC</span> +OS +ENV <span class="nb">export</span> <span class="nv">GC</span><span class="o">=</span>hello
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+hello
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+hello
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+hello
+...
+</pre></div>
+</div>
+<p>run as connected user, os mode - db2 profile loaded, for every database, use database name in a command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 db2 deactivate db  <span class="o">{}</span> +OS +USR instance
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+DB20000I  The DEACTIVATE DATABASE <span class="nb">command</span> completed successfully.
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+DB20000I  The DEACTIVATE DATABASE <span class="nb">command</span> completed successfully.
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+DB20000I  The DEACTIVATE DATABASE <span class="nb">command</span> completed successfully.
+...
+</pre></div>
+</div>
+<p>run as instance owner, os mode - db2 profile loaded, for every database, use database name in a command, put output to excel file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 db2pd -db  <span class="o">{}</span> -bufferpools +OS +USR instance +spool resultsDB.xlsx
+</pre></div>
+</div>
+<img alt="xlsxdb file" src="img/xlsxdb.png" />
+<img alt="docs/img/xlsxdb.png" src="docs/img/xlsxdb.png" />
+<p>run as instance owner, for every database, put output to csv file</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 <span class="k">select</span> * from sysibm.sysdummy1 +USR instance +spool resultsDB.csv
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+...
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hostname,host,instance,db,result,command
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,cogpi,TEST3,IBMREQD, sudo su - cogpi -c <span class="s2">&quot; . /db2/home/cogpi/sqllib/db2profile; db2 connect to TEST3&gt; /dev/null; db2 select \* from sysibm.sysdummy1 ; db2 terminate &gt; /dev/null&quot;</span>
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,cogpi,TEST3,-------, sudo su - cogpi -c <span class="s2">&quot; . /db2/home/cogpi/sqllib/db2profile; db2 connect to TEST3&gt; /dev/null; db2 select \* from sysibm.sysdummy1 ; db2 terminate &gt; /dev/null&quot;</span>
+myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,cogpi,TEST3,Y      , sudo su - cogpi -c <span class="s2">&quot; . /db2/home/cogpi/sqllib/db2profile; db2 connect to TEST3&gt; /dev/null; db2 select \* from sysibm.sysdummy1 ; db2 terminate &gt; /dev/null&quot;</span>
+...
+</pre></div>
+</div>
+<p>run as a connected user, <strong>use persistent variable</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var edit -V table -v sysibm.sysdummy1 -p
+gc&gt; var show -r
+╒════════╤══════════════════╤════════╕
+│ name   │ value            │ keep   │
+╞════════╪══════════════════╪════════╡
+│ table  │ sysibm.sysdummy1 │ y      │
+
+gc&gt; run db2 <span class="k">select</span> * from <span class="o">{{</span>table<span class="o">}}</span>
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+...
+</pre></div>
+</div>
+<p>run as an instance owner, <strong>use session variable</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var edit -V table -v sysibm.sysdummy1
+gc&gt; var show -r
+╒════════╤══════════════════╤════════╕
+│ name   │ value            │ keep   │
+╞════════╪══════════════════╪════════╡
+│ table  │ sysibm.sysdummy1 │ n      │
+├────────┼──────────────────┼────────┤
+
+gc&gt; run db2 <span class="k">select</span> * from <span class="o">{{</span>table<span class="o">}}</span>
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="scp-transfer-files-using-scp">
+<h3>scp : transfer files using scp<a class="headerlink" href="#scp-transfer-files-using-scp" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">scp</span></code> checks progress, messages like “size: 16, done: 0” show current status</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">get</span></code> will add hostname as a suffix to downloaded files to distinguish file’s origin</p>
+</div>
+<p>put file to /tmp dir on connected servers</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scp -m put -s upload/myfile1.txt -d /tmp
+EXISTING FILES WILL BE OVERWRITTEN, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+answer: Y
+scp - <span class="nb">command</span> mode: put, source: upload/myfile1.txt, dest: /tmp, recursive: False, host: myhost2
+scp - <span class="nb">command</span> mode: put, source: upload/myfile1.txt, dest: /tmp, recursive: False, host: myhost1
+object: myfile1.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: myfile1.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: myfile1.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: myfile1.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+</pre></div>
+</div>
+<p>put directory to /tmp dir on connected servers, use recursion, don’t ask for confirmation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scp -m put -s upload/mydir -d /tmp -r -b
+object: file1.csv, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: file2.sql, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: file1.csv, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: file2.sql, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+</pre></div>
+</div>
+<p>put files to /tmp dir on connected servers, <strong>use session variable</strong>, don’t ask for confirmation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var edit -V files -v myfile1.txt,myfile2.txt
+added session variable: files
+gc&gt; var show -r
+╒════════╤═════════════════════════╤════════╕
+│ name   │ value                   │ keep   │
+╞════════╪═════════════════════════╪════════╡
+│ files  │ myfile1.txt,myfile2.txt │ n      │
+
+gc&gt; run scp -m put -s upload/<span class="o">{{</span>files<span class="o">}}</span> -d /tmp -b
+object: myfile2.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: myfile1.txt, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+...
+gc&gt; run os ls -la /tmp/myfile*
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+-rw-r--r--. <span class="m">1</span> root root <span class="m">16</span> Aug <span class="m">14</span> <span class="m">08</span>:06 /tmp/myfile1.txt
+-rw-r--r--. <span class="m">1</span> root root <span class="m">16</span> Aug <span class="m">14</span> <span class="m">08</span>:06 /tmp/myfile2.txt
+
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+-rw-r--r--. <span class="m">1</span> root root <span class="m">16</span> Aug <span class="m">14</span> <span class="m">08</span>:06 /tmp/myfile1.txt
+-rw-r--r--. <span class="m">1</span> root root <span class="m">16</span> Aug <span class="m">14</span> <span class="m">08</span>:06 /tmp/myfile2.txt
+</pre></div>
+</div>
+<p>get file from /tmp dir on connected servers</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scp -m get -s /tmp/myfile1.txt -d download/
+EXISTING FILES WILL BE OVERWRITTEN, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+answer: Y
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile1.txt, dest: download/myfile1.txt_myhost1, recursive: False, host: myhost1
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile1.txt, dest: download/myfile1.txt_myhost2, recursive: False, host: myhost2
+object: download/myfile1.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: download/myfile1.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile1.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile1.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+gc&gt; !ls -la download
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:36 myfile1.txt_myhost1
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:36 myfile1.txt_myhost2
+</pre></div>
+</div>
+<p>get directory from /tmp dir on connected servers, use recursion, don’t ask for confirmation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run scp -m get -s /tmp/mydir -d download/ -r -b
+EXISTING FILES WILL BE OVERWRITTEN, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+scp - <span class="nb">command</span> mode: get, source: /tmp/mydir, dest: download/mydir_myhost1, recursive: True, host: myhost1
+scp - <span class="nb">command</span> mode: get, source: /tmp/mydir, dest: download/mydir_myhost2, recursive: True, host: myhost2
+object: download/mydir_myhost1/file2.sql, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/mydir_myhost1/file1.csv, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/mydir_myhost2/file2.sql, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: download/mydir_myhost2/file1.csv, size: <span class="m">1</span>, <span class="k">done</span>: <span class="m">1</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+gc&gt; !ls -la download/mydir*
+download/mydir_myhost1:
+-rw-r--r--. <span class="m">1</span> pl55227 pl55227    <span class="m">0</span> <span class="m">08</span>-14 <span class="m">14</span>:38 file1.csv
+-rw-r--r--. <span class="m">1</span> pl55227 pl55227    <span class="m">0</span> <span class="m">08</span>-14 <span class="m">14</span>:38 file2.sql
+
+download/mydir_myhost2:
+-rw-r--r--. <span class="m">1</span> pl55227 pl55227    <span class="m">0</span> <span class="m">08</span>-14 <span class="m">14</span>:38 file1.csv
+-rw-r--r--. <span class="m">1</span> pl55227 pl55227    <span class="m">0</span> <span class="m">08</span>-14 <span class="m">14</span>:38 file2.sql
+</pre></div>
+</div>
+<p>get files from /tmp dir on connected servers, <strong>use persistent variable</strong>, don’t ask for confirmation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; var edit -V files -v myfile1.txt,myfile2.txt -p
+added persistent variable: files
+gc&gt; var show -r
+╒════════╤═════════════════════════╤════════╕
+│ name   │ value                   │ keep   │
+╞════════╪═════════════════════════╪════════╡
+│ files  │ myfile1.txt,myfile2.txt │ y      │
+├────────┼─────────────────────────┼────────┤
+gc&gt; run scp -m get -s /tmp/<span class="o">{{</span>files<span class="o">}}</span> -d download/ -b
+EXISTING FILES WILL BE OVERWRITTEN, CONTINUE? <span class="o">[</span>Y/n<span class="o">]</span>
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile1.txt, dest: download/myfile1.txt_myhost1, recursive: False, host: myhost1
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile2.txt, dest: download/myfile2.txt_myhost1, recursive: False, host: myhost1
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile2.txt, dest: download/myfile2.txt_myhost2, recursive: False, host: myhost2
+scp - <span class="nb">command</span> mode: get, source: /tmp/myfile1.txt, dest: download/myfile1.txt_myhost2, recursive: False, host: myhost2
+object: download/myfile2.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile1.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile2.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile2.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: download/myfile1.txt_myhost1, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost1, <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+object: download/myfile2.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: download/myfile1.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">0</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+object: download/myfile1.txt_myhost2, size: <span class="m">16</span>, <span class="k">done</span>: <span class="m">16</span>, server: myhost2, <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+gc&gt; !ls -la download/
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:42 myfile1.txt_myhost1
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:42 myfile1.txt_myhost2
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:42 myfile2.txt_myhost1
+-rw-r--r--.  <span class="m">1</span> pl55227 pl55227   <span class="m">16</span> <span class="m">08</span>-14 <span class="m">14</span>:42 myfile2.txt_myhost2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="batch-steps">
+<h2>Batch &amp; Steps<a class="headerlink" href="#batch-steps" title="Permalink to this headline">¶</a></h2>
+<p>You can create scenarios and re-run them without a need of manual typing/copying commands.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">to create a batch file, simply put there any valid GlobalConsole command</p>
+</div>
+<p><strong>SCENARIO1</strong> - basic</p>
+<ol class="arabic simple">
+<li>Create a file, example:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conn connect -Y
+var show -r
+var edit -V table -v sysibm.sysdummy1
+var show -r
+run db2 <span class="k">select</span> * from <span class="o">{{</span>table<span class="o">}}</span>
+conn close -Y
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Run created batch</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; batch -f batch/db2.param
+command: conn connect -Y
+successfully connected to: <span class="m">192</span>.168.56.102 using password
+successfully connected to: <span class="m">192</span>.168.57.101 using password
+myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span> says: localhost.localdomain
+myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span> says: localhost.localdomain
+command: var show -r
+╒════════╤═════════════════════════╤════════╕
+│ name   │ value                   │ keep   │
+╞════════╪═════════════════════════╪════════╡
+│ files  │ myfile1.txt,myfile2.txt │ y      │
+├────────┼─────────────────────────┼────────┤
+│ <span class="nb">dirs</span>   │ /opt,/tmp               │ y      │
+╘════════╧═════════════════════════╧════════╛
+command: var edit -V table -v sysibm.sysdummy1
+added session variable: table
+command: var show -r
+╒════════╤═════════════════════════╤════════╕
+│ name   │ value                   │ keep   │
+╞════════╪═════════════════════════╪════════╡
+│ table  │ sysibm.sysdummy1        │ n      │
+├────────┼─────────────────────────┼────────┤
+│ files  │ myfile1.txt,myfile2.txt │ y      │
+├────────┼─────────────────────────┼────────┤
+│ <span class="nb">dirs</span>   │ /opt,/tmp               │ y      │
+╘════════╧═════════════════════════╧════════╛
+command: run db2 <span class="k">select</span> * from <span class="o">{{</span>table<span class="o">}}</span>
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+IBMREQD
+-------
+Y
+  <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+....
+
+command: conn close -Y
+removed connection to: myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+removed connection to: myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+</pre></div>
+</div>
+<p><strong>SCENARIO2</strong> - advanced</p>
+<p>When you have a long batch file, you might want abort execution if one of steps somehow fails.
+You can define output checking using <code class="docutils literal notranslate"><span class="pre">check</span></code> command, take a look at example below.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">use <code class="docutils literal notranslate"><span class="pre">check</span> <span class="pre">set</span> <span class="pre">&lt;args&gt;</span> <span class="pre">-r</span></code> to define string that should not appears in a result of command</p>
+</div>
+<ol class="arabic simple">
+<li>Create a file, example:</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conn connect -Y
+<span class="c1">#</span>
+check <span class="nb">set</span> 43G  <span class="m">8</span>.0G
+check show
+run os df -h /tmp
+<span class="c1">#</span>
+check <span class="nb">set</span> sda2
+check show
+run os df -h /tmp
+<span class="c1">#</span>
+check <span class="nb">set</span> /root -r
+check show
+run os <span class="nb">pwd</span>
+<span class="c1">#</span>
+run os hostname
+<span class="c1">#</span>
+run os whoami
+<span class="c1">#</span>
+conn close -Y
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Run created batch</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; batch -f batch/my.param
+command: conn connect -Y
+successfully connected to: <span class="m">192</span>.168.56.102 using password
+successfully connected to: <span class="m">192</span>.168.57.101 using password
+myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span> says: localhost.localdomain
+myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span> says: localhost.localdomain
+command: check <span class="nb">set</span> 43G  <span class="m">8</span>.0G
+command: check show
+
+--------check--------
+text:
+43G <span class="m">8</span>.0G
+should be present: True
+
+command: run os df -h /tmp
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+command: check <span class="nb">set</span> sda2
+command: check show
+
+--------check--------
+text:
+sda2
+should be present: True
+
+command: run os df -h /tmp
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        43G  <span class="m">8</span>.0G   33G  <span class="m">20</span>% /
+
+command: check <span class="nb">set</span> /root -r
+command: check show
+
+--------check--------
+text:
+/root
+should be present: False
+
+command: run os <span class="nb">pwd</span>
+--------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+
+/root
+
+--------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+
+/root
+
+--!--check failed on line:13, command: run os <span class="nb">pwd</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">look at the last line - execution is terminated.
+Line number and command causing problems is provided.</p>
+</div>
+</div>
+<div class="section" id="shell">
+<h2>Shell<a class="headerlink" href="#shell" title="Permalink to this headline">¶</a></h2>
+<p>You can access local shell with <code class="docutils literal notranslate"><span class="pre">shell</span></code> command or using <code class="docutils literal notranslate"><span class="pre">!</span></code> sign.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; shell ls -la creds <span class="p">|</span> wc -l
+<span class="m">8</span>
+gc&gt; ! ls -la creds <span class="p">|</span> wc -l
+<span class="m">8</span>
+gc&gt; !vim tst
+</pre></div>
+</div>
+</div>
+<div class="section" id="history">
+<h2>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">history</span>
+usage: <span class="nb">history</span> &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+work with commands <span class="nb">history</span>
+
+positional arguments:
+  <span class="o">{</span>clear,show,run,find<span class="o">}</span>
+
+optional arguments:
+  -h, --help        show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>you can work with commands history with <code class="docutils literal notranslate"><span class="pre">history</span></code> command.</p>
+<p>history is <strong>persistent</strong>. you can configure how many recent commands should be kept in <strong>config.ini</strong> file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">ctrl</span> <span class="pre">+</span> <span class="pre">r</span></code> combination can be used to reverse-search a history</p>
+</div>
+<div class="section" id="clear-clear-saved-history">
+<h3>clear : clear saved history<a class="headerlink" href="#clear-clear-saved-history" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">history</span> clear -Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="show-show-history">
+<h3>show : show history<a class="headerlink" href="#show-show-history" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">history</span> show
+<span class="m">1</span> cred show -e
+<span class="m">2</span> cred purge
+..
+<span class="m">99</span> var edit -V <span class="nb">dirs</span> -v /root,/home
+<span class="m">100</span> <span class="nb">exit</span>
+<span class="m">101</span> shell <span class="nb">pwd</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-re-run-command-from-history">
+<h3>run : re-run command from history<a class="headerlink" href="#run-re-run-command-from-history" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">history</span> show
+<span class="m">1</span> cred show -e
+..
+<span class="m">89</span> var show
+gc&gt; <span class="nb">history</span> run -c <span class="m">89</span>
+╒════════╤═════════════════╤════════╕
+│ name   │ value           │ keep   │
+╞════════╪═════════════════╪════════╡
+│ <span class="nb">dirs</span>   │ /opt,/tmp       │ y      │
+├────────┼─────────────────┼────────┤
+│ files  │ myfile1,myfile2 │ y      │
+╘════════╧═════════════════╧════════╛
+</pre></div>
+</div>
+</div>
+<div class="section" id="find-find-command-in-history">
+<h3>find : find command in history<a class="headerlink" href="#find-find-command-in-history" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; <span class="nb">history</span> find -c conn
+<span class="m">1</span> conn show
+<span class="m">3</span> conn show
+<span class="m">8</span> conn connect -Y
+<span class="m">9</span> conn show
+<span class="m">13</span> conn close -Y
+..
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Look into <em>logs</em> directory to find <strong>global_console.log</strong> file.</p>
+<p>Log file format is:</p>
+<p><strong>date - module name - level - message</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">2018</span>-08-13 <span class="m">11</span>:45:41,370 - GlobalConsole.command - INFO - successfully connected to: <span class="m">192</span>.168.57.101 using password
+<span class="m">2018</span>-08-13 <span class="m">11</span>:45:47,124 - GlobalConsole.command - ERROR - cannot update host with scanned dat
+</pre></div>
+</div>
+<p><em>Logs</em> directory contains <strong>gc_history</strong> file, also. The file tracks commands’ history and make this persistent.</p>
+</div>
+<div class="section" id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
+<p>Look into <em>config</em> directory to find <strong>config.ini</strong> file.
+All configurable options can be found down there. Every item has self-explanatory description.</p>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>Looking at <em>Module Index</em> you should start with <code class="docutils literal notranslate"><span class="pre">GcConsole</span></code> as it’s an entry point for GlobalConsole.
+It’s based on <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module and it decorates all invocations with prompt. <code class="docutils literal notranslate"><span class="pre">argparse</span></code> is used to provide git-like experience.
+Drilling down <code class="docutils literal notranslate"><span class="pre">GcConsole</span></code> imports from <code class="docutils literal notranslate"><span class="pre">globalconsole</span></code> package one can connect all dots.</p>
+</div>
+<div class="section" id="q-a">
+<h2>Q&amp;A<a class="headerlink" href="#q-a" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>why docker is a default ?</li>
+</ul>
+<p>Easy deployment and more secure - history of environmental variables, used to encrypt/decrypt passwords, is being destroyed with container.</p>
+<ul class="simple">
+<li>can I get standalone version?</li>
+</ul>
+<p>Standalone is possible in future but it’s not a highest priority, currently.</p>
+<ul class="simple">
+<li>what about connecting to Windows?</li>
+</ul>
+<p>I would say - highly possible in next major version. I think about using <code class="docutils literal notranslate"><span class="pre">pywinrm</span></code></p>
+</div>
+<div class="section" id="help-commands-params">
+<h2>Help &amp; Commands params<a class="headerlink" href="#help-commands-params" title="Permalink to this headline">¶</a></h2>
+<p>To get help you can use:</p>
+<ul class="simple">
+<li>this documentation</li>
+<li>command’s own help</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>use <code class="docutils literal notranslate"><span class="pre">help</span></code> to see all available commands. every command has help at every level, check:</p>
+<p>gc&gt; help</p>
+<p>gc&gt; cred -h</p>
+<p class="last">gc&gt; cred update -h</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>use <code class="docutils literal notranslate"><span class="pre">tab</span></code> as autocompletion, check</p>
+<p>gc&gt; help</p>
+<p>gc&gt; cr&lt;tab&gt;</p>
+<p class="last">gc&gt; cred u&lt;tab&gt;</p>
+</div>
+<ul class="simple">
+<li>module’s description</li>
+</ul>
+<p>To print version of GlobalConsole:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; version
+<span class="m">2</span>.0.0_La_Cucaracha
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample-sessions">
+<h2>Sample sessions<a class="headerlink" href="#sample-sessions" title="Permalink to this headline">¶</a></h2>
+<p>installations using venv:</p>
+<img alt="installVenv file" src="img/installVenv.gif" />
+<img alt="docs/img/installVenv.gif" src="docs/img/installVenv.gif" />
+<p>installations using docker:</p>
+<img alt="installDocker file" src="img/installDocker.gif" />
+<img alt="docs/img/installDocker.gif" src="docs/img/installDocker.gif" />
+<p>sample session:</p>
+<img alt="session file" src="img/session.gif" />
+<img alt="docs/img/session.gif" src="docs/img/session.gif" />
+<p>batch file:</p>
+<img alt="batch file" src="img/batch.gif" />
+<img alt="docs/img/batch.gif" src="docs/img/batch.gif" />
+<p>file used:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conn connect -Y
+<span class="c1">#</span>
+var edit -V table -v sysibm.sysdummy1
+var show -r
+run db2 <span class="k">select</span> * from <span class="o">{{</span>table<span class="o">}}</span>
+<span class="c1">#</span>
+<span class="c1">#condition: &quot;/root&quot; phrase should be a part of the result</span>
+check <span class="nb">set</span> /root
+check show
+run os <span class="nb">pwd</span>
+<span class="c1">#this will fail</span>
+<span class="c1">#condition: &quot;/root&quot; phrase should not be a part of the result</span>
+check <span class="nb">set</span> /root -r
+check show
+run os <span class="nb">pwd</span>
+<span class="c1">#</span>
+run os whoami
+<span class="c1">#</span>
+conn close -Y
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If you get error:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Secsh channel X open FAILED: open failed: Administratively prohibited
+</pre></div>
+</div>
+<p>set in <strong>config.ini</strong> file parameter <code class="docutils literal notranslate"><span class="pre">max_threads</span></code> to lower value.</p>
+<p>If you set it to <strong>1</strong> everything should work, however it disables multithreading.</p>
+<p>Root cause for this error is <code class="docutils literal notranslate"><span class="pre">MaxSessions</span></code> setting of sshd daemon on a destination server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this error should only occurs when working with db2, reason is openning parallel sessions to one server.</p>
+</div>
+</div>
+<div class="section" id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
+<p>Don’t hesitate to contact me:
+grzegorz.cylny [at] gmail.com</p>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to GlobalConsole’s documentation!</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#docker">docker</a></li>
+<li><a class="reference internal" href="#venv">venv</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#credentials">Credentials</a><ul>
+<li><a class="reference internal" href="#import-import-csv-file-with-definitions-of-credentials">import : import csv file with definitions of credentials</a></li>
+<li><a class="reference internal" href="#update-update-definition-of-credential">update : update definition of credential</a></li>
+<li><a class="reference internal" href="#rem-remove-selected-credential-credname">rem : remove selected credential (credname)</a></li>
+<li><a class="reference internal" href="#purge-purge-all-credentials">purge : purge all credentials</a></li>
+<li><a class="reference internal" href="#show-show-stored-credentials">show : show stored credentials</a></li>
+<li><a class="reference internal" href="#export-export-definitions-of-credentials-to-csv-file">export : export definitions of credentials to csv file</a></li>
+<li><a class="reference internal" href="#encrypt-encrypt-stored-credentials">encrypt : encrypt stored credentials</a></li>
+<li><a class="reference internal" href="#decrypt-decrypt-stored-credentials">decrypt : decrypt stored credentials</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hosts">Hosts</a><ul>
+<li><a class="reference internal" href="#import-import-csv-file-with-definitions-of-hosts">import : import csv file with definitions of hosts</a></li>
+<li><a class="reference internal" href="#update-update-definition-of-host">update : update definition of host</a></li>
+<li><a class="reference internal" href="#rem-remove-selected-host-hostname">rem : remove selected host (hostname)</a></li>
+<li><a class="reference internal" href="#purge-purge-all-hosts">purge : purge all hosts</a></li>
+<li><a class="reference internal" href="#pick-pick-hosts">pick : pick hosts</a></li>
+<li><a class="reference internal" href="#show-show-stored-hosts">show : show stored hosts</a></li>
+<li><a class="reference internal" href="#export-export-definitions-of-hosts-to-csv-file">export : export definitions of hosts to csv file</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connections">Connections</a><ul>
+<li><a class="reference internal" href="#connect-connect-to-selected-hosts">connect : connect to selected hosts</a></li>
+<li><a class="reference internal" href="#close-close-active-connections">close : close active connections</a></li>
+<li><a class="reference internal" href="#show-show-active-connections">show : show active connections</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#variables">Variables</a><ul>
+<li><a class="reference internal" href="#show-show-all-defined-variables">show : show all defined variables</a></li>
+<li><a class="reference internal" href="#edit-add-edit-selected-variable">edit : add/edit selected variable</a></li>
+<li><a class="reference internal" href="#rem-remove-variable">rem : remove variable</a></li>
+<li><a class="reference internal" href="#purge-purge-all-variables">purge : purge all variables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running-commands">Running commands</a><ul>
+<li><a class="reference internal" href="#os-run-os-commands">os : run OS commands</a></li>
+<li><a class="reference internal" href="#scan-scan-connected-hosts-to-get-db2-infrastructure">scan : scan connected hosts to get DB2 infrastructure</a></li>
+<li><a class="reference internal" href="#db2-run-db2-specific-commands">db2 : run DB2 specific commands</a></li>
+<li><a class="reference internal" href="#scp-transfer-files-using-scp">scp : transfer files using scp</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#batch-steps">Batch &amp; Steps</a></li>
+<li><a class="reference internal" href="#shell">Shell</a></li>
+<li><a class="reference internal" href="#history">History</a><ul>
+<li><a class="reference internal" href="#clear-clear-saved-history">clear : clear saved history</a></li>
+<li><a class="reference internal" href="#show-show-history">show : show history</a></li>
+<li><a class="reference internal" href="#run-re-run-command-from-history">run : re-run command from history</a></li>
+<li><a class="reference internal" href="#find-find-command-in-history">find : find command in history</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging">Logging</a></li>
+<li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#q-a">Q&amp;A</a></li>
+<li><a class="reference internal" href="#help-commands-params">Help &amp; Commands params</a></li>
+<li><a class="reference internal" href="#sample-sessions">Sample sessions</a></li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Grzegorz Cylny.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+    </div>
+  </body>
+</html>
