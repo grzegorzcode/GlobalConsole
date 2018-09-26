@@ -361,7 +361,7 @@ class GcConsole(cmd.Cmd):
             os_parser = subparsers.add_parser('os', description="run os commands", usage="run os <args>", prefix_chars='+')
             os_parser.set_defaults(which='os')
             os_parser.add_argument('cmd', type=str, nargs="*", help="command to run")
-            os_parser.add_argument('+SU', type=str, nargs="?", help="sudo to root or user")
+            os_parser.add_argument('+SU', type=str, nargs="?", const="root", help="sudo to root or user")
             os_parser.add_argument('+SH', type=str, nargs="?", help="choose shell")
             os_parser.add_argument('+spool', type=str, nargs="?", help="spool output to file")
 
