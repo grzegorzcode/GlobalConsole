@@ -225,11 +225,12 @@ class GcCommand:
                 lines = self.gHosts.pickHosts(_printing=False)
                 for line in lines:
                     if 'group' in line:
-                        group = self.gHosts.gUtils.trim_ansi(line).split('id')[0].split(":")[1].strip()
+                        #group = self.gHosts.gUtils.trim_ansi(line).split('id')[0].split(":")[1].strip()
+                        group = "id".join(self.gHosts.gUtils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
                         print(group)
                     if 'host' in line:
                         #line must be cleaned up from ansi escape sequences
-                        host = self.gHosts.gUtils.trim_ansi(line).split('id')[0].split(":")[1].strip()
+                        host = "id".join(self.gHosts.gUtils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
                         if host in connected:
                             details = self.gHosts.searchHostName(host)[0]
                             print("\t" + host, self.gHosts.gUtils.color_pick('[connected, ip: {}, port: {}]'.format(details['host'], details['port']), self.gConfig['JSON']['pick_yes']))
