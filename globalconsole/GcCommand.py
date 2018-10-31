@@ -257,9 +257,17 @@ class GcCommand:
         #host = self.gHosts.searchHostName(hostname)[0]
         #cred = self.gCreds.searchCredName(host['def_cred'])[0]
         # fix to tinydb purging json
-        host = [x for x in self.connhosttempdict if x['hostname'] == hostname][0]
-        cred = [x for x in self.conncredtempdict if x['credname'] == host['def_cred']][0]
-        #
+        try:
+            host = [x for x in self.connhosttempdict if x['hostname'] == hostname][0]
+        except Exception:
+            self.gLogging.error("cannot found given hostname: " + hostname)
+            return (host['hostname'], None)
+
+        try:
+            cred = [x for x in self.conncredtempdict if x['credname'] == host['def_cred']][0]
+        except Exception:
+            self.gLogging.error("cannot found valid credentials for: " + hostname)
+            return (host['hostname'], None)
 
         self.gLogging.debug("_connectOne host value: %s, host creds: %s, cred user: %s " % (host['host'], host['def_cred'], cred['username']))
         try:
