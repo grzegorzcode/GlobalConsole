@@ -599,8 +599,9 @@ class GcCommand:
             except Exception:
                 self.spool = ""
                 self.gLogging.error("cannot generate spool file: %s " % self.gConfig['COMMAND']['spoolpath'] + self.spool)
-
-        for result in self.result:
+        # output is sorted by default by hostname
+        # to see this not only in xlsx/csv but in a terminal also one has to set wait_for_all_hosts parameter to YES
+        for result in sorted(self.result, key=lambda x: x[1]):
             # self.gLogging.info("--------" + result[1] + " " + self.hostDict[result[1]] + "--------")
 
             if len(self.check[0]) > 0:
