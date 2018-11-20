@@ -767,7 +767,55 @@ class GcConsole(cmd.Cmd):
             self.gLogging.error("cannot parse given arguments")
 
 
+    def complete_config(self, text, line, start_index, end_index):
+        """
+        This method uses ``inlist`` variable to enable ``cmd`` module command autocompletion
 
+        """
+        #todo - finish setting
+        inlist = ['show'] #, 'set']
+        if text:
+            return [item for item in inlist if item.startswith(text)]
+        else:
+            return inlist
+
+    def do_config(self, args):
+        """
+        This method handles all tasks related to internal configuration
+
+        """
+        self.gLogging.debug("do_config invoked")
+        description = "work with configuration"
+        try:
+            #import argcomplete
+            parser = argparse.ArgumentParser(prog="config", add_help=True, epilog=self.epilog, description=description, usage="config <command> [<args>]")
+            subparsers = parser.add_subparsers()
+
+            show_parser = subparsers.add_parser('show', description="show config", usage="config show") #, aliases=['s']
+            show_parser.set_defaults(which='show')
+            show_parser.add_argument('-s', '--section', type=str, required=False, help="section of config")
+            show_parser.add_argument('-o', '--option', type=str, required=False, help="option to show")
+
+            # set_parser = subparsers.add_parser('set', description="set config option", usage="config set <args>")
+            # set_parser.set_defaults(which='set')
+            # set_parser.add_argument('-s', '--section', type=str, required=True, help="section of config")
+            # set_parser.add_argument('-o', '--option', type=str, required=True, help="option to pick")
+            # set_parser.add_argument('-v', '--value', type=str, required=True, help="value to set")
+
+            choice = vars(parser.parse_args(args.split()))
+            if len(args) == 0:
+                parser.print_help()
+            elif choice['which'] == 'show':
+                GcConfig().get(section=choice['section'], option=choice['option'])
+            # elif choice['which'] == 'set':
+            #     config.set(section=choice['section'], option=choice['option'], value=choice['value'])
+            else:
+                parser.print_help()
+
+        except SystemExit:
+            pass
+        except Exception:
+            self.gLogging.error("cannot parse given arguments")
 
 if __name__ == '__main__':
     GcConsole().cmdloop()

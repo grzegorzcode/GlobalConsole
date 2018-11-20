@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to GlobalConsole’s documentation! &#8212; GlobalConsole v2.0.0 documentation</title>
+    <title>Welcome to GlobalConsole’s documentation! &#8212; GlobalConsole v2.1.1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -25,7 +26,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -882,6 +883,7 @@ Take a look on examples of below.</p>
 <li>you must specify <code class="docutils literal notranslate"><span class="pre">spool</span></code> parameter with valid filename mask (<a href="#id1"><span class="problematic" id="id2">*</span></a>.csv or <a href="#id3"><span class="problematic" id="id4">*</span></a>.xlsx) to generate file</li>
 <li>generated files are being stored into <strong>spool</strong> directory</li>
 <li>default one row per one output behaviour in xlsx files can be changed in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">spoolxlsxline</span></code>. setting to YES will cause to generate one row for every output’s line.</li>
+<li>default csv fields delimiter can be changed in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">csv_delimiter</span></code></li>
 <li>output will be printed as soon as it arrives. You can change this in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">wait_for_all_hosts</span></code>, so result of a command will be printed when all servers will deliver</li>
 </ul>
 </div>
@@ -1597,6 +1599,18 @@ gc&gt; <span class="nb">history</span> run -c <span class="m">89</span>
 <h2>Config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h2>
 <p>Look into <em>config</em> directory to find <strong>config.ini</strong> file.
 All configurable options can be found down there. Every item has self-explanatory description.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt;  config show -s COMMAND -o csv_delimiter
+section: COMMAND option: csv_delimiter value: <span class="p">;</span>
+
+gc&gt; config show -s COMMAND
+section: COMMAND option: keep_alive_interval value: <span class="m">30</span>
+section: COMMAND option: ssh_timeout value: <span class="m">5</span>
+section: COMMAND option: ssh_cmd_timeout value: <span class="m">20</span>
+
+gc&gt; config show -o csv_delimiter
+section: COMMAND option: csv_delimiter value: <span class="p">;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
@@ -1721,7 +1735,7 @@ grzegorz.cylny [at] gmail.com</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
+  <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to GlobalConsole’s documentation!</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a><ul>
@@ -1825,12 +1839,12 @@ grzegorz.cylny [at] gmail.com</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Grzegorz Cylny.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>

@@ -6,13 +6,14 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>globalconsole package &#8212; GlobalConsole v2.0.0 documentation</title>
+    <title>globalconsole package &#8212; GlobalConsole v2.1.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
   </head><body>
@@ -25,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -328,6 +329,28 @@ Synchronous, OBSOLETE</p>
 </ul>
 <p>Object of this class will look up for a config file <strong>config/config.ini</strong>.
 Config file must have a proper structure, because of this fact headers needs to be validated.</p>
+<dl class="method">
+<dt id="GcConfig.GcConfig.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>section=None</em>, <em>option=None</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConfig.GcConfig.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gets config option</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>section</strong> (<em>str</em>) – section from config file</li>
+<li><strong>option</strong> (<em>str</em>) – option from config file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMMAND&#39;</span><span class="p">,</span> <span class="s1">&#39;csv_delimiter&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -345,6 +368,12 @@ Config file must have a proper structure, because of this fact headers needs to 
 <dl class="method">
 <dt id="GcConsole.GcConsole.complete_check">
 <code class="descname">complete_check</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GcConsole.GcConsole.complete_config">
+<code class="descname">complete_config</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
 </dd></dl>
 
@@ -394,6 +423,12 @@ Config file must have a proper structure, because of this fact headers needs to 
 <dt id="GcConsole.GcConsole.do_check">
 <code class="descname">do_check</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_check" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method handles all tasks related to management of variables being used  by <code class="docutils literal notranslate"><span class="pre">batch</span></code> method as a control points</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GcConsole.GcConsole.do_config">
+<code class="descname">do_config</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to internal configuration</p>
 </dd></dl>
 
 <dl class="method">
@@ -1307,7 +1342,7 @@ uuid: uuid generated based on string</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">globalconsole package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -1355,12 +1390,12 @@ uuid: uuid generated based on string</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, Grzegorz Cylny.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.7.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>

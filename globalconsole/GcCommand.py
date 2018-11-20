@@ -352,7 +352,6 @@ class GcCommand:
         except Exception:
             self.gLogging.error("cannot connect, unhandled error")
 
-    # todo info w dokumentacji odnosnie max_treds a Administratively prohibited
     def _commandOne(self, cmd_conn):
         """
         This method executes command on a given host
@@ -370,11 +369,11 @@ class GcCommand:
             stdin, stdout, stderr = cmd_conn[0][1].exec_command(cmd_conn[1], get_pty=True, timeout=int(self.gConfig['COMMAND']['ssh_cmd_timeout']))
             stdin.close()
             self.gLogging.debug("stopping thread for host: %s, instance: %s, db: %s" % (cmd_conn[0][0], cmd_conn[2], cmd_conn[3]))
-            return (stdout.read(), cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3])
+            return (stdout.read(), cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
         except SocketTimeout:
-            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3])
+            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
         except IOError:
-            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3])
+            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
         except Exception:
             print(type(Exception).__name__)
             self.gLogging.error("cannot run command %s at host: %s" % (cmd_conn[1], cmd_conn[0][0]))
@@ -433,7 +432,7 @@ class GcCommand:
                 if not db2:
                     commands = self.gVars.parseString(command)
                     for cmd_parsed in commands:
-                        pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA"),), callback=self._commandOneCallback)
+                        pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA"),), callback=self._commandOneCallback)
                         self.gLogging.debug("%s executed command: %s " % (conn[0], cmd_parsed))
                 else:
                     vhost = self.gHosts.searchHostName(conn[0])
@@ -463,7 +462,7 @@ class GcCommand:
                                         commands = self.gVars.parseString(cmd)
                                         for cmd_parsed in commands:
                                             #print(cmd_parsed)
-                                            pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], "NA"),), callback=self._commandOneCallback)
+                                            pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], "NA", install['installation_name']),), callback=self._commandOneCallback)
                                             self.gLogging.debug("%s(%s:%s) executed command: %s " % (host["hostname"], host["host"], host["port"], cmd_parsed))
                                 elif kwargs['level'] == 'DB':
                                     for db in instance["databases"]:
@@ -488,7 +487,7 @@ class GcCommand:
                                             #print(host['hostname'], cmd)
                                             commands = self.gVars.parseString(cmd)
                                             for cmd_parsed in commands:
-                                                pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], db['db_name']),), callback=self._commandOneCallback)
+                                                pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], db['db_name'], install['installation_name']),), callback=self._commandOneCallback)
                                                 self.gLogging.debug("%s(%s:%s) executed command: %s " % (host["hostname"], host["host"], host["port"], cmd_parsed))
                                 else:
                                     self.gLogging.info("not supported level")
@@ -523,8 +522,10 @@ class GcCommand:
 
         """
         details = ""
+        if result[5] != "NA":
+            details += "--install: " + result[5] + "\n"
         if result[3] != "NA":
-            details += "-- instance: " + result[3]
+            details += "--instance: " + result[3]
         if result[4] != "NA":
             details += " --database: " + result[4] + " --"
 
@@ -542,6 +543,23 @@ class GcCommand:
 
 
         """
+        def _spool_formatter(xresult, option):
+            if option == 4:
+                return [xresult[1], self.hostDict[xresult[1]], xresult[0], xresult[2]]
+            elif option == 5:
+                return [xresult[1], self.hostDict[xresult[1]], xresult[5], xresult[3], xresult[0], xresult[2]]
+            elif option == 6:
+                return [xresult[1], self.hostDict[xresult[1]], xresult[5], xresult[3], xresult[4], xresult[0], xresult[2]]
+            else:
+                return None
+
+        if self.result[0][3] == "NA" and self.result[0][4] == "NA":
+            cols = (["hostname", "host", "result", "command"], 4)
+        elif self.result[0][3] != "NA" and self.result[0][4] == "NA":
+            cols = (["hostname", "host", "install", "instance", "result", "command"], 5)
+        else:
+            cols = (["hostname", "host", "install", "instance", "db", "result", "command"], 6)
+
         #generate excel file
         def xlsx():
             try:
@@ -551,25 +569,38 @@ class GcCommand:
                 wrap_alignment = Alignment(wrap_text=True, vertical="top")
                 byLine = self.gConfig['COMMAND']['spoolxlsxline']
 
-                ws.append(["hostname", "host", "instance", "db", "result", "command"])
+                ws.append(cols[0])
                 for xresult in self.result:
                     if byLine == "NO":
-                        ws.append([xresult[1], self.hostDict[xresult[1]], xresult[3], xresult[4], xresult[0], xresult[2]])
+                        ws.append(_spool_formatter(xresult, cols[1]))
                     else:
                         for xline in xresult[0].splitlines():
                             if len(xline) > 0:
-                                ws.append([xresult[1], self.hostDict[xresult[1]], xresult[3], xresult[4], xline.decode("utf-8"), xresult[2]])
+                                ws.append(_spool_formatter([xresult[1], self.hostDict[xresult[1]], xresult[5], xresult[3], xresult[4], xline.decode("utf-8"), xresult[2]], cols[1]))
 
                 ws.column_dimensions['A'].width = int(self.gConfig['COMMAND']['hostwidth'])
                 ws.column_dimensions['B'].width = int(self.gConfig['COMMAND']['hostwidth'])
-                ws.column_dimensions['E'].width = int(self.gConfig['COMMAND']['resultwidth'])
-                ws.column_dimensions['F'].width = int(self.gConfig['COMMAND']['resultwidth'])
+
+                if self.result[0][3] == "NA" and self.result[0][4] == "NA":
+                    ws.column_dimensions['C'].width = int(self.gConfig['COMMAND']['resultwidth'])
+                    ws.column_dimensions['D'].width = int(self.gConfig['COMMAND']['resultwidth'])
+                elif self.result[0][3] != "NA" and self.result[0][4] == "NA":
+                    ws.column_dimensions['C'].width = int(self.gConfig['COMMAND']['hostwidth'])
+                    ws.column_dimensions['D'].width = int(self.gConfig['COMMAND']['hostwidth'])
+                    ws.column_dimensions['E'].width = int(self.gConfig['COMMAND']['resultwidth'])
+                    ws.column_dimensions['F'].width = int(self.gConfig['COMMAND']['resultwidth'])
+                else:
+                    ws.column_dimensions['C'].width = int(self.gConfig['COMMAND']['hostwidth'])
+                    ws.column_dimensions['D'].width = int(self.gConfig['COMMAND']['hostwidth'])
+                    ws.column_dimensions['E'].width = int(self.gConfig['COMMAND']['hostwidth'])
+                    ws.column_dimensions['F'].width = int(self.gConfig['COMMAND']['resultwidth'])
+                    ws.column_dimensions['G'].width = int(self.gConfig['COMMAND']['resultwidth'])
 
                 for row in ws.iter_rows():
                     for cell in row:
                         cell.alignment = wrap_alignment
 
-                for c in ['A1', 'B1', 'C1', 'D1', 'E1', 'F1']:
+                for c in ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1']:
                     cell = ws[c]
                     cell.font = Font(bold=True)
 
@@ -588,11 +619,22 @@ class GcCommand:
                 self.gLogging.debug("generating spool file..")
                 outfile = "{}/{}{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), self.gConfig['COMMAND']['spoolpath'], self.spool)
                 with open(outfile, "w") as f:
-                    f.write("%s,%s,%s,%s,%s,%s\n" % ("hostname", "host", "instance", "db", "result", "command"))
+                    if cols[1] == 4:
+                        f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s"]) % tuple(cols[0]) + "\n")
+                    elif cols[1] == 5:
+                        f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s", "%s", "%s"]) % tuple(cols[0]) + "\n")
+                    else:
+                        f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s", "%s", "%s", "%s"]) % tuple(cols[0]) + "\n")
+
                     for xresult in self.result:
                         for xline in xresult[0].splitlines():
                             if len(xline) > 0:
-                                f.write("%s,%s,%s,%s,%s,%s\n" % (xresult[1], self.hostDict[xresult[1]], xresult[3], xresult[4], xline.decode("utf-8"), xresult[2]))
+                                if cols[1] == 4:
+                                    f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s"]) % (xresult[1], self.hostDict[xresult[1]], xline.decode("utf-8"), xresult[2]) + "\n")
+                                elif cols[1] == 5:
+                                    f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s", "%s", "%s"]) % (xresult[1], self.hostDict[xresult[1]], xresult[5], xresult[3], xline.decode("utf-8"), xresult[2]) + "\n")
+                                else:
+                                    f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s", "%s", "%s", "%s"]) % (xresult[1], self.hostDict[xresult[1]], xresult[5], xresult[3], xresult[4], xline.decode("utf-8"), xresult[2]) + "\n")
 
                 self.gLogging.info("csv file generated to: %s.. spool turned off" % outfile)
                 self.spool = ""
@@ -664,7 +706,7 @@ class GcCommand:
         #todo switch to Command method
         for conn in self.connections:
             try:
-                pool.apply_async(self._commandOne, args=((conn, command, "NA", "NA"),), callback=self._commandOneCallback)
+                pool.apply_async(self._commandOne, args=((conn, command, "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -691,7 +733,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c "' + x + '"'
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -716,7 +758,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c "cat /etc/passwd | grep ^' + x + ': | cut -d: -f6"'
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -742,7 +784,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c ". %s; db2 list db directory"' % x
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -759,11 +801,13 @@ class GcCommand:
                             #print(names.split("=")[1].split("Database")[0].split("\\r")[0].strip())
                             input.append((names.split("=")[1].split("Database")[0].split("\\r")[0].strip(), db[1]))
                             tempinstallations.append([db[1], db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip()])
-                            #print(db[2].split('"')[1].split(";")[0].replace(".", '').strip()[:-1])
-                            #db[2].split('"')[1].split("sqllib")[0].replace(".",'').strip()[:-1]
+                            cmd = 'sudo su - -c ". %s; db2pd -d %s -hadr"' % (db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip())
+                            # pprint([db[1], db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip()])
+                            pprint(cmd)
         # print("-------db-----------")
         # pprint(input)
         self.gLogging.show("step 4/4 completed..")
+
         # print("-------TEMPINSTALLATIONS-----------")
         # pprint(tempinstallations)
 
@@ -789,7 +833,7 @@ class GcCommand:
                 #print("--------------", host)
                 for fid, id in items:
                     entries[id] = entry = {'id': id, 'fid': fid}
-                    if fid == "/usr/local/bin/db2ls":
+                    if fid == self.gConfig['COMMAND']['db2ls_location']:
                         l.append(entry)
                     else:
                         parent = entries[fid]
