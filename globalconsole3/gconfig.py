@@ -1,7 +1,6 @@
 import configparser
 import glob
 #
-import globalconsole3.gexception as gexception
 from globalconsole3.gutils import GcUtils as gutils
 
 class GcConfig:
@@ -18,14 +17,10 @@ class GcConfig:
             loaded = self.config.read(glob.glob("{}/{}".format(gutils.gcpath(), self.CONFIG_MASK)))
 
             if self.CONFIG_MAIN not in [gutils.gcfile(file) for file in loaded]:
-                raise gexception.GcException(2000)
+                raise Exception("main config file: {} cannot be found. exiting..".format(self.CONFIG_MAIN))
 
             if not all(elem in self.config.sections() for elem in self.CONFIG_MAIN_SECTIONS):
-                raise gexception.GcException(2001)
-
-        except gexception.GcException as e:
-            print(e)
-            exit(1)
+                raise Exception("main config file: {} seems to be invalid. exiting..".format(self.CONFIG_MAIN))
 
         except Exception as e:
             print(e)

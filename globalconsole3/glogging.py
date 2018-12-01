@@ -3,7 +3,6 @@ from logging.handlers import RotatingFileHandler
 from tabulate import tabulate
 from colorama import Fore, Style
 #
-import globalconsole3.gexception as gexception
 from globalconsole3.gutils import GcUtils as gutils
 
 
@@ -14,14 +13,14 @@ class GcLogging:
         try:
             self.logger = logging.getLogger(self.gConfig['LOGGING']['logger_name'])
             self.logger.setLevel(self.gConfig['LOGGING']['logging_level'])
+            #file
             self.handler = RotatingFileHandler("{}/{}".format(gutils.gcpath(), self.gConfig['LOGGING']['log_file']),  maxBytes=int(self.gConfig['LOGGING']['log_file_size']), backupCount=int(self.gConfig['LOGGING']['log_file_rotate']))
             self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             self.handler.setFormatter(self.formatter)
             self.logger.addHandler(self.handler)
 
         except Exception as e:
-            gexception.UnhadledException(e, "cannot start logging mechanism")
-            exit(1)
+            print("cannot start logging mechanism. reason: {}. exiting..".format(e))
 
         self.logging_levels = {"CRITICAL": 50, "ERROR": 40, "WARNING": 30, "INFO": 20, "DEBUG": 10, "NOSET": 10}
         self.logging_level = self.logging_levels[self.gConfig['LOGGING']['logging_level']]
@@ -29,9 +28,14 @@ class GcLogging:
     def _print(self, msg, methodlevel):
         if self.gConfig['LOGGING']['logging_to_cli'] == "YES":
             if methodlevel >= self.logging_level:
-                print(msg)
+                rev_logging_levels = {v: k for k, v in self.logging_levels.items()}
+                rev_level = rev_logging_levels[methodlevel]
+                print("Globalconsole {} - {}".format(rev_level, msg))
         else:
             pass
+
+    def _format_cli_msg(self, msg):
+        return
 
     def show(self, msg):
         if self.gConfig['LOGGING']['logging_silent_cli'] == "NO":

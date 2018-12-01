@@ -30,7 +30,6 @@ from scp import SCPClient, asbytes, SCPException
 from socket import timeout as SocketTimeout
 import sys
 
-
 #rewritten method to get hostname into progress callback
 class MySCPClient(SCPClient):
     """This class features:
@@ -1064,6 +1063,8 @@ class GcCommand:
             shell = ""
 
         if sudo:
+            # TODO: fix single apostrophe issue with sudo: " -c $'" + cmd.replace("'", "\\'")
+            # same for db2 commands
             command = 'sudo su - ' + sudoUser + shell + " -c '" + cmd + "'"
 
         try:
