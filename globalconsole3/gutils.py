@@ -7,7 +7,8 @@ class GcUtils:
 
     @staticmethod
     def gcpath():
-        return os.path.dirname(os.getcwd())
+        return os.getcwd()
+        #return os.path.dirname(os.getcwd())
 
     @staticmethod
     def gcfile(file):
