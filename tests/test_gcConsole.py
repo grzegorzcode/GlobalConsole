@@ -102,3 +102,6 @@ class TestGcConsole(TestCase):
     # def test_do_config(self):
     #     self.fail()
 
+
+if __name__ == '__main__':
+    unittest.main()
