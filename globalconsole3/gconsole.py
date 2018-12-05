@@ -24,7 +24,11 @@ class GcConsole(cmd.Cmd):
 
         #set cmd module environment
         self.epilog = ""
-        self.header()
+        try:
+            if self.gConfig['CMD']['print_header'] == "YES":
+                self.header()
+        except Exception:
+            self.gLogging.warning("not supported terminal, you may experience a strange behaviour")
 
         #check env variable
 

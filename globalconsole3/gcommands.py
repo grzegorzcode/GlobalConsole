@@ -665,7 +665,7 @@ class GcCommand:
         if sudo:
             # TODO: fix single apostrophe issue with sudo: " -c $'" + cmd.replace("'", "\\'")
             # same for db2 commands
-            command = 'sudo su - ' + sudoUser + shell + " -c '" + cmd + "'"
+            command = 'sudo su - ' + sudoUser + shell + " -c $'" + cmd.replace("'", "\\'") + "'"
 
         try:
             self.command(command)
