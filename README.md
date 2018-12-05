@@ -2,6 +2,8 @@
 GlobalConsole
 ----------------
 
+https://travis-ci.com/grzegorzcode/GlobalConsole.svg?branch=v3.0_alpha
+
 GlobalConsole is a tool designed to run commands on many Linux/Unix machines at the same time.
 What distinguishes GlobalConsole from similar software is ability to handle DB2 database environments.
 You can:

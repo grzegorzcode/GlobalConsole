@@ -68,6 +68,10 @@ class TestGcConsole(TestCase):
         self.gcreds.credfile.close()
         self.ghosts.hostfile.close()
 
+        with open('logs/global_console.log', 'r') as file:
+            for line in file.readlines():
+                print(line)
+
     def test_do_conn(self):
         self.assert_stdout("conn connect -Y", self.gcon.onecmd, 2, "INFO", "ERROR", "connection test")
 
@@ -105,3 +109,4 @@ class TestGcConsole(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
