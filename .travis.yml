@@ -1,0 +1,19 @@
+language: python
+branches:
+  only:
+    - v3.0_alpha
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+virtualenv:
+  system_site_package: true
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq openssh-client openssh-server python3-dev
+  - pip install -r requirements.txt
+install:
+  - .travis/setup_ssh.sh
+script:
+  - python tests/test_gcConsole.py
+
