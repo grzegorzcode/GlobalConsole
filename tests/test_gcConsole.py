@@ -75,6 +75,10 @@ class TestGcConsole(TestCase):
     def test_do_conn(self):
         self.assert_stdout("conn connect -Y", self.gcon.onecmd, 2, "INFO", "ERROR", "connection test")
 
+    def test_do_run(self):
+        self.gcon.onecmd("conn connect -Y")
+        self.assert_stdout("run os whoami", self.gcon.onecmd, 2, "travis", "root", "connection test")
+        self.assert_stdout("run os whoami +SU", self.gcon.onecmd, 2, "root", "travis", "connection test")
     #
     # def test_do_cred(self):
     #     self.fail()
@@ -82,8 +86,6 @@ class TestGcConsole(TestCase):
     # def test_do_host(self):
     #     self.fail()
     #
-    # def test_do_run(self):
-    #     self.fail()
     #
     # def test_do_shell(self):
     #     self.fail()
