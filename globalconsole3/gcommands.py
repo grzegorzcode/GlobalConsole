@@ -95,6 +95,7 @@ class GcCommand:
                 key_passwd = cred['key_password']
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            #fixme non default ports!!
             if cred['use'] == 'password':
                 client.connect(host['host'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using password" % host['host'])
