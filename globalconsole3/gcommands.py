@@ -97,7 +97,7 @@ class GcCommand:
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #fixme non default ports!!
             if cred['use'] == 'password':
-                client.connect(host['host'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
+                client.connect(host['host'], port=host['port'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using password" % host['host'])
                 stdin, stdout, stderr = client.exec_command(self.gConfig['COMMAND']['hello_command'])
                 stdin.close()
@@ -107,7 +107,7 @@ class GcCommand:
                 return (host['hostname'], client)
             elif cred['use'] == 'key':
                 privkey = paramiko.RSAKey.from_private_key_file(cred["key"], password=key_passwd)
-                client.connect(host['host'], username=cred['username'], password=passwd, pkey=privkey, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
+                client.connect(host['host'], port=host['port'], username=cred['username'], password=passwd, pkey=privkey, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using key" % host['host'])
                 stdin, stdout, stderr = client.exec_command(self.gConfig['COMMAND']['hello_command'])
                 stdin.close()

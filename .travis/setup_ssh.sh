@@ -9,7 +9,7 @@ cd /tmp/ssh_server
 
 # Server config file
 cat >config <<'EOF'
-Port 22
+Port 10022
 ListenAddress 127.0.0.1
 
 Protocol 2
@@ -41,7 +41,7 @@ ssh-keygen -f client/id_rsa -N '' -t rsa
 umask 022
 
 # Starts the server
-/usr/sbin/sshd -f config -h key_rsa -h key_dsa -p 22
+/usr/sbin/sshd -f config -h key_rsa -h key_dsa -p 10022
 
 # Sets up the client
 umask 077
@@ -53,7 +53,7 @@ rm -f ~/.ssh/known_hosts
 # ssh-keyscan -v -p 10022 -t rsa 127.0.0.1 >> ~/.ssh/known_hosts
 ssh -o StrictHostKeyChecking=no \
     -o PasswordAuthentication=no \
-    -p 22 127.0.0.1 exit
+    -p 10022 127.0.0.1 exit
 cat ~/.ssh/known_hosts
 echo "whoami"
 whoami
@@ -63,8 +63,7 @@ import paramiko
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 privkey=paramiko.RSAKey.from_private_key_file('/home/travis/.ssh/id_rsa', password='')
-client.connect('127.0.0.1', username='travis', password='password', pkey=privkey, timeout=10)
+client.connect('127.0.0.1', port=10022, username='travis', password='password', pkey=privkey, timeout=10)
 client.exec_command('whoami')
 exit()
-
 EOF
