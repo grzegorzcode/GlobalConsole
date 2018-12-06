@@ -83,7 +83,7 @@ class TestGcConsole(TestCase):
         self.assert_stdout("run os whoami | awk '{print $1}' +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command with apostrophe test")
         self.assert_stdout("run scan -Y", self.gcon.onecmd, 11, "TESTDB", "ERROR", "scanning functionality test")
         self.assert_stdout("run db2 db2select +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command test")
-        self.assert_stdout("run scp -m put -s tests/hostsTEST.csv -d tests/hostsTEST2.csv", self.gcon.onecmd, 2, "tests/hostsTEST.csv", "ERROR", "db2 scp test")
+        #self.assert_stdout("run scp -m put -s tests/hostsTEST.csv -d tests/hostsTEST2.csv", self.gcon.onecmd, 2, "tests/hostsTEST.csv", "ERROR", "db2 scp test")
         # try:
         #     with open('tests/hostsTEST2.csv', 'r') as file:
         #         val = 1
