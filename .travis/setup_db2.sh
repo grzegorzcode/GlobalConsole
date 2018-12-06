@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo su -
+
 mkdir -p /usr/local/bin
 
 cat > /usr/local/bin/db2ls <<EOF
