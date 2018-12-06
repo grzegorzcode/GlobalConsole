@@ -705,7 +705,7 @@ class GcCommand:
         self.gLogging.debug("_scpOne invoked")
         try:
             self.gLogging.debug("starting thread for host: %s" % cmd_conn[0][0])
-            scp = SCPClient(cmd_conn[0][1].get_transport(), sanitize=lambda x: x, progress=self._progress)
+            scp = SCPClient(cmd_conn[0][1].get_transport(), sanitize=lambda x: x, progress4=self._progress)
             if cmd_conn[1]['mode'] == "put":
                 self.gLogging.info("scp - command mode: %s, source: %s, dest: %s, recursive: %s, host: %s" % (cmd_conn[1]['mode'], cmd_conn[1]['source'], cmd_conn[1]['dest'], str(cmd_conn[1]['recursive']), cmd_conn[0][0]))
                 scp.put(cmd_conn[1]['source'], cmd_conn[1]['dest'], recursive=cmd_conn[1]['recursive'])
