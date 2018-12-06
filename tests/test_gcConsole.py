@@ -98,8 +98,6 @@ class TestGcConsole(TestCase):
         #     val = 0
         # self.assertEqual(val, 1, "db2 scp result test2")
 
-    #todo add missing test cases
-
     #
     # def test_do_cred(self):
     #     self.fail()
