@@ -91,9 +91,9 @@ class TestGcConsole(TestCase):
         except Exception:
             val = 0
         self.assertEqual(val, 1, "db2 scp result test")
-        self.assert_stdout("run scp -m get -s /home/travis/.ssh/id_rsa -d /home/travis/id -b", self.gcon.onecmd, 4, "id_rsa", "ERROR", "db2 scp test2")
+        self.assert_stdout("run scp -m get -s /home/travis/.ssh/id_rsa -d /home/travis/ -b", self.gcon.onecmd, 4, "done:", "ERROR", "db2 scp test2")
         try:
-            with open('/home/travis/id_127.0.0.1', 'r') as file:
+            with open('/home/travis/id_rsa_myhost1', 'r') as file:
                 file.readlines()
                 val = 1
         except Exception:
