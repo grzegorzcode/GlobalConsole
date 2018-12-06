@@ -67,7 +67,7 @@ class TestGcConsole(TestCase):
         self.gvars.varsfile.close()
         self.gcreds.credfile.close()
         self.ghosts.hostfile.close()
-
+        print("---------------LOG INFO---------------")
         with open('logs/global_console.log', 'r') as file:
             for line in file.readlines():
                 print(line)
@@ -80,7 +80,8 @@ class TestGcConsole(TestCase):
         self.assert_stdout("run os whoami", self.gcon.onecmd, 4, "travis", "root", "os command test")
         self.assert_stdout("run os whoami +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command test")
         self.assert_stdout("run os whoami | awk '{print $1}' +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command with apostrophe test")
-        self.assert_stdout("run scan -Y", self.gcon.onecmd, 6, "TESTDB", "ERROR", "scanning functionality test")
+        self.assert_stdout("run scan -Y", self.gcon.onecmd, 11, "TESTDB", "ERROR", "scanning functionality test")
+        self.assert_stdout("run db2 db2select +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command test")
     #
     # def test_do_cred(self):
     #     self.fail()
