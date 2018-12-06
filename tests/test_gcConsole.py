@@ -90,13 +90,13 @@ class TestGcConsole(TestCase):
         except Exception:
             val = 0
         self.assertEqual(val, 1, "db2 scp result test")
-        self.assert_stdout("run scp -m get -s tests/hostsTEST.csv -d tests/hostsTEST3.csv", self.gcon.onecmd, 2, "tests/hostsTEST3.csv", "ERROR", "db2 scp test2")
-        try:
-            with open('tests/hostsTEST3.csv_127.0.0.1', 'r') as file:
-                val = 1
-        except Exception:
-            val = 0
-        self.assertEqual(val, 1, "db2 scp result test2")
+        # self.assert_stdout("run scp -m get -s tests/hostsTEST.csv -d tests/hostsTEST3.csv", self.gcon.onecmd, 2, "tests/hostsTEST3.csv", "ERROR", "db2 scp test2")
+        # try:
+        #     with open('tests/hostsTEST3.csv_127.0.0.1', 'r') as file:
+        #         val = 1
+        # except Exception:
+        #     val = 0
+        # self.assertEqual(val, 1, "db2 scp result test2")
 
     #todo add missing test cases
 
