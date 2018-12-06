@@ -14,6 +14,7 @@ before_install:
   - pip install -r requirements.txt
 install:
   - .travis/setup_ssh.sh
+  - .travis/setup_db2.sh
 script:
   - python tests/test_gcConsole.py
 

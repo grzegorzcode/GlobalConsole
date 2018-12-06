@@ -77,8 +77,10 @@ class TestGcConsole(TestCase):
 
     def test_do_run(self):
         self.gcon.onecmd("conn connect -Y")
-        self.assert_stdout("run os whoami", self.gcon.onecmd, 4, "travis", "root", "connection test")
-        self.assert_stdout("run os whoami +SU", self.gcon.onecmd, 4, "root", "travis", "connection test")
+        self.assert_stdout("run os whoami", self.gcon.onecmd, 4, "travis", "root", "os command test")
+        self.assert_stdout("run os whoami +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command test")
+        self.assert_stdout("run os whoami | awk '{print $1}' +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command with apostrophe test")
+        self.assert_stdout("run scan -Y", self.gcon.onecmd, 6, "TESTDB", "ERROR", "scanning functionality test")
     #
     # def test_do_cred(self):
     #     self.fail()
