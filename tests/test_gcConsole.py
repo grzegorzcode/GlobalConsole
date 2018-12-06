@@ -68,10 +68,10 @@ class TestGcConsole(TestCase):
         self.gcreds.credfile.close()
         self.ghosts.hostfile.close()
         #DEBUGGING PURPOSES
-        # print("---------------LOG INFO---------------")
-        # with open('logs/global_console.log', 'r') as file:
-        #     for line in file.readlines():
-        #         print(line)
+        print("---------------LOG INFO---------------")
+        with open('logs/global_console.log', 'r') as file:
+            for line in file.readlines():
+                print(line)
 
     def test_do_conn(self):
         self.assert_stdout("conn connect -Y", self.gcon.onecmd, 2, "INFO", "ERROR", "connection test")
