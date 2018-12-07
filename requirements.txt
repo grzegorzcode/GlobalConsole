@@ -1,9 +1,8 @@
 colorama
-inquirer
 openpyxl
 paramiko
 pycrypto
 pycryptodome
-scp
+scp>=0.13
 tabulate
 tinydb
