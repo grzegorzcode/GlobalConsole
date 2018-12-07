@@ -1,7 +1,4 @@
 language: python
-branches:
-  only:
-    - v3.0_beta
 python:
   - "3.4"
   - "3.5"
