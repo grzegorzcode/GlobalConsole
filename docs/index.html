@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to GlobalConsole’s documentation! &#8212; GlobalConsole v2.1.1 documentation</title>
+    <title>Welcome to GlobalConsole’s documentation! &#8212; GlobalConsole v3.0.1 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v3.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,6 @@ You can:</p>
 <li><strong>multithreaded</strong></li>
 <li>stored passwords can be encrypted</li>
 <li>output of command can be saved within <strong>excel</strong> or <strong>csv</strong> file</li>
-<li>hosts can be picked up using visual editor</li>
 <li>local shell commands are supported</li>
 <li>history of invoked commands is persistent over sessions</li>
 <li>custom variables can be set to improve productivity</li>
@@ -590,19 +589,10 @@ gc&gt; host show
 <p>Command below prints if item is picked(can be use to connect on, or run command on it) or not.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Use <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch to collapse items under hosts (installations, instance and databases). It’s useful using interactive mode ( <code class="docutils literal notranslate"><span class="pre">-e</span></code> switch ).</p>
-<p class="last">For long list of items use <strong>manual</strong> editing instead of interactive</p>
+<p class="last">Use <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch to collapse items under hosts (installations, instance and databases).</p>
 </div>
 <p>Example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick
-</pre></div>
-</div>
-<p>You must use <code class="docutils literal notranslate"><span class="pre">-e</span></code> switch to enter interactive edit mode. use <strong>STOP</strong> when all changes are made.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -e
-</pre></div>
-</div>
-<p>collapse items:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -e -c
 </pre></div>
 </div>
 <p>You must use <code class="docutils literal notranslate"><span class="pre">-m</span></code> switch to manually select uuids</p>
@@ -615,6 +605,10 @@ gc&gt; host show
 </div>
 <p>You must use <code class="docutils literal notranslate"><span class="pre">-r</span></code> switch to reset all selections</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -r
+</pre></div>
+</div>
+<p>use additional parameter <code class="docutils literal notranslate"><span class="pre">-o</span></code> to reset all to selected (value: <strong>Y</strong>) or not selected (value: <strong>N</strong>)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; host pick -r -o Y
 </pre></div>
 </div>
 <div class="admonition note">
@@ -1839,11 +1833,11 @@ grzegorz.cylny [at] gmail.com</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">GlobalConsole v3.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Grzegorz Cylny.
+        &#169; Copyright 2019, Grzegorz Cylny.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

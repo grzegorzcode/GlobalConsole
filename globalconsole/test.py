@@ -4,13 +4,13 @@ import os
 sys.path.append(os.getcwd())
 
 
-import globalconsole3.gconfig as gconfig
-import globalconsole3.glogging as glogging
-import globalconsole3.ghosts as ghosts
-import globalconsole3.gcreds as gcreds
-import globalconsole3.gvars as gvars
-import globalconsole3.gcommands as gcomm
-import globalconsole3.gconsole as gcon
+import globalconsole.gconfig as gconfig
+import globalconsole.glogging as glogging
+import globalconsole.ghosts as ghosts
+import globalconsole.gcreds as gcreds
+import globalconsole.gvars as gvars
+import globalconsole.gcommands as gcomm
+import globalconsole.gconsole as gcon
 
 if __name__ == '__main__':
 

@@ -1,62 +1,60 @@
 """
-.. module:: GcConsole
+.. module:: gconsole
    :platform: Linux
-   :synopsis:  An entry point for GlobalConsole
+   :synopsis: Cmd Module for GlobalConsole
 
 .. moduleauthor:: Grzegorz Cylny
 
-
 """
-
 import cmd
 from colorama import Fore, Style
-try:
-    from globalconsole.GcLogging import GcLogging
-    from globalconsole.GcCommand import GcCommand
-    from globalconsole.GcConfig import GcConfig
-except ImportError:
-    from GcLogging import GcLogging
-    from GcCommand import GcCommand
-    from GcConfig import GcConfig
 import os
-import inspect
 import argparse
 import readline
 import atexit
 import sys
+#
+from globalconsole.gutils import GcUtils as gutils
+
 
 class GcConsole(cmd.Cmd):
     """This class features:
 
-    - use cmd module to interact with imports
+    - use cmd module to interact with the app
 
     Arguments of methods are being parsed by ``argparse``
 
     """
     prompt = "gc> "
 
-    def __init__(self, hostfile="", credfile=""):
+    def __init__(self, config, logger, command):
+        """
+        Construct object
+
+        Args:
+            config (object): holds instance of GcConfig class
+            logger (object): holds instance of GcLogging class
+            command (object): holds instance of GcCommands class
+
+
+        """
         cmd.Cmd.doc_header = "GlobalConsole: type <help> to see this message"
         cmd.Cmd.undoc_header = "Commands: type <command> -h to get help (+h for db2 command)"
         cmd.Cmd.__init__(self)
 
         #initialize required objects
-        self.gLogging = GcLogging("console")
-        self.gConfig = GcConfig().config
+        self.gLogging = logger
+        self.gConfig = config.config
+        self.gCommand = command
         self.gLogging.info("Session started.")
-
-        if len(hostfile) == 0 and len(credfile) == 0:
-            self.gCommand = GcCommand()
-        elif len(hostfile) == 0:
-            self.gCommand = GcCommand(hostfile="", credfile=credfile)
-        elif len(credfile) == 0:
-            self.gCommand = GcCommand(hostfile=hostfile, credfile="")
-        else:
-            self.gCommand = GcCommand(hostfile=hostfile, credfile=credfile)
 
         #set cmd module environment
         self.epilog = ""
-        self.header()
+        try:
+            if self.gConfig['CMD']['print_header'] == "YES":
+                self.header()
+        except Exception:
+            self.gLogging.warning("not supported terminal, you may experience a strange behaviour")
 
         #check env variable
 
@@ -67,11 +65,11 @@ class GcConsole(cmd.Cmd):
 
         #initialize history file
         try:
-            if os.path.exists("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcConsole)))), self.gConfig['CMD']['histfile'])) is False:
-                with open("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcConsole)))), self.gConfig['CMD']['histfile']), "w") as f:
+            if os.path.exists("{}/{}".format(gutils.gcpath(), self.gConfig['CMD']['histfile'])) is False:
+                with open("{}/{}".format(gutils.gcpath(), self.gConfig['CMD']['histfile']), "w") as f:
                     f.write("")
 
-            readline.read_history_file("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcConsole)))), self.gConfig['CMD']['histfile']))
+            readline.read_history_file("{}/{}".format(gutils.gcpath(), self.gConfig['CMD']['histfile']))
             # default history len is -1 (infinite), which may grow unruly
             readline.set_history_length(int(self.gConfig['CMD']['histlen']))
         except Exception:
@@ -219,10 +217,10 @@ class GcConsole(cmd.Cmd):
 
             pick_parser = subparsers.add_parser('pick', description="pick hosts", usage="host pick <args>")
             pick_parser.set_defaults(which='pick')
-            pick_parser.add_argument('-e', '--edit', action='store_true', help="interactive edit")
             pick_parser.add_argument('-m', '--manual', nargs='*', help="manually select uuids to change")
             pick_parser.add_argument('-r', '--reset', action='store_true', help="reset all items selection")
             pick_parser.add_argument('-c', '--collapse', action='store_false', help="show only groups and hosts")
+            pick_parser.add_argument('-o', '--option', type=str, required=False, help="reset option: Y(default) - all to picked, N - none picked")
 
             show_parser = subparsers.add_parser('show', description="show hosts", usage="host show <args>")
             show_parser.set_defaults(which='show')
@@ -249,12 +247,12 @@ class GcConsole(cmd.Cmd):
                 else:
                     self.gLogging.show("skipped.. ")
             elif choice['which'] == 'pick':
-                if choice['edit']:
-                    self.gCommand.gHosts.pickHosts(edit=choice['edit'], collapse=choice['collapse'])
-                elif choice['manual']:
+                if choice['manual']:
                     self.gCommand.gHosts.pickHosts(manual=True, uuids=choice['manual'], collapse=choice['collapse'])
                 elif choice['reset']:
-                    self.gCommand.gHosts.pickHosts(reset=choice['reset'], collapse=choice['collapse'])
+                    if choice['option'] is None:
+                        choice['option'] = 'Y'
+                    self.gCommand.gHosts.pickHosts(reset=choice['reset'], collapse=choice['collapse'], resetOption=choice['option'])
                 else:
                     self.gCommand.gHosts.pickHosts(collapse=choice['collapse'])
 
@@ -448,23 +446,13 @@ class GcConsole(cmd.Cmd):
         except Exception:
             self.gLogging.error("cannot parse given arguments")
 
-
-    def do_quit(self, args):
-        """
-        This method saves command history and exit program
-
-        """
-        self.gLogging.debug("do_quit invoked")
-        atexit.register(readline.write_history_file, "{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcConsole)))), self.gConfig['CMD']['histfile']))
-        self.gCommand.quit()
-
     def do_exit(self, args):
         """
         This method saves command history and exit program
 
         """
         self.gLogging.debug("do_exit invoked")
-        atexit.register(readline.write_history_file, "{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcConsole)))), self.gConfig['CMD']['histfile']))
+        atexit.register(readline.write_history_file, "{}/{}".format(gutils.gcpath(), self.gConfig['CMD']['histfile']))
         self.gCommand.exit()
 
     ###Utilities
@@ -496,7 +484,7 @@ class GcConsole(cmd.Cmd):
         self.gLogging.show("".center(int(columns)))
         self.gLogging.show("".center(int(columns)))
         self.gLogging.show(Fore.LIGHTYELLOW_EX + "With Great Power Comes Great Responsibility".center(int(columns)) + Style.RESET_ALL)
-        self.gLogging.show(Fore.LIGHTWHITE_EX + "La Cucaracha Edition".center(int(columns)) + Style.RESET_ALL)
+        self.gLogging.show(Fore.LIGHTWHITE_EX + self.gConfig['LOGGING']['gversion'].center(int(columns)) + Style.RESET_ALL)
         self.gLogging.show("".center(int(columns)))
         self.gLogging.show("".center(int(columns)))
 
@@ -817,8 +805,13 @@ class GcConsole(cmd.Cmd):
         except Exception:
             self.gLogging.error("cannot parse given arguments")
 
+    def app(self):
+        """
+        This method start the app
+
+        """
+        self.cmdloop()
+
+
 if __name__ == '__main__':
     GcConsole().cmdloop()
-    # cons = GcConsole()
-    # res = cons.complete_cred("", "", "", "")
-    # print(res)

@@ -1,9 +1,22 @@
+"""
+.. module:: gconfig
+   :platform: Linux
+   :synopsis: Config Module for GlobalConsole
+
+.. moduleauthor:: Grzegorz Cylny
+
+"""
 import configparser
 import glob
 #
-from globalconsole3.gutils import GcUtils as gutils
+from globalconsole.gutils import GcUtils as gutils
 
 class GcConfig:
+    """This class features:
+
+     -load GC configuration files
+
+    """
 
     CONFIG_MASK = "config/*.ini"
     CONFIG_MAIN = "config.ini"

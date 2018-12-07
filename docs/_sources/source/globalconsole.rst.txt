@@ -1,69 +1,69 @@
 globalconsole package
-=====================
+======================
 
 Submodules
 ----------
 
-globalconsole.GcCommand module
-------------------------------
+globalconsole.gcommands module
+-------------------------------
 
-.. automodule:: GcCommand
+.. automodule:: gcommands
     :members:
     :undoc-members:
     :show-inheritance:
 
-globalconsole.GcConfig module
+globalconsole.gconfig module
+------------------------------
+
+.. automodule:: gconfig
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+globalconsole.gconsole module
+-------------------------------
+
+.. automodule:: gconsole
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+globalconsole.gcreds module
 -----------------------------
 
-.. automodule:: GcConfig
+.. automodule:: gcreds
     :members:
     :undoc-members:
     :show-inheritance:
 
-globalconsole.GcConsole module
-------------------------------
+globalconsole.ghosts module
+-----------------------------
 
-.. automodule:: GcConsole
+.. automodule:: ghosts
     :members:
     :undoc-members:
     :show-inheritance:
 
-globalconsole.GcCreds module
+globalconsole.glogging module
+-------------------------------
+
+.. automodule:: glogging
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+globalconsole.gutils module
+-----------------------------
+
+.. automodule:: gutils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+globalconsole.gvars module
 ----------------------------
 
-.. automodule:: GcCreds
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-globalconsole.GcHosts module
-----------------------------
-
-.. automodule:: GcHosts
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-globalconsole.GcLogging module
-------------------------------
-
-.. automodule:: GcLogging
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-globalconsole.GcUtils module
-----------------------------
-
-.. automodule:: GcUtils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-globalconsole.GcVars module
----------------------------
-
-.. automodule:: GcVars
+.. automodule:: gvars
     :members:
     :undoc-members:
     :show-inheritance:

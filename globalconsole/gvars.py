@@ -1,51 +1,51 @@
 """
-.. module:: GcVars
+.. module:: gvars
    :platform: Linux
-   :synopsis: Variables Manager for GlobalConsole
+   :synopsis: Variables Module for GlobalConsole
 
 .. moduleauthor:: Grzegorz Cylny
 
 """
-
-try:
-    from globalconsole.GcLogging import GcLogging
-    from globalconsole.GcConfig import GcConfig
-except ImportError:
-    from GcConfig import GcConfig
-    from GcLogging import GcLogging
-
 from tinydb import TinyDB, Query
-import os
-import inspect
 import re
 import itertools
+from operator import itemgetter
+#
+from globalconsole.gutils import GcUtils as gutils
+
 
 class GcVars:
     """This class features:
 
-    -handle variables definitions
+    -handle GC specific variables
 
 
     """
+    def __init__(self, config, logger):
+        """
+        Construct object
 
-    def __init__(self):
+        Args:
+            config (object): holds instance of GcConfig class
+            logger (object): holds instance of GcLogging class
+
+
+        """
         # enable logging and config
-        self.gLogging = GcLogging("vars")
-        self.gConfig = GcConfig().config
+        self.gLogging = logger
+        self.gConfig = config.config
         #
         try:
-            #initialize TinyDB with file configured in a config file
-            varsfile = "{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcVars)))), self.gConfig['JSON']['varfile'])
+            varsfile = "{}/{}".format(gutils.gcpath(), self.gConfig['JSON']['varfile'])
             self.varsfile = TinyDB(varsfile)
             self.varstable = self.varsfile.table("VARS")
             self.allvars = self.varstable.all()
-
         except Exception:
-            self.gLogging.critical("variables definitions cannot be loaded. process terminated..")
+            self.gLogging.critical("variables definitions cannot be loaded")
 
     def refreshVars(self):
         """
-        This method refreshes list of both session and pernament variables
+        This method refreshes list of variables
 
         Examples:
 
@@ -61,7 +61,6 @@ class GcVars:
             if mydict not in result:
                 result.append(mydict)
         self.allvars = result
-
 
     def updateVar(self, varname, value, persistent=True):
         """
@@ -98,6 +97,7 @@ class GcVars:
                     self.allvars = [x for x in self.allvars if x['varname'] != varname]
                     self.allvars.append({"varname": varname, "value": value.split(','), "persistent": "n"})
                     self.gLogging.info("edited session variable: %s " % varname)
+            self.refreshVars()
         except Exception:
             self.gLogging.error("cannot update variable: " + varname)
 
@@ -182,7 +182,6 @@ class GcVars:
         templist = list()
         #docs = self.varstable.all()
         docs = self.allvars
-        from operator import itemgetter
         result = sorted(docs, key=itemgetter("varname"), reverse=sort_reverse)
         try:
             for x in result:
@@ -241,20 +240,3 @@ class GcVars:
             self.gLogging.error("cannot parse command with variables")
 
 
-if __name__ == '__main__':
-    gvar = GcVars()
-    gvar.updateVar(varname="file", value="myfil1.txt", persistent=False)
-    gvar.updateVar(varname="dir", value="myfil1.txt", persistent=False)
-    gvar.updateVar(varname="dcat", value="mdwad.txt", persistent=True)
-    # gvar.removeVar("dir", persistent=False)
-    # gvar.updateVar({"varname": "file", "value": "myfil1.txt", "persistent": "y"}, "file")
-    # gvar.updateVar({"varname": "ports", "value": [22, 2222], "persistent": "y"}, "ports")
-    # gvar.purgeVars()
-    # gvar.updateVar({"varname": "users", "value": [22, 2222, 4444], "persistent": "y"}, "users")
-    # gvar.updateVar({"varname": "perms", "value": ["r", "w"], "persistent": "y"}, "perms")
-    # gvar.removeVar("users")
-    gvar.updateVar(varname="tar", value=["t", "g", "z"], persistent=True)
-    gvar.updateVar(varname="gzip", value=["C", "a", "2"], persistent=True)
-    gvar.refreshVars()
-    gvar.getVars(sort_reverse=False)
-    pprint(gvar.searchVarName("perms"))

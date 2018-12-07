@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>globalconsole package &#8212; GlobalConsole v2.1.1 documentation</title>
+    <title>globalconsole package &#8212; GlobalConsole v3.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v3.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -40,35 +40,17 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-GcCommand">
-<span id="globalconsole-gccommand-module"></span><h2>globalconsole.GcCommand module<a class="headerlink" href="#module-GcCommand" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcCommand"></span><dl class="class">
-<dt id="GcCommand.GcCommand">
-<em class="property">class </em><code class="descclassname">GcCommand.</code><code class="descname">GcCommand</code><span class="sig-paren">(</span><em>hostfile=''</em>, <em>credfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-gcommands">
+<span id="globalconsole-gcommands-module"></span><h2>globalconsole.gcommands module<a class="headerlink" href="#module-gcommands" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gcommands"></span><dl class="class">
+<dt id="gcommands.GcCommand">
+<em class="property">class </em><code class="descclassname">gcommands.</code><code class="descname">GcCommand</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em>, <em>vars</em>, <em>creds</em>, <em>hosts</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<ul class="simple">
-<li>handle ssh related tasks</li>
-<li>handle os commands</li>
-<li>handle db2 commands</li>
-<li>handle scp commands</li>
-<li>handle db2 discovery</li>
-</ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>hostfile</strong> (<em>str</em>) – path to json file with hosts definitions</li>
-<li><strong>credfile</strong> (<em>str</em>) – path to json file with credentials definitions</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
+<p>-handle GC commands</p>
 <dl class="method">
-<dt id="GcCommand.GcCommand.close">
-<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.close" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.close" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method closes active connections</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">close</span><span class="p">()</span>
@@ -77,8 +59,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.command">
-<code class="descname">command</code><span class="sig-paren">(</span><em>command</em>, <em>host='all'</em>, <em>db2=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.command" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.command">
+<code class="descname">command</code><span class="sig-paren">(</span><em>command</em>, <em>host='all'</em>, <em>db2=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.command" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method executes command on a picked hosts in loaded json file.</p>
 <p>Should not be used directly, use <code class="docutils literal notranslate"><span class="pre">os</span></code> or <code class="docutils literal notranslate"><span class="pre">db2</span></code> instead</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -102,8 +84,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.connect">
-<code class="descname">connect</code><span class="sig-paren">(</span><em>hostnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.connect" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>hostnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method creates a connection handler for picked hosts in loaded json file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,8 +102,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.db2">
-<code class="descname">db2</code><span class="sig-paren">(</span><em>command</em>, <em>user='current'</em>, <em>env=''</em>, <em>shell=''</em>, <em>placeholder='{}'</em>, <em>level='DB'</em>, <em>osmode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.db2" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.db2">
+<code class="descname">db2</code><span class="sig-paren">(</span><em>command</em>, <em>user='current'</em>, <em>env=''</em>, <em>shell=''</em>, <em>placeholder='{}'</em>, <em>level='DB'</em>, <em>osmode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.db2" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method executes os command on a picked hosts in loaded json file.</p>
 <p>User can be ‘instance’ - instance owner, &lt;any&gt; - whoever you want, empty or ‘current’ - connected user.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -167,8 +149,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.exit">
-<code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.exit" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.exit">
+<code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.exit" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method stops program</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">exit</span><span class="p">()</span>
@@ -177,8 +159,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.getConnections">
-<code class="descname">getConnections</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.getConnections" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.getConnections">
+<code class="descname">getConnections</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.getConnections" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method shows active connections. Uses output of pickHosts from GcHosts module</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">getConnections</span><span class="p">()</span>
@@ -187,14 +169,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.getConnections_old">
-<code class="descname">getConnections_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.getConnections_old" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method shows active connections. OBSOLETE</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcCommand.GcCommand.os">
-<code class="descname">os</code><span class="sig-paren">(</span><em>cmd</em>, <em>sudo=False</em>, <em>sudoUser=''</em>, <em>shell=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.os" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.os">
+<code class="descname">os</code><span class="sig-paren">(</span><em>cmd</em>, <em>sudo=False</em>, <em>sudoUser=''</em>, <em>shell=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.os" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method executes os command on a picked hosts in loaded json file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -224,18 +200,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.quit">
-<code class="descname">quit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method stops program</p>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">quit</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcCommand.GcCommand.scan">
-<code class="descname">scan</code><span class="sig-paren">(</span><em>dry=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.scan" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.scan">
+<code class="descname">scan</code><span class="sig-paren">(</span><em>dry=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.scan" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method scans connected hosts to get db2 installations, instances and databases.
 Basically is a set of command method invocations.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -253,15 +219,8 @@ Basically is a set of command method invocations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.scan_obsolete">
-<code class="descname">scan_obsolete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.scan_obsolete" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method scans connected hosts to get db2 installations, instances and databases.
-Synchronous, OBSOLETE</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcCommand.GcCommand.scp">
-<code class="descname">scp</code><span class="sig-paren">(</span><em>mode</em>, <em>source</em>, <em>dest</em>, <em>recursive=False</em>, <em>suffix=True</em>, <em>batch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.scp" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.scp">
+<code class="descname">scp</code><span class="sig-paren">(</span><em>mode</em>, <em>source</em>, <em>dest</em>, <em>recursive=False</em>, <em>suffix=True</em>, <em>batch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.scp" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method allows you to scp get/put files/dirs over active connections</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -290,8 +249,8 @@ Synchronous, OBSOLETE</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCommand.GcCommand.set_spool">
-<code class="descname">set_spool</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.GcCommand.set_spool" title="Permalink to this definition">¶</a></dt>
+<dt id="gcommands.GcCommand.set_spool">
+<code class="descname">set_spool</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.set_spool" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method sets spool variable to a given name; sets filename.</p>
 <p><strong>Supported filename extensions are: xlsx and csv</strong></p>
 <p class="rubric">Examples</p>
@@ -305,237 +264,207 @@ Synchronous, OBSOLETE</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="GcCommand.MySCPClient">
-<em class="property">class </em><code class="descclassname">GcCommand.</code><code class="descname">MySCPClient</code><span class="sig-paren">(</span><em>transport</em>, <em>buff_size=16384</em>, <em>socket_timeout=10.0</em>, <em>progress=None</em>, <em>sanitize=&lt;function _sh_quote&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCommand.MySCPClient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scp.SCPClient</span></code></p>
-<p>This class features:</p>
-<ul class="simple">
-<li>rewrites _send_file and _recv_file method from SCPClient class to add hostname to _progress callback</li>
-</ul>
-</dd></dl>
-
 </div>
-<div class="section" id="module-GcConfig">
-<span id="globalconsole-gcconfig-module"></span><h2>globalconsole.GcConfig module<a class="headerlink" href="#module-GcConfig" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcConfig"></span><dl class="class">
-<dt id="GcConfig.GcConfig">
-<em class="property">class </em><code class="descclassname">GcConfig.</code><code class="descname">GcConfig</code><a class="headerlink" href="#GcConfig.GcConfig" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-gconfig">
+<span id="globalconsole-gconfig-module"></span><h2>globalconsole.gconfig module<a class="headerlink" href="#module-gconfig" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gconfig"></span><dl class="class">
+<dt id="gconfig.GcConfig">
+<em class="property">class </em><code class="descclassname">gconfig.</code><code class="descname">GcConfig</code><a class="headerlink" href="#gconfig.GcConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<ul class="simple">
-<li>load parameter file, exit if not found</li>
-<li>check headers in config file, exit if not valid ones</li>
-</ul>
-<p>Object of this class will look up for a config file <strong>config/config.ini</strong>.
-Config file must have a proper structure, because of this fact headers needs to be validated.</p>
-<dl class="method">
-<dt id="GcConfig.GcConfig.get">
-<code class="descname">get</code><span class="sig-paren">(</span><em>section=None</em>, <em>option=None</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConfig.GcConfig.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method gets config option</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>section</strong> (<em>str</em>) – section from config file</li>
-<li><strong>option</strong> (<em>str</em>) – option from config file</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COMMAND&#39;</span><span class="p">,</span> <span class="s1">&#39;csv_delimiter&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-GcConsole">
-<span id="globalconsole-gcconsole-module"></span><h2>globalconsole.GcConsole module<a class="headerlink" href="#module-GcConsole" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcConsole"></span><dl class="class">
-<dt id="GcConsole.GcConsole">
-<em class="property">class </em><code class="descclassname">GcConsole.</code><code class="descname">GcConsole</code><span class="sig-paren">(</span><em>hostfile=''</em>, <em>credfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">cmd.Cmd</span></code></p>
-<p>This class features:</p>
-<ul class="simple">
-<li>use cmd module to interact with imports</li>
-</ul>
-<p>Arguments of methods are being parsed by <code class="docutils literal notranslate"><span class="pre">argparse</span></code></p>
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_check">
-<code class="descname">complete_check</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_check" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_config">
-<code class="descname">complete_config</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_conn">
-<code class="descname">complete_conn</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_cred">
-<code class="descname">complete_cred</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_cred" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_history">
-<code class="descname">complete_history</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_history" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_host">
-<code class="descname">complete_host</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_run">
-<code class="descname">complete_run</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_run" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.complete_var">
-<code class="descname">complete_var</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.complete_var" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_batch">
-<code class="descname">do_batch</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_batch" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method gives a possibility to run commands being stored in a file</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_check">
-<code class="descname">do_check</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_check" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to management of variables being used  by <code class="docutils literal notranslate"><span class="pre">batch</span></code> method as a control points</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_config">
-<code class="descname">do_config</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to internal configuration</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_conn">
-<code class="descname">do_conn</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_conn" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to connections</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_cred">
-<code class="descname">do_cred</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_cred" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to credentials</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_exit">
-<code class="descname">do_exit</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_exit" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method saves command history and exit program</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_history">
-<code class="descname">do_history</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_history" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to management of history of commands</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_host">
-<code class="descname">do_host</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to hosts</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_quit">
-<code class="descname">do_quit</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_quit" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method saves command history and exit program</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_run">
-<code class="descname">do_run</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_run" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to commands execution</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_shell">
-<code class="descname">do_shell</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method gives a possibility to run local os shell commands</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_var">
-<code class="descname">do_var</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_var" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method handles all tasks related to management of variables</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.do_version">
-<code class="descname">do_version</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.do_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method prints GC version</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.emptyline">
-<code class="descname">emptyline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.emptyline" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method rewrites default behaviour of <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module to re-run last command when enter pressed on empty prompt.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.header">
-<code class="descname">header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.header" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method gives a pretty header on start</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="GcConsole.GcConsole.postcmd">
-<code class="descname">postcmd</code><span class="sig-paren">(</span><em>stop</em>, <em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#GcConsole.GcConsole.postcmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method shows number of active connections after every command</p>
-</dd></dl>
+<p>-load GC configuration files</p>
+<dl class="attribute">
+<dt id="gconfig.GcConfig.CONFIG_MAIN">
+<code class="descname">CONFIG_MAIN</code><em class="property"> = 'config.ini'</em><a class="headerlink" href="#gconfig.GcConfig.CONFIG_MAIN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
-<dt id="GcConsole.GcConsole.prompt">
-<code class="descname">prompt</code><em class="property"> = 'gc&gt; '</em><a class="headerlink" href="#GcConsole.GcConsole.prompt" title="Permalink to this definition">¶</a></dt>
+<dt id="gconfig.GcConfig.CONFIG_MAIN_SECTIONS">
+<code class="descname">CONFIG_MAIN_SECTIONS</code><em class="property"> = ['LOGGING', 'JSON', 'COMMAND', 'BATCH', 'CMD']</em><a class="headerlink" href="#gconfig.GcConfig.CONFIG_MAIN_SECTIONS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gconfig.GcConfig.CONFIG_MASK">
+<code class="descname">CONFIG_MASK</code><em class="property"> = 'config/*.ini'</em><a class="headerlink" href="#gconfig.GcConfig.CONFIG_MASK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-GcCreds">
-<span id="globalconsole-gccreds-module"></span><h2>globalconsole.GcCreds module<a class="headerlink" href="#module-GcCreds" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcCreds"></span><dl class="class">
-<dt id="GcCreds.GcCreds">
-<em class="property">class </em><code class="descclassname">GcCreds.</code><code class="descname">GcCreds</code><span class="sig-paren">(</span><em>credfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-gconsole">
+<span id="globalconsole-gconsole-module"></span><h2>globalconsole.gconsole module<a class="headerlink" href="#module-gconsole" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gconsole"></span><dl class="class">
+<dt id="gconsole.GcConsole">
+<em class="property">class </em><code class="descclassname">gconsole.</code><code class="descname">GcConsole</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em>, <em>command</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">cmd.Cmd</span></code></p>
+<p>This class features:</p>
+<ul class="simple">
+<li>use cmd module to interact with the app</li>
+</ul>
+<p>Arguments of methods are being parsed by <code class="docutils literal notranslate"><span class="pre">argparse</span></code></p>
+<dl class="method">
+<dt id="gconsole.GcConsole.app">
+<code class="descname">app</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method start the app</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_check">
+<code class="descname">complete_check</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_config">
+<code class="descname">complete_config</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_conn">
+<code class="descname">complete_conn</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_cred">
+<code class="descname">complete_cred</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_cred" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_history">
+<code class="descname">complete_history</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_host">
+<code class="descname">complete_host</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_run">
+<code class="descname">complete_run</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.complete_var">
+<code class="descname">complete_var</code><span class="sig-paren">(</span><em>text</em>, <em>line</em>, <em>start_index</em>, <em>end_index</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.complete_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method uses <code class="docutils literal notranslate"><span class="pre">inlist</span></code> variable to enable <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module command autocompletion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_batch">
+<code class="descname">do_batch</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gives a possibility to run commands being stored in a file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_check">
+<code class="descname">do_check</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to management of variables being used  by <code class="docutils literal notranslate"><span class="pre">batch</span></code> method as a control points</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_config">
+<code class="descname">do_config</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to internal configuration</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_conn">
+<code class="descname">do_conn</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to connections</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_cred">
+<code class="descname">do_cred</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_cred" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to credentials</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_exit">
+<code class="descname">do_exit</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method saves command history and exit program</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_history">
+<code class="descname">do_history</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to management of history of commands</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_host">
+<code class="descname">do_host</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to hosts</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_run">
+<code class="descname">do_run</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to commands execution</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_shell">
+<code class="descname">do_shell</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gives a possibility to run local os shell commands</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_var">
+<code class="descname">do_var</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_var" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method handles all tasks related to management of variables</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.do_version">
+<code class="descname">do_version</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.do_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method prints GC version</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.emptyline">
+<code class="descname">emptyline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.emptyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method rewrites default behaviour of <code class="docutils literal notranslate"><span class="pre">cmd</span></code> module to re-run last command when enter pressed on empty prompt.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.header">
+<code class="descname">header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gives a pretty header on start</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gconsole.GcConsole.postcmd">
+<code class="descname">postcmd</code><span class="sig-paren">(</span><em>stop</em>, <em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#gconsole.GcConsole.postcmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method shows number of active connections after every command</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gconsole.GcConsole.prompt">
+<code class="descname">prompt</code><em class="property"> = 'gc&gt; '</em><a class="headerlink" href="#gconsole.GcConsole.prompt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gcreds">
+<span id="globalconsole-gcreds-module"></span><h2>globalconsole.gcreds module<a class="headerlink" href="#module-gcreds" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gcreds"></span><dl class="class">
+<dt id="gcreds.GcCreds">
+<em class="property">class </em><code class="descclassname">gcreds.</code><code class="descname">GcCreds</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em>, <em>credfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<p>-handle definitions of credentials</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>credfile</strong> (<em>str</em>) – path to json file with credentials definitions</td>
-</tr>
-</tbody>
-</table>
+<p>-handle GC definition of credentials</p>
 <dl class="method">
-<dt id="GcCreds.GcCreds.decryptPasswds">
-<code class="descname">decryptPasswds</code><span class="sig-paren">(</span><em>cred</em>, <em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.decryptPasswds" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.decryptPasswds">
+<code class="descname">decryptPasswds</code><span class="sig-paren">(</span><em>cred</em>, <em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.decryptPasswds" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method decrypts in memory passwords in loaded json with definitions of credentials. Fields ‘password’ and ‘key_password’ are subjects of dencryption.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -565,8 +494,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.decryptPasswdsInFile">
-<code class="descname">decryptPasswdsInFile</code><span class="sig-paren">(</span><em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.decryptPasswdsInFile" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.decryptPasswdsInFile">
+<code class="descname">decryptPasswdsInFile</code><span class="sig-paren">(</span><em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.decryptPasswdsInFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method decrypts in file passwords in loaded json with definitions of credentials. Fields ‘password’ and ‘key_password’ are subjects of dencryption.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -584,8 +513,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.encryptPasswds">
-<code class="descname">encryptPasswds</code><span class="sig-paren">(</span><em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.encryptPasswds" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.encryptPasswds">
+<code class="descname">encryptPasswds</code><span class="sig-paren">(</span><em>_utest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.encryptPasswds" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method encrypts passwords in loaded json with definitions of credentials. Fields ‘password’ and ‘key_password’ are subjects of encryption.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -602,8 +531,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.exportCredsToCsv">
-<code class="descname">exportCredsToCsv</code><span class="sig-paren">(</span><em>outfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.exportCredsToCsv" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.exportCredsToCsv">
+<code class="descname">exportCredsToCsv</code><span class="sig-paren">(</span><em>outfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.exportCredsToCsv" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method exports csv file with credentials.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -628,8 +557,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.getCreds">
-<code class="descname">getCreds</code><span class="sig-paren">(</span><em>show</em>, <em>sort_reverse</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.getCreds" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.getCreds">
+<code class="descname">getCreds</code><span class="sig-paren">(</span><em>show</em>, <em>sort_reverse</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.getCreds" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method prints most important info about each credential in a tabular form.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -651,8 +580,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.importCsvAsCreds">
-<code class="descname">importCsvAsCreds</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.importCsvAsCreds" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.importCsvAsCreds">
+<code class="descname">importCsvAsCreds</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.importCsvAsCreds" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method imports csv file with credentials.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -677,8 +606,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.purgeCreds">
-<code class="descname">purgeCreds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.purgeCreds" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.purgeCreds">
+<code class="descname">purgeCreds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.purgeCreds" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes all credentials</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">purgeCreds</span><span class="p">()</span>
@@ -687,8 +616,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.removeCred">
-<code class="descname">removeCred</code><span class="sig-paren">(</span><em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.removeCred" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.removeCred">
+<code class="descname">removeCred</code><span class="sig-paren">(</span><em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.removeCred" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes selected credential</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -705,8 +634,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.searchCredName">
-<code class="descname">searchCredName</code><span class="sig-paren">(</span><em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.searchCredName" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.searchCredName">
+<code class="descname">searchCredName</code><span class="sig-paren">(</span><em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.searchCredName" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method searches for a credential by name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -727,8 +656,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcCreds.GcCreds.updateCred">
-<code class="descname">updateCred</code><span class="sig-paren">(</span><em>definition</em>, <em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcCreds.GcCreds.updateCred" title="Permalink to this definition">¶</a></dt>
+<dt id="gcreds.GcCreds.updateCred">
+<code class="descname">updateCred</code><span class="sig-paren">(</span><em>definition</em>, <em>credname</em><span class="sig-paren">)</span><a class="headerlink" href="#gcreds.GcCreds.updateCred" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method updates selected credential</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -751,25 +680,17 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-GcHosts">
-<span id="globalconsole-gchosts-module"></span><h2>globalconsole.GcHosts module<a class="headerlink" href="#module-GcHosts" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcHosts"></span><dl class="class">
-<dt id="GcHosts.GcHosts">
-<em class="property">class </em><code class="descclassname">GcHosts.</code><code class="descname">GcHosts</code><span class="sig-paren">(</span><em>hostfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-ghosts">
+<span id="globalconsole-ghosts-module"></span><h2>globalconsole.ghosts module<a class="headerlink" href="#module-ghosts" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-ghosts"></span><dl class="class">
+<dt id="ghosts.GcHosts">
+<em class="property">class </em><code class="descclassname">ghosts.</code><code class="descname">GcHosts</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em>, <em>hostfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<p>-handle definitions of hostsout_dict</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hostfile</strong> (<em>str</em>) – path to json file with hosts definitions</td>
-</tr>
-</tbody>
-</table>
+<p>-handle GC definition of hosts</p>
 <dl class="method">
-<dt id="GcHosts.GcHosts.exportHostsToCsv">
-<code class="descname">exportHostsToCsv</code><span class="sig-paren">(</span><em>outfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.exportHostsToCsv" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.exportHostsToCsv">
+<code class="descname">exportHostsToCsv</code><span class="sig-paren">(</span><em>outfile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.exportHostsToCsv" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method exports csv file with hosts definitions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -793,8 +714,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.getHosts">
-<code class="descname">getHosts</code><span class="sig-paren">(</span><em>sort_reverse</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.getHosts" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.getHosts">
+<code class="descname">getHosts</code><span class="sig-paren">(</span><em>sort_reverse</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.getHosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method prints most important info about each host in a tabular form.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -815,8 +736,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.importCsvAsHosts">
-<code class="descname">importCsvAsHosts</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.importCsvAsHosts" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.importCsvAsHosts">
+<code class="descname">importCsvAsHosts</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.importCsvAsHosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method imports csv file with definitions of hosts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -842,19 +763,19 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.pickHosts">
-<code class="descname">pickHosts</code><span class="sig-paren">(</span><em>edit=False</em>, <em>manual=False</em>, <em>reset=False</em>, <em>_printing=True</em>, <em>collapse=True</em>, <em>uuids=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.pickHosts" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.pickHosts">
+<code class="descname">pickHosts</code><span class="sig-paren">(</span><em>manual=False</em>, <em>reset=False</em>, <em>_printing=True</em>, <em>collapse=True</em>, <em>uuids=[]</em>, <em>resetOption='E'</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.pickHosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method gives a possibility to pick items to work with</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>edit</strong> (<em>bool</em>) – enable graphical edit mode</li>
 <li><strong>manual</strong> (<em>bool</em>) – manually select uuids to pick</li>
 <li><strong>reset</strong> (<em>bool</em>) – reset all elements to selected or not selected</li>
-<li><strong>collapse</strong> (<em>bool</em>) – shows only groups and hosts if True. Objects underneath host level are being selected, however.</li>
+<li><strong>collapse</strong> (<em>bool</em>) – shows only groups and hosts if True. Objects underneath host level are being selected in background, however.</li>
 <li><strong>uuids</strong> (<em>list</em>) – list of uuids to select manually</li>
+<li><strong>resetOption</strong> (<em>str</em>) – choose Y to reset all to selected ones, N to reset all to not selected</li>
 <li><strong>_printing</strong> (<em>bool</em>) – print lines</li>
 </ul>
 </td>
@@ -868,14 +789,14 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pickHosts</span><span class="p">(</span><span class="n">edit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pickHosts</span><span class="p">(</span><span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">uuids</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;5645848e-8cd4-5ff5-87fe-2a906d660aa0&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.purgeHosts">
-<code class="descname">purgeHosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.purgeHosts" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.purgeHosts">
+<code class="descname">purgeHosts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.purgeHosts" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes all hosts</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">purgeHosts</span><span class="p">()</span>
@@ -884,8 +805,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.removeHost">
-<code class="descname">removeHost</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.removeHost" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.removeHost">
+<code class="descname">removeHost</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.removeHost" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes selected host</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -902,8 +823,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.searchByUuid">
-<code class="descname">searchByUuid</code><span class="sig-paren">(</span><em>uuid</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.searchByUuid" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.searchByUuid">
+<code class="descname">searchByUuid</code><span class="sig-paren">(</span><em>uuid</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.searchByUuid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method searches items in index - result of _indexHosts method - by uuid</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -924,8 +845,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.searchGroupName">
-<code class="descname">searchGroupName</code><span class="sig-paren">(</span><em>groupname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.searchGroupName" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.searchGroupName">
+<code class="descname">searchGroupName</code><span class="sig-paren">(</span><em>groupname</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.searchGroupName" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method searches for a group of host by name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -946,8 +867,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.searchHostName">
-<code class="descname">searchHostName</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.searchHostName" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.searchHostName">
+<code class="descname">searchHostName</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.searchHostName" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method searches for a host by name</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -968,8 +889,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcHosts.GcHosts.updateHost">
-<code class="descname">updateHost</code><span class="sig-paren">(</span><em>definition</em>, <em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcHosts.GcHosts.updateHost" title="Permalink to this definition">¶</a></dt>
+<dt id="ghosts.GcHosts.updateHost">
+<code class="descname">updateHost</code><span class="sig-paren">(</span><em>definition</em>, <em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#ghosts.GcHosts.updateHost" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method updates selected host</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -992,33 +913,17 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-GcLogging">
-<span id="globalconsole-gclogging-module"></span><h2>globalconsole.GcLogging module<a class="headerlink" href="#module-GcLogging" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcLogging"></span><dl class="class">
-<dt id="GcLogging.GcLogging">
-<em class="property">class </em><code class="descclassname">GcLogging.</code><code class="descname">GcLogging</code><span class="sig-paren">(</span><em>suffix</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-glogging">
+<span id="globalconsole-glogging-module"></span><h2>globalconsole.glogging module<a class="headerlink" href="#module-glogging" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-glogging"></span><dl class="class">
+<dt id="glogging.GcLogging">
+<em class="property">class </em><code class="descclassname">glogging.</code><code class="descname">GcLogging</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<ul class="simple">
-<li>setup rotating logs, exit if cannot be done</li>
-<li>decorate standard logging methods with print function if needed</li>
-<li>decorate error, critical logging methods with traceback and stack info</li>
-</ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>suffix</strong> (<em>str</em>) – <ul class="simple">
-<li>module name that will be added in a log file</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Object of this class uses <em>RotatingFileHandler</em>, parameters are stored in <strong>config.ini</strong> file.</p>
+<p>-handle logging and error handling of the application</p>
 <dl class="method">
-<dt id="GcLogging.GcLogging.critical">
-<code class="descname">critical</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.critical" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.critical">
+<code class="descname">critical</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.critical" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method writes CRITICAL message to both log file and stdout if level is greater or equal.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1032,8 +937,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.debug">
-<code class="descname">debug</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.debug" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.debug" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method writes DEBUG message to both log file and stdout if level is greater or equal.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1046,8 +951,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.error">
-<code class="descname">error</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.error" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.error">
+<code class="descname">error</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method writes ERROR message to both log file and stdout if level is greater or equal.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1061,8 +966,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.info">
-<code class="descname">info</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.info" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.info">
+<code class="descname">info</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method writes INFO message to both log file and stdout if level is greater or equal.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1075,8 +980,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.show" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method prints message to stdout independently from chosen logging level.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1089,8 +994,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.tab">
-<code class="descname">tab</code><span class="sig-paren">(</span><em>vtab</em>, <em>vheaders</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.tab" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.tab">
+<code class="descname">tab</code><span class="sig-paren">(</span><em>vtab</em>, <em>vheaders</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.tab" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method prints messages in a form of decorated table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1108,8 +1013,8 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcLogging.GcLogging.warning">
-<code class="descname">warning</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GcLogging.GcLogging.warning" title="Permalink to this definition">¶</a></dt>
+<dt id="glogging.GcLogging.warning">
+<code class="descname">warning</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#glogging.GcLogging.warning" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method writes WARNING message to both log file and stdout if level is greater or equal.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1124,24 +1029,24 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-GcUtils">
-<span id="globalconsole-gcutils-module"></span><h2>globalconsole.GcUtils module<a class="headerlink" href="#module-GcUtils" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcCommand"></span><dl class="class">
-<dt id="GcUtils.GcUtils">
-<em class="property">class </em><code class="descclassname">GcUtils.</code><code class="descname">GcUtils</code><a class="headerlink" href="#GcUtils.GcUtils" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-gutils">
+<span id="globalconsole-gutils-module"></span><h2>globalconsole.gutils module<a class="headerlink" href="#module-gutils" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gutils"></span><dl class="class">
+<dt id="gutils.GcUtils">
+<em class="property">class </em><code class="descclassname">gutils.</code><code class="descname">GcUtils</code><a class="headerlink" href="#gutils.GcUtils" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<p>-generates uuids
--trim ansi escape sequences</p>
-<dl class="method">
-<dt id="GcUtils.GcUtils.color_pick">
-<code class="descname">color_pick</code><span class="sig-paren">(</span><em>item</em>, <em>ver</em><span class="sig-paren">)</span><a class="headerlink" href="#GcUtils.GcUtils.color_pick" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method colors given string to value described in a config file</p>
+<p>-provide helpful methods shared by other modules</p>
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.color_pick">
+<em class="property">static </em><code class="descname">color_pick</code><span class="sig-paren">(</span><em>config</em>, <em>item</em>, <em>ver</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.color_pick" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method colors given string to a value described in a config file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>config</strong> (<em>object</em>) – holds instance of GcConfig class</li>
 <li><strong>item</strong> (<em>str</em>) – string to color</li>
 <li><strong>ver</strong> (<em>str</em>) – color to ‘pick_yes’ or ‘pick_no’ parameter</li>
 </ul>
@@ -1152,15 +1057,67 @@ UnicodeDecodeError: Environmental variable must be not-empty unicode string</p>
 <p>Returns:
 str: string with colors</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trim_ansi</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;[1000D&quot;</span> <span class="o">+</span> <span class="sa">u</span><span class="s2">&quot;[34m&quot;</span> <span class="o">+</span> <span class="s2">&quot;text&quot;</span> <span class="o">+</span> <span class="sa">u</span><span class="s2">&quot;[0m&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color_pick</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;sometext&quot;</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;JSON&#39;</span><span class="p">][</span><span class="s1">&#39;pick_yes&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="GcUtils.GcUtils.trim_ansi">
-<code class="descname">trim_ansi</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#GcUtils.GcUtils.trim_ansi" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method trim string from ansi escape sequences</p>
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.color_uuid">
+<em class="property">static </em><code class="descname">color_uuid</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.color_uuid" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method colors given string to a predefined value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>item</strong> (<em>str</em>) – string to color</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+str: string with colors</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color_uuid</span><span class="p">(</span><span class="s2">&quot;sometext&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.gcfile">
+<em class="property">static </em><code class="descname">gcfile</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.gcfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method extracts filename from path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<em>str</em>) – full path of a file</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+str: filename</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gcfile</span><span class="p">(</span><span class="s1">&#39;/var/some/file.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.gcpath">
+<em class="property">static </em><code class="descname">gcpath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.gcpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method returns full path of current directory</p>
+<p>Returns:
+str: current directory path</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gcpath</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.trim_ansi">
+<em class="property">static </em><code class="descname">trim_ansi</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.trim_ansi" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method trims string from ansi escape sequences</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1177,10 +1134,10 @@ str: string without escape sequences</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="GcUtils.GcUtils.uuid_generator">
-<code class="descname">uuid_generator</code><span class="sig-paren">(</span><em>instring</em><span class="sig-paren">)</span><a class="headerlink" href="#GcUtils.GcUtils.uuid_generator" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method generates uuid based on a given string</p>
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.uuid_generator">
+<em class="property">static </em><code class="descname">uuid_generator</code><span class="sig-paren">(</span><em>instring</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.uuid_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method generates type 5 uuid based on a given string</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1200,17 +1157,17 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-GcVars">
-<span id="globalconsole-gcvars-module"></span><h2>globalconsole.GcVars module<a class="headerlink" href="#module-GcVars" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-GcVars"></span><dl class="class">
-<dt id="GcVars.GcVars">
-<em class="property">class </em><code class="descclassname">GcVars.</code><code class="descname">GcVars</code><a class="headerlink" href="#GcVars.GcVars" title="Permalink to this definition">¶</a></dt>
+<div class="section" id="module-gvars">
+<span id="globalconsole-gvars-module"></span><h2>globalconsole.gvars module<a class="headerlink" href="#module-gvars" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-gvars"></span><dl class="class">
+<dt id="gvars.GcVars">
+<em class="property">class </em><code class="descclassname">gvars.</code><code class="descname">GcVars</code><span class="sig-paren">(</span><em>config</em>, <em>logger</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This class features:</p>
-<p>-handle variables definitions</p>
+<p>-handle GC specific variables</p>
 <dl class="method">
-<dt id="GcVars.GcVars.getVars">
-<code class="descname">getVars</code><span class="sig-paren">(</span><em>sort_reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.getVars" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.getVars">
+<code class="descname">getVars</code><span class="sig-paren">(</span><em>sort_reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.getVars" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method prints info about each variable in a tabular form.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1227,8 +1184,8 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.parseString">
-<code class="descname">parseString</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.parseString" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.parseString">
+<code class="descname">parseString</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.parseString" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method parses given string to find variables, name of variable must be written within {{}}</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1249,8 +1206,8 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.purgeVars">
-<code class="descname">purgeVars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.purgeVars" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.purgeVars">
+<code class="descname">purgeVars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.purgeVars" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes all variables</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">purgeHosts</span><span class="p">()</span>
@@ -1259,9 +1216,9 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.refreshVars">
-<code class="descname">refreshVars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.refreshVars" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method refreshes list of both session and pernament variables</p>
+<dt id="gvars.GcVars.refreshVars">
+<code class="descname">refreshVars</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.refreshVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method refreshes list of variables</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">refreshVars</span><span class="p">()</span>
 </pre></div>
@@ -1269,8 +1226,8 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.removeVar">
-<code class="descname">removeVar</code><span class="sig-paren">(</span><em>varname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.removeVar" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.removeVar">
+<code class="descname">removeVar</code><span class="sig-paren">(</span><em>varname</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.removeVar" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method removes selected variable</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1287,8 +1244,8 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.searchVarName">
-<code class="descname">searchVarName</code><span class="sig-paren">(</span><em>varname</em><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.searchVarName" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.searchVarName">
+<code class="descname">searchVarName</code><span class="sig-paren">(</span><em>varname</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.searchVarName" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method searches for a variable</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1309,8 +1266,8 @@ uuid: uuid generated based on string</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="GcVars.GcVars.updateVar">
-<code class="descname">updateVar</code><span class="sig-paren">(</span><em>varname</em>, <em>value</em>, <em>persistent=True</em><span class="sig-paren">)</span><a class="headerlink" href="#GcVars.GcVars.updateVar" title="Permalink to this definition">¶</a></dt>
+<dt id="gvars.GcVars.updateVar">
+<code class="descname">updateVar</code><span class="sig-paren">(</span><em>varname</em>, <em>value</em>, <em>persistent=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvars.GcVars.updateVar" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method updates selected variable</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1346,14 +1303,14 @@ uuid: uuid generated based on string</p>
   <ul>
 <li><a class="reference internal" href="#">globalconsole package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-GcCommand">globalconsole.GcCommand module</a></li>
-<li><a class="reference internal" href="#module-GcConfig">globalconsole.GcConfig module</a></li>
-<li><a class="reference internal" href="#module-GcConsole">globalconsole.GcConsole module</a></li>
-<li><a class="reference internal" href="#module-GcCreds">globalconsole.GcCreds module</a></li>
-<li><a class="reference internal" href="#module-GcHosts">globalconsole.GcHosts module</a></li>
-<li><a class="reference internal" href="#module-GcLogging">globalconsole.GcLogging module</a></li>
-<li><a class="reference internal" href="#module-GcUtils">globalconsole.GcUtils module</a></li>
-<li><a class="reference internal" href="#module-GcVars">globalconsole.GcVars module</a></li>
+<li><a class="reference internal" href="#module-gcommands">globalconsole.gcommands module</a></li>
+<li><a class="reference internal" href="#module-gconfig">globalconsole.gconfig module</a></li>
+<li><a class="reference internal" href="#module-gconsole">globalconsole.gconsole module</a></li>
+<li><a class="reference internal" href="#module-gcreds">globalconsole.gcreds module</a></li>
+<li><a class="reference internal" href="#module-ghosts">globalconsole.ghosts module</a></li>
+<li><a class="reference internal" href="#module-glogging">globalconsole.glogging module</a></li>
+<li><a class="reference internal" href="#module-gutils">globalconsole.gutils module</a></li>
+<li><a class="reference internal" href="#module-gvars">globalconsole.gvars module</a></li>
 </ul>
 </li>
 </ul>
@@ -1390,11 +1347,11 @@ uuid: uuid generated based on string</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v2.1.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">GlobalConsole v3.0.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Grzegorz Cylny.
+        &#169; Copyright 2019, Grzegorz Cylny.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

@@ -17,7 +17,6 @@ It's worth to mention, also:
 - **multithreaded** by design
 - stored passwords can be encrypted
 - output of command can be saved within **excel** or **csv** file
-- hosts can be picked up using visual editor
 - local shell commands are supported
 - history of invoked commands is persistent over sessions
 - custom variables can be set to improve productivity

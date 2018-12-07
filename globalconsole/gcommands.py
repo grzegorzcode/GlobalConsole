@@ -1,180 +1,52 @@
 """
-.. module:: GcCommand
+.. module:: gcommands
    :platform: Linux
-   :synopsis: Command Manager for GlobalConsole
+   :synopsis: Commands Module for GlobalConsole
 
 .. moduleauthor:: Grzegorz Cylny
 
 """
-try:
-    from globalconsole.GcLogging import GcLogging
-    from globalconsole.GcConfig import GcConfig
-    from globalconsole.GcHosts import GcHosts
-    from globalconsole.GcCreds import GcCreds
-    from globalconsole.GcVars import GcVars
-except ImportError:
-    from GcLogging import GcLogging
-    from GcConfig import GcConfig
-    from GcHosts import GcHosts
-    from GcCreds import GcCreds
-    from GcVars import GcVars
 import os
-import inspect
 import re
 from multiprocessing.pool import ThreadPool
 from pprint import pprint
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 import paramiko
-from scp import SCPClient, asbytes, SCPException
+from scp import SCPClient
 from socket import timeout as SocketTimeout
-import sys
+#
+from globalconsole.gutils import GcUtils as gutils
 
-#rewritten method to get hostname into progress callback
-class MySCPClient(SCPClient):
-    """This class features:
-
-    - rewrites _send_file and _recv_file method from SCPClient class to add hostname to _progress callback
-
-    """
-
-    def _send_file(self, fl, name, mode, size):
-        basename = asbytes(os.path.basename(name))
-        # The protocol can't handle \n in the filename.
-        # Quote them as the control sequence \^J for now,
-        # which is how openssh handles it.
-        self.channel.sendall(("C%s %d " % (mode, size)).encode('ascii') + basename.replace(b'\n', b'\\^J') + b"\n")
-        self._recv_confirm()
-        file_pos = 0
-
-        try:
-            peername = self.transport.getpeername()
-        except Exception:
-            peername = os.uname()[1]
-
-        if self._progress:
-            if size == 0:
-                # avoid divide-by-zero
-                self._progress(basename, 1, 1, peername)
-            else:
-                self._progress(basename, size, 0, peername)
-        buff_size = self.buff_size
-        chan = self.channel
-        while file_pos < size:
-            chan.sendall(fl.read(buff_size))
-            file_pos = fl.tell()
-            if self._progress:
-                self._progress(basename, size, file_pos, self.transport.getpeername())
-        chan.sendall('\x00')
-        self._recv_confirm()
-
-
-    def _recv_file(self, cmd):
-        chan = self.channel
-        parts = cmd.strip().split(b' ', 2)
-
-        try:
-            peername = self.transport.getpeername()
-        except Exception:
-            peername = os.uname()[1]
-
-        try:
-            mode = int(parts[0], 8)
-            size = int(parts[1])
-            if self._rename:
-                path = self._recv_dir
-                self._rename = False
-            elif os.name == 'nt':
-                path = os.path.join(asunicode_win(self._recv_dir),
-                                    parts[2].decode('utf-8'))
-            else:
-                path = os.path.join(asbytes(self._recv_dir),
-                                    parts[2])
-        except:
-            chan.send('\x01')
-            chan.close()
-            raise SCPException('Bad file format')
-
-        try:
-            file_hdl = open(path, 'wb')
-        except IOError as e:
-            chan.send(b'\x01' + str(e).encode('utf-8'))
-            chan.close()
-            raise
-
-        if self._progress:
-            if size == 0:
-                # avoid divide-by-zero
-                self._progress(path, 1, 1, peername)
-            else:
-                self._progress(path, size, 0, peername)
-        buff_size = self.buff_size
-        pos = 0
-        chan.send(b'\x00')
-        try:
-            while pos < size:
-                # we have to make sure we don't read the final byte
-                if size - pos <= buff_size:
-                    buff_size = size - pos
-                file_hdl.write(chan.recv(buff_size))
-                pos = file_hdl.tell()
-                if self._progress:
-                    self._progress(path, size, pos, peername)
-
-            msg = chan.recv(512)
-            if msg and msg[0:1] != b'\x00':
-                raise SCPException(asunicode(msg[1:]))
-        except SocketTimeout:
-            chan.close()
-            raise SCPException('Error receiving, socket.timeout')
-
-        file_hdl.truncate()
-        try:
-            os.utime(path, self._utime)
-            self._utime = None
-            os.chmod(path, mode)
-            # should we notify the other end?
-        finally:
-            file_hdl.close()
-        # '\x00' confirmation sent in _recv_all
 
 class GcCommand:
     """This class features:
 
-    - handle ssh related tasks
-    - handle os commands
-    - handle db2 commands
-    - handle scp commands
-    - handle db2 discovery
-
-    Args:
-        hostfile (str): path to json file with hosts definitions
-        credfile (str): path to json file with credentials definitions
+    -handle GC commands
 
 
     """
+    def __init__(self, config, logger, vars, creds, hosts):
+        """
+        Construct object
 
-    def __init__(self, hostfile="", credfile=""):
+        Args:
+            config (object): holds instance of GcConfig class
+            logger (object): holds instance of GcLogging class
+            vars (object): holds instance of GcVars class
+            creds (object): holds instance of GcCreds class
+            hosts (object): holds instance of GcHosts class
 
+
+        """
         #initialize related objects
-        self.gLogging = GcLogging("command")
-        self.gConfig = GcConfig().config
-        self.gVars = GcVars()
+        self.gLogging = logger
+        self.gConfig = config.config
+        self.gVars = vars
         # if hostfile, credfile not provided, use default one from config file
         # start TinyDB object
-        if len(hostfile) == 0 and len(credfile) == 0:
-            self.gHosts = GcHosts()
-            self.gCreds = GcCreds()
-        elif len(hostfile) == 0:
-            self.gHosts = GcHosts()
-            self.gCreds = GcCreds(credfile)
-        elif len(credjson) == 0:
-            self.gHosts = GcHosts(hostfile)
-            self.gCreds = GcCreds()
-        else:
-            self.gHosts = GcHosts(hostfile)
-            self.gCreds = GcCreds(credfile)
-
+        self.gHosts = hosts
+        self.gCreds = creds
         #list of active connections in a form of list of tuples (hostname, conn_handler)
         self.connections = []
         #list of outputs from a given command, one entry per execution
@@ -195,20 +67,6 @@ class GcCommand:
         #should batch proceed, reset on every step in batch
         self.chain_proceed = 1
 
-    def getConnections_old(self):
-        """
-        This method shows active connections. OBSOLETE
-
-        """
-        self.gLogging.debug("getConnections invoked")
-
-        try:
-            for host, _ in self.connections:
-                details = self.gHosts.searchHostName(host)[0]
-                self.gLogging.info("connected to: %s (%s:%s)" % (host, details['host'], details['port']))
-        except Exception:
-            self.gLogging.error("cannot get connections list")
-
     def getConnections(self):
         """
         This method shows active connections. Uses output of pickHosts from GcHosts module
@@ -224,17 +82,16 @@ class GcCommand:
                 lines = self.gHosts.pickHosts(_printing=False)
                 for line in lines:
                     if 'group' in line:
-                        #group = self.gHosts.gUtils.trim_ansi(line).split('id')[0].split(":")[1].strip()
-                        group = "id".join(self.gHosts.gUtils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
-                        print(group)
+                        #group = gutils.trim_ansi(line).split('id')[0].split(":")[1].strip()
+                        group = "id".join(gutils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
                     if 'host' in line:
                         #line must be cleaned up from ansi escape sequences
-                        host = "id".join(self.gHosts.gUtils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
+                        host = "id".join(gutils.trim_ansi(line).split('id')[:-1]).split(":")[1].strip()
                         if host in connected:
                             details = self.gHosts.searchHostName(host)[0]
-                            print("\t" + host, self.gHosts.gUtils.color_pick('[connected, ip: {}, port: {}]'.format(details['host'], details['port']), self.gConfig['JSON']['pick_yes']))
+                            print("\t" + host, gutils.color_pick(self.gConfig, '[connected, ip: {}, port: {}]'.format(details['host'], details['port']), self.gConfig['JSON']['pick_yes']))
                         else:
-                            print("\t" + host, self.gHosts.gUtils.color_pick('[no connected]', self.gConfig['JSON']['pick_no']))
+                            print("\t" + host, gutils.color_pick(self.gConfig, '[no connected]', self.gConfig['JSON']['pick_no']))
             else:
                 self.gLogging.show("there is no active connection")
         except Exception:
@@ -279,8 +136,9 @@ class GcCommand:
                 key_passwd = cred['key_password']
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            #fixme non default ports!!
             if cred['use'] == 'password':
-                client.connect(host['host'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
+                client.connect(host['host'], port=host['port'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using password" % host['host'])
                 stdin, stdout, stderr = client.exec_command(self.gConfig['COMMAND']['hello_command'])
                 stdin.close()
@@ -290,7 +148,7 @@ class GcCommand:
                 return (host['hostname'], client)
             elif cred['use'] == 'key':
                 privkey = paramiko.RSAKey.from_private_key_file(cred["key"], password=key_passwd)
-                client.connect(host['host'], username=cred['username'], password=passwd, pkey=privkey, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
+                client.connect(host['host'], port=host['port'], username=cred['username'], password=passwd, pkey=privkey, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using key" % host['host'])
                 stdin, stdout, stderr = client.exec_command(self.gConfig['COMMAND']['hello_command'])
                 stdin.close()
@@ -330,7 +188,6 @@ class GcCommand:
 
             >>> connect()
         """
-
         self.gLogging.debug("connect invoked")
         try:
             # fix to tinydb purging json
@@ -411,7 +268,6 @@ class GcCommand:
 
             >>> command("df -h")
         """
-
         self.gLogging.debug("command invoked")
         self.result = []
 
@@ -604,7 +460,7 @@ class GcCommand:
                     cell.font = Font(bold=True)
 
                 #todo change to relative
-                outfile = "{}/{}{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), self.gConfig['COMMAND']['spoolpath'], self.spool)
+                outfile = "{}/{}{}".format(gutils.gcpath(), self.gConfig['COMMAND']['spoolpath'], self.spool)
                 wb.save(outfile)
                 self.gLogging.info("excel file generated to: %s.. spool turned off" % outfile)
                 self.spool = ""
@@ -616,7 +472,7 @@ class GcCommand:
         def plain():
             try:
                 self.gLogging.debug("generating spool file..")
-                outfile = "{}/{}{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), self.gConfig['COMMAND']['spoolpath'], self.spool)
+                outfile = "{}/{}{}".format(gutils.gcpath(), self.gConfig['COMMAND']['spoolpath'], self.spool)
                 with open(outfile, "w") as f:
                     if cols[1] == 4:
                         f.write(self.gConfig['COMMAND']['csv_delimiter'].join(["%s", "%s", "%s", "%s"]) % tuple(cols[0]) + "\n")
@@ -663,7 +519,7 @@ class GcCommand:
             #         self.gLogging.info(line.decode("utf-8"))
             # self.gLogging.show("")
 
-        if os.path.exists("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), self.gConfig['COMMAND']['spoolpath'])):
+        if os.path.exists("{}/{}".format(gutils.gcpath(), self.gConfig['COMMAND']['spoolpath'])):
             if self.spool.split(".")[-1:][0] == "xlsx":
                 xlsx()
             elif self.spool.split(".")[-1:][0] == "csv":
@@ -848,17 +704,17 @@ class GcCommand:
                                 if profile != "N":
                                     for db in profile.get('son', "N"):
                                         if db != "N":
-                                            tempdatabases.append({'db_name': db['id'], "db_checked": self.gConfig['JSON']['pick_yes'], "db_uuid": self.gHosts.gUtils.uuid_generator(host+install['id']+instance['id']+db['id'])})
+                                            tempdatabases.append({'db_name': db['id'], "db_checked": self.gConfig['JSON']['pick_yes'], "db_uuid": gutils.uuid_generator(host+install['id']+instance['id']+db['id'])})
                                         else:
                                             pass
-                                    tempinstances.append({'instance_name': instance['id'], "instance_checked": self.gConfig['JSON']['pick_yes'], 'instance_profile': profile['id'], 'databases': tempdatabases, "instance_uuid": self.gHosts.gUtils.uuid_generator(host+install['id']+instance['id'])})
+                                    tempinstances.append({'instance_name': instance['id'], "instance_checked": self.gConfig['JSON']['pick_yes'], 'instance_profile': profile['id'], 'databases': tempdatabases, "instance_uuid": gutils.uuid_generator(host+install['id']+instance['id'])})
                                     tempdatabases = []
                                 else:
                                     pass
                         else:
                             pass
                     if install != "N":
-                        tempinstall.append({'installation_name': install['id'], "installation_checked": self.gConfig['JSON']['pick_yes'], 'instances': tempinstances, "installation_uuid": self.gHosts.gUtils.uuid_generator(host+install['id'])})
+                        tempinstall.append({'installation_name': install['id'], "installation_checked": self.gConfig['JSON']['pick_yes'], 'instances': tempinstances, "installation_uuid": gutils.uuid_generator(host+install['id'])})
                         tempinstances = []
                 if dry:
                     pprint(tempinstall)
@@ -866,7 +722,7 @@ class GcCommand:
                     self.gHosts.updateHost({"installations": tempinstall, "scanned": "yes"}, host)
 
             if not dry:
-                self.gHosts.pickHosts(edit=False)
+                self.gHosts.pickHosts()
 
         except Exception:
             self.gLogging.error("cannot update host with scanned data ")
@@ -874,65 +730,6 @@ class GcCommand:
         if wait_switched == 1:
             self.gConfig['COMMAND']['wait_for_all_hosts'] = "NO"
 
-    def scan_obsolete(self):
-        """
-        This method scans connected hosts to get db2 installations, instances and databases.
-        Synchronous, OBSOLETE
-
-        """
-        self.gLogging.debug("scan_obsolete invoked")
-        try:
-            tmp_profile = ""
-            tempinstallations = list()
-            tempinstances = list()
-            tempdatabases = list()
-            self.command('sudo su - -c "' + self.gConfig['COMMAND']['db2ls_location'] + '"')
-            for install in self.result:
-                #print("--------", install[1], "--------")
-                for line1 in install[0].splitlines():
-                    if line1.startswith(bytearray("/", 'utf8')):
-                        self.command('sudo su - -c "' + line1.decode("utf-8").split(" ")[0] + '/bin/db2ilist' + '"', host=install[1])
-                        for instance in self.result:
-                            for line2 in instance[0].splitlines():
-                                if not line2.startswith(bytearray("[", 'utf8')):
-                                    self.command('sudo su - -c "cat /etc/passwd | grep '+line2.decode("utf-8") + ' | cut -d: -f6"', host=install[1])
-                                    for profile in self.result:
-                                        for line3 in profile[0].splitlines():
-                                            tmp_profile = line3.decode("utf-8") + '/sqllib/db2profile'
-                                            self.command('sudo su - -c ". %s; db2 list db directory"' % tmp_profile, host=install[1])
-                                            for database in re.findall('entry.*?Catalog', str(self.result[0]), re.DOTALL):
-                                                if "Indirect" in database:
-                                                    for names in database.splitlines():
-                                                        if "name" in names:
-                                                            tempdatabases.append(
-                                                                {"db_name": names.split("=")[1].split("Database")[0].split("\\r")[0],
-                                                                 "db_checked": self.gConfig['JSON']['pick_yes'],
-                                                                 "db_uuid": self.gHosts.gUtils.uuid_generator(install[1]+line1.decode("utf-8").split(" ")[0]+line2.decode("utf-8")+names.split("=")[1].split("Database")[0].split("\\r")[0])
-                                                                 })
-                                                            #print(install[1]+line1.decode("utf-8").split(" ")[0]+line2.decode("utf-8")+names.split("=")[1].split("Database")[0].split("\\r")[0])
-
-                                    tempinstances.append(
-                                        {"instance_name": line2.decode("utf-8"),
-                                         "instance_checked": self.gConfig['JSON']['pick_yes'],
-                                         "instance_profile": tmp_profile,
-                                         "instance_uuid": self.gHosts.gUtils.uuid_generator(install[1] + line1.decode("utf-8").split(" ")[0] + line2.decode("utf-8")),
-                                         "databases": tempdatabases
-                                         })
-                                    tempdatabases = []
-                        tempinstallations.append(
-                            {"installation_name": line1.decode("utf-8").split(" ")[0],
-                             "installation_checked": self.gConfig['JSON']['pick_yes'],
-                             "installation_uuid": self.gHosts.gUtils.uuid_generator(install[1] + line1.decode("utf-8").split(" ")[0]),
-                             "instances": tempinstances})
-                        tempinstances = []
-                #print(tempinstallations)
-                self.gHosts.updateHost({'installations': tempinstallations}, install[1])
-                tempinstallations = []
-        except Exception:
-            self.gLogging.error("cannot update host with scanned data ")
-
-
-############
     def _closeOne(self, conn):
         """
         This method closes one active connection
@@ -995,24 +792,6 @@ class GcCommand:
         pool.close()
         pool.join()
 
-    
-
-    def quit(self):
-        """
-        This method stops program
-
-        Examples:
-
-            >>> quit()
-        """
-        self.gLogging.debug("quit invoked")
-        self.close()
-        self.gVars.varsfile.close()
-        self.gCreds.credfile.close()
-        self.gHosts.hostfile.close()
-        self.gLogging.show("bye!")
-        self.gLogging.info("Session stopped.")
-        exit(0)
 
     def exit(self):
         """
@@ -1051,7 +830,6 @@ class GcCommand:
 
             >>> os("du -ms {{structs}}", sudo=True)
         """
-
         self.gLogging.debug("os invoked")
 
         command = cmd
@@ -1065,7 +843,7 @@ class GcCommand:
         if sudo:
             # TODO: fix single apostrophe issue with sudo: " -c $'" + cmd.replace("'", "\\'")
             # same for db2 commands
-            command = 'sudo su - ' + sudoUser + shell + " -c '" + cmd + "'"
+            command = 'sudo su - ' + sudoUser + shell + " -c $'" + cmd.replace("'", "\\'") + "'"
 
         try:
             self.command(command)
@@ -1109,7 +887,6 @@ class GcCommand:
             >>> db2("db2pd -db {} -{{lock}}", user="instance", osmode=True)
 
         """
-
         self.gLogging.debug("db2 invoked")
 
         if len(shell) > 0:
@@ -1157,7 +934,7 @@ class GcCommand:
         self.gLogging.debug("_scpOne invoked")
         try:
             self.gLogging.debug("starting thread for host: %s" % cmd_conn[0][0])
-            scp = MySCPClient(cmd_conn[0][1].get_transport(), sanitize=lambda x: x, progress=self._progress)
+            scp = SCPClient(cmd_conn[0][1].get_transport(), sanitize=lambda x: x, progress4=self._progress)
             if cmd_conn[1]['mode'] == "put":
                 self.gLogging.info("scp - command mode: %s, source: %s, dest: %s, recursive: %s, host: %s" % (cmd_conn[1]['mode'], cmd_conn[1]['source'], cmd_conn[1]['dest'], str(cmd_conn[1]['recursive']), cmd_conn[0][0]))
                 scp.put(cmd_conn[1]['source'], cmd_conn[1]['dest'], recursive=cmd_conn[1]['recursive'])
@@ -1220,39 +997,3 @@ class GcCommand:
             self.gLogging.info("scp aborted. ")
 
 
-
-if __name__ == '__main__':
-    gcom = GcCommand()
-    #gcom.gCreds.purgeCreds()
-    #gcom.gCreds.importCsvAsCreds("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), "creds/credsVM.csv"))
-    #gcom.gHosts.purgeHosts()
-    #gcom.gHosts.importCsvAsHosts("{}/{}".format(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getsourcefile(GcCommand)))), "hosts/hostsVM.csv"))
-    # gcom.gHosts.getHosts(False, 'group')
-    # gcom.gCreds.getCreds(False, False, 'username')
-    #print(gcom.gHosts.hosts_idx)
-    #gcom.connect()
-    #gcom.getConnections()
-    #gcom.command("df -h")
-    #gcom.scan()
-    #gcom.scan2(dry=False)
-    #gcom.os("cat /etc/shadow", sudo=False)
-    #gcom.db2("select * from sysibm.sysdummy1", user="instance")
-    #gcom.db2("pwd", osmode=True)
-    #gcom.db2("get db cfg for {}", user="instance")
-    #gcom.db2("db2pd -db {} -wlocks", user="instance", osmode=True)
-    #gcom.db2("get dbm cfg | grep buffer", user="instance", osmode=False, level='IN')
-    #gcom.db2("echo {}; db2 get dbm cfg | grep buffer", user="instance", osmode=True, level='IN')
-    #gcom.scp(mode="put", source="/home/pl55227/Documents/GlobalConsole/GlobalConsole2/upload/myfile1_12123.txt", dest="/tmp", recursive=False, suffix=True, batch=True)
-    #gcom.getConnections()
-    #gcom.set_spool("result.xlsx")cmd
-    #gcom.os("df -h", sudo=False)
-    #gcom.gVars.updateVar(varname="structs", value=["buffer", "arch"], persistent=False)
-    # gcom.gVars.updateVar(varname="dests", value=["/tmp"], persistent=False)
-    # gcom.gVars.updateVar(varname="srcs", value=["/home/pl55227/Documents/GlobalConsole/GlobalConsole2/upload/myfile1_12123.txt", "/home/pl55227/Documents/GlobalConsole/GlobalConsole2/upload/myfile1_12124.txt"], persistent=False)
-    #gcom.os("du -ms {{structs}}", sudo=True)
-    # gcom.scp(mode="put", source="{{srcs}}", dest="/tmp", recursive=False, suffix=True, batch=True)
-    #gcom.db2("echo {}; db2 get dbm cfg | grep {{structs}}", user="instance", osmode=True, level='IN')
-    # gcom.db2("db2pd -db {} -{{lock}}", user="instance", osmode=True)
-    # gcom.close()
-    #gcom.getConn()
-#gc> run db2 select IBMREQD \|\| \'{}\' from sysibm.sysdummy1 +USR instance

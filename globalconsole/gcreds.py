@@ -1,3 +1,11 @@
+"""
+.. module:: gcreds
+   :platform: Linux
+   :synopsis: Credentials Module for GlobalConsole
+
+.. moduleauthor:: Grzegorz Cylny
+
+"""
 from tinydb import TinyDB, Query
 import os
 from Crypto.Cipher import AES
@@ -5,11 +13,26 @@ import base64
 from getpass import getpass
 from operator import itemgetter
 #
-from globalconsole3.gutils import GcUtils as gutils
+from globalconsole.gutils import GcUtils as gutils
 
 class GcCreds:
+    """This class features:
 
+    -handle GC definition of credentials
+
+
+    """
     def __init__(self, config, logger, credfile=None):
+        """
+        Construct object
+
+        Args:
+            config (object): holds instance of GcConfig class
+            logger (object): holds instance of GcLogging class
+            credfile (str): json file with definitions
+
+
+        """
         # enable logging and config, create a proper objects
         self.gLogging = logger
         self.gConfig = config.config
@@ -28,6 +51,28 @@ class GcCreds:
 
 
     def importCsvAsCreds(self, filename):
+        """
+        This method imports csv file with credentials.
+
+        Args:
+            filename (str): path to csv file with credentials definitions
+
+        **csv file must follow format(no headers):**
+
+        **credname,username,password,path_to_key,key_password,use_password_or_key*,encrypted_yes_or_no,env_var_used_to_encrypt**
+
+        *valid options: password | key
+
+        Examples:
+
+            format:
+
+            >>> rootVM,root,MyPass,/path/to/key,key_password,password,no,GC_KEY
+
+            execution:
+
+            >>> importCsvAsCreds("creds/creds.csv")
+        """
         #todo strip whitespace
         self.gLogging.debug("importCsvAsCreds invoked")
         MyCred = Query()
@@ -40,6 +85,20 @@ class GcCreds:
             self.gLogging.error("cannot open or invalid csv file: " + filename)
 
     def updateCred(self, definition, credname):
+        """
+        This method updates selected credential
+
+
+        Args:
+            definition (dict): dictionary with credential definition
+            credname (str): credential name to update
+
+
+        Examples:
+
+            >>> updateCred({'username': 'user1', 'use': 'key'}, 'credname3')
+
+        """
         self.gLogging.debug("updateCred invoked")
         MyCred = Query()
         try:
@@ -48,6 +107,18 @@ class GcCreds:
             self.gLogging.error("cannot update credential: " + credname)
 
     def removeCred(self, credname):
+        """
+        This method removes selected credential
+
+        Args:
+            credname (str): credential name to remove
+
+        Examples:
+
+            >>> removeCred('credname3')
+
+
+        """
         self.gLogging.debug("removeCred invoked")
         MyCred = Query()
         try:
@@ -56,6 +127,14 @@ class GcCreds:
             self.gLogging.error("cannot remove credname: " + credname)
 
     def purgeCreds(self):
+        """
+        This method removes all credentials
+
+        Examples:
+
+            >>> purgeCreds()
+
+        """
         self.gLogging.debug("purgeCreds invoked")
         try:
             self.credtable.purge()
@@ -63,6 +142,20 @@ class GcCreds:
             self.gLogging.error("cannot purge credentials " )
 
     def searchCredName(self, credname):
+        """
+        This method searches for a credential by name
+
+        Args:
+            credname (str): credential name to find
+
+        Returns:
+            list: credential definition as dict, packed into list object
+
+        Examples:
+
+            >>> searchCredName('credname3')
+
+        """
         self.gLogging.debug("searchCredName invoked")
         MyCred = Query()
         try:
@@ -74,6 +167,19 @@ class GcCreds:
                 return self.gLogging.error("cannot search with credential name: " + credname)
 
     def getCreds(self, show, sort_reverse, *args):
+        """
+        This method prints most important info about each credential in a tabular form.
+
+        Args:
+            show (bool): show passwords as plain text
+            sort_reverse (bool): reverse order of sorting
+            *args (list): list of columns to be a sorting key
+
+        Examples:
+
+            >>> getCreds(True, False, 'username', 'encrypted')
+
+        """
         self.gLogging.debug("getCreds invoked")
         #list of records to display
         templist = list()
@@ -96,6 +202,29 @@ class GcCreds:
             self.gLogging.error("cannot get creds definitions")
 
     def exportCredsToCsv(self, outfile=""):
+        """
+        This method exports csv file with credentials.
+
+        Args:
+            outfile (str): path to csv file with credentials definitions
+
+        **csv file format:**
+
+        **credname,username,password,path_to_key,key_password,use_password_or_key*,encrypted_yes_or_no,env_var_used_to_encrypt**
+
+        *valid options: password | key
+
+        Examples:
+
+            format:
+
+            >>> rootVM,root,MyPass,/path/to/key,key_password,password,no,GC_KEY
+
+            execution:
+
+            >>> exportCredsToCsv("creds/credsExp.csv")
+
+        """
         self.gLogging.debug("exportCredsToCsv invoked")
         try:
             with open(outfile, "w") as f:
@@ -107,6 +236,17 @@ class GcCreds:
             self.gLogging.error("cannot export credentials definitions to: " + outfile)
 
     def _upto16(self, passwd):
+        """
+        Internal method to generates string with at least 16 signs and divisible by 16
+
+        Args:
+            passwd (str): string to proceed
+
+        Examples:
+
+            >>> _upto16('MyPasswd')
+
+        """
         modpass = divmod(16, len(passwd))
         if int(modpass[0]) == int(0):
             modpass = divmod(len(passwd), 16)
@@ -115,6 +255,17 @@ class GcCreds:
             return passwd * modpass[0] + passwd[:modpass[1]]
 
     def encryptPasswds(self, _utest=False):
+        """
+        This method encrypts passwords in loaded json with definitions of credentials. Fields 'password' and 'key_password' are subjects of encryption.
+
+        Args:
+            _utest (bool): internal parameter, only for automatic testing, method doesn't need environmental variable to be set
+
+        Examples:
+
+            >>> encryptPasswds(_utest=False)
+
+        """
         secret_key = ""
         secret_key2 = " "
         #print(_utest, 'iiiiiiiiiiiiii')
@@ -181,6 +332,26 @@ class GcCreds:
             print("skipped")
 
     def decryptPasswds(self, cred, _utest=False):
+        """
+        This method decrypts in memory passwords in loaded json with definitions of credentials. Fields 'password' and 'key_password' are subjects of dencryption.
+
+        Args:
+            _utest (bool): internal parameter, only for automatic testing, method doesn't need environmental variable to be set
+            cred (dict): credential definition
+
+        Returns:
+            tuple: decrypted password, decrypted password to key (passwd, key_password)
+
+        To decrypt you must provide secret key using env variable
+
+        Raises:
+        UnicodeDecodeError: Environmental variable must be not-empty unicode string
+
+        Examples:
+
+            >>> decryptPasswds(searchCredName('credname3'), _utest=False)
+
+        """
         self.gLogging.debug("decryptPasswds invoked")
 
         if cred["encrypted"] == "yes":
@@ -222,6 +393,19 @@ class GcCreds:
             return (cred["password"], cred["key_password"])
 
     def decryptPasswdsInFile(self, _utest=False):
+        """
+        This method decrypts in file passwords in loaded json with definitions of credentials. Fields 'password' and 'key_password' are subjects of dencryption.
+
+        Args:
+            _utest (bool): internal parameter, only for automatic testing, method doesn't need environmental variable to be set
+
+        To decrypt you must provide secret key using env variable
+
+        Examples:
+
+            >>> decryptPasswdsInFile()
+
+        """
         self.gLogging.debug("decryptPasswdsInFile invoked")
 
         utest = _utest
