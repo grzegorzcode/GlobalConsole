@@ -813,5 +813,3 @@ class GcConsole(cmd.Cmd):
         self.cmdloop()
 
 
-if __name__ == '__main__':
-    GcConsole().cmdloop()

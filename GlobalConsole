@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python3 globalconsole/gconsole.py
+python3 globalconsole/app.py
 
 
