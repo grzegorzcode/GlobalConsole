@@ -83,11 +83,28 @@ class GcHosts:
             with open(filename, 'r') as infile:
                 for line in infile:
                     if len(line) > 4:
+                        newone = {"group": line.split(",")[4].strip("\n"), "port": line.split(",")[2],
+                                  "installations": [], "scanned": "no", "def_cred": line.split(",")[3],
+                                  "host": line.split(",")[1], "hostname": line.split(",")[0]}
+
+                        try:
+                            oldone = self.searchHostName(line.split(",")[0])[0]
+                        except Exception:
+                            oldone = None
+
                         self.hosttable.upsert(
-                            {"group": line.split(",")[4].strip("\n"), "group_uuid": gutils.uuid_generator(line.split(",")[4].strip("\n")), "group_checked": self.gConfig['JSON']['pick_yes'], "host_checked": self.gConfig['JSON']['pick_yes'], "port": line.split(",")[2],
-                             "installations": [], "scanned": "no",
-                             "def_cred": line.split(",")[3], "host": line.split(",")[1], "host_uuid": gutils.uuid_generator(line.split(",")[4].strip("\n") + line.split(",")[0]),
-                             "hostname": line.split(",")[0]}, MyHost.hostname == line.split(",")[0])
+                            {"group": gutils.compare_dicts("group", newone, oldone),
+                             "group_uuid": gutils.uuid_generator(line.split(",")[4].strip("\n")),
+                             "group_checked": gutils.compare_checked("group_checked", self.gConfig['JSON']['pick_yes'], oldone),
+                             "host_checked": gutils.compare_checked("host_checked", self.gConfig['JSON']['pick_yes'], oldone),
+                             "port": gutils.compare_dicts("port", newone, oldone),
+                             "installations": gutils.compare_dicts("installations", newone, oldone),
+                             "scanned": gutils.compare_dicts("scanned", newone, oldone),
+                             "def_cred": gutils.compare_dicts("def_cred", newone, oldone),
+                             "host": gutils.compare_dicts("host", newone, oldone),
+                             "host_uuid": gutils.uuid_generator(line.split(",")[4].strip("\n") + line.split(",")[0]),
+                             "hostname": line.split(",")[0]},
+                            MyHost.hostname == line.split(",")[0])
             self._indexHosts()
         except Exception:
             self.gLogging.error("cannot open or invalid csv file: " + filename)
@@ -172,10 +189,7 @@ class GcHosts:
         try:
             return self.hosttable.search(MyHost.hostname == hostname)
         except Exception:
-            try:
-                return self.hosttable.search(MyHost.hostname == hostname)
-            except Exception:
-                return self.gLogging.error("cannot search with hostname: " + hostname)
+            return self.gLogging.error("cannot search with hostname: " + hostname)
 
 
     def searchGroupName(self, groupname):

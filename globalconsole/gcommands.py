@@ -136,7 +136,6 @@ class GcCommand:
                 key_passwd = cred['key_password']
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            #fixme non default ports!!
             if cred['use'] == 'password':
                 client.connect(host['host'], port=host['port'], username=cred['username'], password=passwd, timeout=int(self.gConfig['COMMAND']['ssh_timeout']))
                 self.gLogging.info("successfully connected to: %s using password" % host['host'])
@@ -459,7 +458,6 @@ class GcCommand:
                     cell = ws[c]
                     cell.font = Font(bold=True)
 
-                #todo change to relative
                 outfile = "{}/{}{}".format(gutils.gcpath(), self.gConfig['COMMAND']['spoolpath'], self.spool)
                 wb.save(outfile)
                 self.gLogging.info("excel file generated to: %s.. spool turned off" % outfile)
@@ -841,7 +839,6 @@ class GcCommand:
             shell = ""
 
         if sudo:
-            # TODO: fix single apostrophe issue with sudo: " -c $'" + cmd.replace("'", "\\'")
             # same for db2 commands
             command = 'sudo su - ' + sudoUser + shell + " -c $'" + cmd.replace("'", "\\'") + "'"
 

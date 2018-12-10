@@ -137,3 +137,52 @@ class GcUtils:
 
         """
         return Style.RESET_ALL + Style.DIM + Fore.BLACK + item + Style.RESET_ALL
+
+    @staticmethod
+    def compare_dicts(item, newjson, oldjson=None):
+        """
+        This method compares two dictionaries. Dedicated to creds and hosts file.
+
+        Args:
+            item (str): item to compare
+            newjson (dict): new values
+            oldjson (dict): old values
+
+        Returns:
+        str: result of comparision. Return an old value if exists, new value otherwise.
+
+        Examples:
+
+            >>> compare_dicts("port", newdict, olddict)
+
+        """
+        # mainly placeholder for future functionality
+        if oldjson is None:
+            return newjson.get(item)
+        else:
+            return newjson.get(item)
+
+
+    @staticmethod
+    def compare_checked(item, default, oldjson=None):
+        """
+        This method checks status of 'picked' item for hosts and groups. Dedicated to creds and hosts file.
+
+        Args:
+            item (str): item to compare
+            default (str): default value if oldjson is None
+            oldjson (dict): old value
+
+        Returns:
+        str: result of comparision. Return an old value if exists, default otherwise.
+
+        Examples:
+
+            >>> compare_checked("group_checked", "x", olddict)
+
+        """
+        if oldjson is None:
+            return default
+        else:
+            return oldjson[item]
+

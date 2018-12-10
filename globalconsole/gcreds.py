@@ -80,7 +80,23 @@ class GcCreds:
             with open(filename, 'r') as infile:
                 for line in infile:
                     if len(line) > 4:
-                        self.credtable.upsert({"credname": line.split(",")[0], "username": line.split(",")[1], "password": line.split(",")[2], "key": line.split(",")[3], "key_password": line.split(",")[4], "use": line.split(",")[5], "encrypted": line.split(",")[6], "secret_env_key": line.split(",")[7].strip("\n")}, MyCred.credname == line.split(",")[0])
+
+                        newone = {"credname": line.split(",")[0], "username": line.split(",")[1], "password": line.split(",")[2], "key": line.split(",")[3], "key_password": line.split(",")[4], "use": line.split(",")[5], "encrypted": line.split(",")[6], "secret_env_key": line.split(",")[7].strip("\n")}
+
+                        try:
+                            oldone = self.searchCredName(line.split(",")[0])[0]
+                        except Exception:
+                            oldone = None
+
+                        self.credtable.upsert({"credname": line.split(",")[0],
+                                               "username": gutils.compare_dicts("username", newone, oldone),
+                                               "password": gutils.compare_dicts("password", newone, oldone),
+                                               "key": gutils.compare_dicts("key", newone, oldone),
+                                               "key_password": gutils.compare_dicts("key_password", newone, oldone),
+                                               "use": gutils.compare_dicts("use", newone, oldone),
+                                               "encrypted": gutils.compare_dicts("encrypted", newone, oldone),
+                                               "secret_env_key": gutils.compare_dicts("secret_env_key", newone, oldone)},
+                                              MyCred.credname == line.split(",")[0])
         except Exception:
             self.gLogging.error("cannot open or invalid csv file: " + filename)
 
@@ -161,10 +177,7 @@ class GcCreds:
         try:
             return self.credtable.search(MyCred.credname == credname)
         except Exception:
-            try:
-                return self.credtable.search(MyCred.credname == credname)
-            except Exception:
-                return self.gLogging.error("cannot search with credential name: " + credname)
+            return self.gLogging.error("cannot search with credential name: " + credname)
 
     def getCreds(self, show, sort_reverse, *args):
         """
