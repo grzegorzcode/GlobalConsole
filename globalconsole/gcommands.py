@@ -818,12 +818,13 @@ class GcCommand:
             sudo (bool): use sudo if true
             sudoUser (str): choose user for sudo, root is default
             shell (str): choose shell being used
+            repeat (str): repeat command execution. <NR_OF_REPETITIONS DELAY_IN_SEC>
 
         Examples:
 
             >>> os("ls -la", sudo=False)
 
-            >>> os("cat /etc/passwd", sudo=True, sudoUser="admin", shell="/bin/bash")
+            >>> os("cat /etc/passwd", sudo=True, sudoUser="admin", shell="/bin/bash", repeat="10 2")
 
             using variables:
 
@@ -882,6 +883,7 @@ class GcCommand:
             placeholder (str): placeholder where database/instance name should be placed
             level (str): choose shell being used
             osmode (bool): run commands at OS level if True (db2 profile loaded)
+            repeat (str): repeat command execution. <NR_OF_REPETITIONS DELAY_IN_SEC>
 
         Examples:
 
@@ -899,7 +901,7 @@ class GcCommand:
 
             >>> db2("echo {}; db2 get dbm cfg | grep {{structs}}", user="instance", osmode=True, level='IN')
 
-            >>> db2("db2pd -db {} -{{lock}}", user="instance", osmode=True)
+            >>> db2("db2pd -db {} -{{lock}}", user="instance", osmode=True, repeat="5 4")
 
         """
         self.gLogging.debug("db2 invoked")
@@ -922,7 +924,7 @@ class GcCommand:
                         if len(self.spool) > 0:
                             self.spool = gutils.number_to_name(self.spool, i + 1)
                             varspool = self.spool
-                            self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
+                        self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
                         if i < vrepeat[0]-1:
                             if varspool is not None:
                                 self.spool = gutils.number_to_name(varspool, i + 2)

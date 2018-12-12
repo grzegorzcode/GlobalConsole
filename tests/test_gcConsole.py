@@ -81,8 +81,10 @@ class TestGcConsole(TestCase):
         self.assert_stdout("run os whoami", self.gcon.onecmd, 4, "travis", "root", "os command test")
         self.assert_stdout("run os whoami +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command test")
         self.assert_stdout("run os whoami | awk '{print $1}' +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command with apostrophe test")
+        self.assert_stdout("run os whoami +repeat 2 2", self.gcon.onecmd, 10, "travis", "root", "os command with repetition test")
         self.assert_stdout("run scan -Y", self.gcon.onecmd, 11, "TESTDB", "ERROR", "scanning functionality test")
         self.assert_stdout("run db2 db2select +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command test")
+        self.assert_stdout("run db2 db2select +OS +USR instance +repeat 2 2", self.gcon.onecmd, 18, "IBMREQD", "ERROR", "db2 command with repetition test")
         self.assert_stdout("run scp -m put -s /home/travis/.ssh/id_rsa -d /home/travis/rsa -b", self.gcon.onecmd, 4, "id_rsa", "ERROR", "db2 scp test")
         try:
             with open('/home/travis/rsa', 'r') as file:

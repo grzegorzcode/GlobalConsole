@@ -118,6 +118,7 @@
 <li><strong>placeholder</strong> (<em>str</em>) – placeholder where database/instance name should be placed</li>
 <li><strong>level</strong> (<em>str</em>) – choose shell being used</li>
 <li><strong>osmode</strong> (<em>bool</em>) – run commands at OS level if True (db2 profile loaded)</li>
+<li><strong>repeat</strong> (<em>str</em>) – repeat command execution. &lt;NR_OF_REPETITIONS DELAY_IN_SEC&gt;</li>
 </ul>
 </td>
 </tr>
@@ -143,7 +144,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db2</span><span class="p">(</span><span class="s2">&quot;echo </span><span class="si">{}</span><span class="s2">; db2 get dbm cfg | grep {{structs}}&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="n">osmode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;IN&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db2</span><span class="p">(</span><span class="s2">&quot;db2pd -db </span><span class="si">{}</span><span class="s2"> -{{lock}}&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="n">osmode</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">db2</span><span class="p">(</span><span class="s2">&quot;db2pd -db </span><span class="si">{}</span><span class="s2"> -{{lock}}&quot;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="n">osmode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="s2">&quot;5 4&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -181,6 +182,7 @@
 <li><strong>sudo</strong> (<em>bool</em>) – use sudo if true</li>
 <li><strong>sudoUser</strong> (<em>str</em>) – choose user for sudo, root is default</li>
 <li><strong>shell</strong> (<em>str</em>) – choose shell being used</li>
+<li><strong>repeat</strong> (<em>str</em>) – repeat command execution. &lt;NR_OF_REPETITIONS DELAY_IN_SEC&gt;</li>
 </ul>
 </td>
 </tr>
@@ -190,7 +192,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="p">(</span><span class="s2">&quot;ls -la&quot;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="p">(</span><span class="s2">&quot;cat /etc/passwd&quot;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sudoUser</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="p">(</span><span class="s2">&quot;cat /etc/passwd&quot;</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sudoUser</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="s2">&quot;10 2&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>using variables:</p>
