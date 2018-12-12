@@ -2,6 +2,7 @@ TODO:
 v3.0.2
 - rewrite scan method
 - add any/all condition to 'repeat' (+docs)
+- documentation review
 
 v3.0.1
 NEW:
