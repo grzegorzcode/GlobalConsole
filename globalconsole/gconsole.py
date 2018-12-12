@@ -362,6 +362,7 @@ class GcConsole(cmd.Cmd):
             os_parser.add_argument('+SU', type=str, nargs="?", const="root", help="sudo to root or user")
             os_parser.add_argument('+SH', type=str, nargs="?", help="choose shell")
             os_parser.add_argument('+spool', type=str, nargs="?", help="spool output to file")
+            os_parser.add_argument('+repeat', type=str, nargs=2, help="repeat command execution. <NR_OF_REPETITIONS DELAY_IN_SEC>")
 
             scp_parser = subparsers.add_parser('scp', description="run scp commands", usage="run scp <args>")
             scp_parser.set_defaults(which='scp')
@@ -380,6 +381,7 @@ class GcConsole(cmd.Cmd):
             db2_parser.add_argument('+IN', action='store_true', help="placeholder: use instance instead of dbname")
             db2_parser.add_argument('+OS', action='store_true', help="run in osmode: os commands with loaded db2 profile")
             db2_parser.add_argument('+spool', type=str, nargs="?", help="spool output to file")
+            db2_parser.add_argument('+repeat', type=str, nargs=2,  help="repeat command execution. <NR_OF_REPETITIONS DELAY_IN_SEC>")
 
             scan_parser = subparsers.add_parser('scan', description="run scan command", usage="run scan <args>")
             scan_parser.set_defaults(which='scan')
@@ -397,15 +399,18 @@ class GcConsole(cmd.Cmd):
                 sudoUser = ""
                 if choice['SU'] is not None:
                     useSudo = True
-                    sudoUser  = choice['SU']
+                    sudoUser = choice['SU']
 
                 if choice['SH'] is None:
                     choice['SH'] = ""
 
+                if choice['repeat'] is None:
+                    choice['repeat'] = [""]
+
                 if len(choice['cmd']) == 0:
                     os_parser.print_help()
                 else:
-                    self.gCommand.os(cmd=" ".join(choice['cmd']), sudo=useSudo, sudoUser=sudoUser, shell=choice['SH'])
+                    self.gCommand.os(cmd=" ".join(choice['cmd']), sudo=useSudo, sudoUser=sudoUser, shell=choice['SH'], repeat=" ".join(choice['repeat']))
 
             elif choice['which'] == 'scp':
                 self.gCommand.scp(mode=choice['mode'], source=choice['src'], dest=choice['dest'], recursive=choice['recursive'], suffix=True, batch=choice['batch'])
@@ -430,10 +435,13 @@ class GcConsole(cmd.Cmd):
                 else:
                     vlevel = "DB"
 
+                if choice['repeat'] is None:
+                    choice['repeat'] = [""]
+
                 if len(choice['cmd']) == 0:
                     db2_parser.print_help()
                 else:
-                    self.gCommand.db2(command=" ".join(choice['cmd']), user=choice['USR'], env=choice['ENV'], shell=choice['SH'], level=vlevel, osmode=choice['OS'])
+                    self.gCommand.db2(command=" ".join(choice['cmd']), user=choice['USR'], env=choice['ENV'], shell=choice['SH'], level=vlevel, osmode=choice['OS'], repeat=" ".join(choice['repeat']))
 
             elif choice['which'] == 'scan':
                 if choice['yes']:

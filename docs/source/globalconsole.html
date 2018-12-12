@@ -103,7 +103,7 @@
 
 <dl class="method">
 <dt id="gcommands.GcCommand.db2">
-<code class="descname">db2</code><span class="sig-paren">(</span><em>command</em>, <em>user='current'</em>, <em>env=''</em>, <em>shell=''</em>, <em>placeholder='{}'</em>, <em>level='DB'</em>, <em>osmode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.db2" title="Permalink to this definition">¶</a></dt>
+<code class="descname">db2</code><span class="sig-paren">(</span><em>command</em>, <em>user='current'</em>, <em>env=''</em>, <em>shell=''</em>, <em>placeholder='{}'</em>, <em>level='DB'</em>, <em>osmode=False</em>, <em>repeat=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.db2" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method executes os command on a picked hosts in loaded json file.</p>
 <p>User can be ‘instance’ - instance owner, &lt;any&gt; - whoever you want, empty or ‘current’ - connected user.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -170,7 +170,7 @@
 
 <dl class="method">
 <dt id="gcommands.GcCommand.os">
-<code class="descname">os</code><span class="sig-paren">(</span><em>cmd</em>, <em>sudo=False</em>, <em>sudoUser=''</em>, <em>shell=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.os" title="Permalink to this definition">¶</a></dt>
+<code class="descname">os</code><span class="sig-paren">(</span><em>cmd</em>, <em>sudo=False</em>, <em>sudoUser=''</em>, <em>shell=''</em>, <em>repeat=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gcommands.GcCommand.os" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method executes os command on a picked hosts in loaded json file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1083,6 +1083,56 @@ str: string with colors</p>
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="gutils.GcUtils.compare_checked">
+<em class="property">static </em><code class="descname">compare_checked</code><span class="sig-paren">(</span><em>item</em>, <em>default</em>, <em>oldjson=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.compare_checked" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method checks status of ‘picked’ item for hosts and groups. Dedicated to creds and hosts file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>item</strong> (<em>str</em>) – item to compare</li>
+<li><strong>default</strong> (<em>str</em>) – default value if oldjson is None</li>
+<li><strong>oldjson</strong> (<em>dict</em>) – old value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+str: result of comparision. Return an old value if exists, default otherwise.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compare_checked</span><span class="p">(</span><span class="s2">&quot;group_checked&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">olddict</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.compare_dicts">
+<em class="property">static </em><code class="descname">compare_dicts</code><span class="sig-paren">(</span><em>item</em>, <em>newjson</em>, <em>oldjson=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.compare_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method compares two dictionaries. Dedicated to creds and hosts file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>item</strong> (<em>str</em>) – item to compare</li>
+<li><strong>newjson</strong> (<em>dict</em>) – new values</li>
+<li><strong>oldjson</strong> (<em>dict</em>) – old values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+str: result of comparision. Return an old value if exists, new value otherwise.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compare_dicts</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">,</span> <span class="n">newdict</span><span class="p">,</span> <span class="n">olddict</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="gutils.GcUtils.gcfile">
 <em class="property">static </em><code class="descname">gcfile</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.gcfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method extracts filename from path</p>
@@ -1110,6 +1160,50 @@ str: filename</p>
 str: current directory path</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gcpath</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.number_to_name">
+<em class="property">static </em><code class="descname">number_to_name</code><span class="sig-paren">(</span><em>name</em>, <em>number</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.number_to_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method adds number at the end of filename, just before last dot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – filename</li>
+<li><strong>number</strong> (<em>str</em>) – number to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+filename: modified filename</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">number_to_name</span><span class="p">(</span><span class="s2">&quot;myfile.txt&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="gutils.GcUtils.parse_repeat">
+<em class="property">static </em><code class="descname">parse_repeat</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#gutils.GcUtils.parse_repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method parses given string to check is it possible to use it with internal scheduler</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>item</strong> (<em>str</em>) – item to check</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:
+status, items: result of checking and parsed items</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_repeat</span><span class="p">(</span><span class="s2">&quot;100 10&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

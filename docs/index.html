@@ -861,7 +861,7 @@ optional arguments:
 </pre></div>
 </div>
 <p>you can run commands on connected hosts using <strong>ssh</strong> with <code class="docutils literal notranslate"><span class="pre">run</span></code> command.</p>
-<p>You can use <strong>variables</strong> and put results into <strong>excel</strong> or <strong>csv</strong> file.
+<p>You can use <strong>variables</strong> and put results into <strong>excel</strong> or <strong>csv</strong> file. You can <strong>repeat</strong> execution, also.
 Take a look on examples of below.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -876,6 +876,7 @@ Take a look on examples of below.</p>
 <li>variables can be used with <code class="docutils literal notranslate"><span class="pre">os</span></code>, <code class="docutils literal notranslate"><span class="pre">db2</span></code> and <code class="docutils literal notranslate"><span class="pre">scp</span></code> commands</li>
 <li>you must specify <code class="docutils literal notranslate"><span class="pre">spool</span></code> parameter with valid filename mask (<a href="#id1"><span class="problematic" id="id2">*</span></a>.csv or <a href="#id3"><span class="problematic" id="id4">*</span></a>.xlsx) to generate file</li>
 <li>generated files are being stored into <strong>spool</strong> directory</li>
+<li>if <code class="docutils literal notranslate"><span class="pre">repeat</span></code> is being used, <em>run&lt;int&gt;</em> is being added to a filename to distinguish output</li>
 <li>default one row per one output behaviour in xlsx files can be changed in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">spoolxlsxline</span></code>. setting to YES will cause to generate one row for every output’s line.</li>
 <li>default csv fields delimiter can be changed in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">csv_delimiter</span></code></li>
 <li>output will be printed as soon as it arrives. You can change this in <strong>config.ini</strong> file, parameter <code class="docutils literal notranslate"><span class="pre">wait_for_all_hosts</span></code>, so result of a command will be printed when all servers will deliver</li>
@@ -979,6 +980,27 @@ myhost1,<span class="o">(</span><span class="m">192</span>.168.57.101:22<span cl
 myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,NA,NA,1110      /opt,du -ms /opt
 myhost2,<span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>,NA,NA,4 /tmp,du -ms /tmp
 myhost1,<span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>,NA,NA,1110      /opt,du -ms /opt
+</pre></div>
+</div>
+<p>run as a connected user, <strong>repeat</strong> command 2 times with 3 second delay</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run os whoami +repeat <span class="m">2</span> <span class="m">3</span>
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - root
+
+Globalconsole INFO - --------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - root
+
+Globalconsole INFO - -----------run:2--------------
+
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - root
+
+Globalconsole INFO - --------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - root
 </pre></div>
 </div>
 </div>
@@ -1204,6 +1226,44 @@ IBMREQD
 Y
   <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
 ...
+</pre></div>
+</div>
+<p>run as a connected user, <strong>repeat</strong> command 2 times with 5 second delay, spool output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; run db2 <span class="k">select</span> * from sysibm.sysdummy1 +spool db.xlsx +repeat <span class="m">2</span> <span class="m">5</span>
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO - --install: /opt/ibm/db2/V10.5
+--instance: db2inst1 --database: TEST --
+Globalconsole INFO - IBMREQD
+Globalconsole INFO - -------
+Globalconsole INFO - Y
+Globalconsole INFO -   <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+Globalconsole INFO - --------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+Globalconsole INFO - --install: /opt/ibm/db2/V10.5
+--instance: db2inst1 --database: TEST2 --
+Globalconsole INFO - IBMREQD
+Globalconsole INFO - -------
+Globalconsole INFO - Y
+Globalconsole INFO -   <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+
+Globalconsole INFO - -----------run:2--------------
+
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO - --install: /opt/ibm/db2/V10.5
+--instance: db2inst1 --database: TEST --
+Globalconsole INFO - IBMREQD
+Globalconsole INFO - -------
+Globalconsole INFO - Y
+Globalconsole INFO -   <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
+
+Globalconsole INFO - --------myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>--------
+Globalconsole INFO - --install: /opt/ibm/db2/V10.5
+--instance: db2inst1 --database: TEST2 --
+Globalconsole INFO - IBMREQD
+Globalconsole INFO - -------
+Globalconsole INFO - Y
+Globalconsole INFO -   <span class="m">1</span> record<span class="o">(</span>s<span class="o">)</span> selected.
 </pre></div>
 </div>
 </div>

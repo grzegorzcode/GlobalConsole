@@ -1,0 +1,14 @@
+TODO:
+v3.0.2
+- rewrite scan method
+- add any/all condition to 'repeat' (+docs)
+
+v3.0.1
+NEW:
+- add 'repeat' to commands
+- initial v3 release
+- rewritten dependencies
+- upsert enhanced
+- rewritten logging
+FIXED:
+- all bugs raised in v2

@@ -10,6 +10,7 @@ import os
 import uuid
 import re
 from colorama import Fore, Style
+from re import search, compile
 
 class GcUtils:
     """This class features:
@@ -185,4 +186,56 @@ class GcUtils:
             return default
         else:
             return oldjson[item]
+
+    @staticmethod
+    def parse_repeat(item):
+        """
+        This method parses given string to check is it possible to use it with internal scheduler
+
+        Args:
+            item (str): item to check
+
+        Returns:
+        status, items: result of checking and parsed items
+
+        Examples:
+
+            >>> parse_repeat("100 10")
+
+        """
+        items = item.split()
+        nr_of_items = len(items)
+        type_of_items = all([isinstance(int(x), int) for x in items])
+
+        if nr_of_items == 2 and type_of_items is True:
+            return True, [int(x) for x in items]
+        else:
+            return False, []
+
+    @staticmethod
+    def number_to_name(name, number):
+        """
+        This method adds number at the end of filename, just before last dot.
+
+        Args:
+            name (str): filename
+            number (str): number to add
+
+        Returns:
+        filename: modified filename
+
+        Examples:
+
+            >>> number_to_name("myfile.txt", 2)
+
+        """
+        splited = os.path.splitext(name)
+        r1 = compile("run\d$")
+
+        if r1.search(splited[0]):
+            childsplited = os.path.splitext(splited[0])
+            return "{}.run{}{}".format(childsplited[0], number, splited[1])
+        else:
+            return "{}.run{}{}".format(splited[0], number, splited[1])
+
 

@@ -15,6 +15,7 @@ from openpyxl.styles import Alignment, Font
 import paramiko
 from scp import SCPClient
 from socket import timeout as SocketTimeout
+from time import sleep
 #
 from globalconsole.gutils import GcUtils as gutils
 
@@ -808,7 +809,7 @@ class GcCommand:
         self.gLogging.info("Session stopped.")
         exit(0)
 
-    def os(self, cmd, sudo=False, sudoUser="", shell=""):
+    def os(self, cmd, sudo=False, sudoUser="", shell="", repeat=""):
         """
         This method executes os command on a picked hosts in loaded json file
 
@@ -843,14 +844,31 @@ class GcCommand:
             command = 'sudo su - ' + sudoUser + shell + " -c $'" + cmd.replace("'", "\\'") + "'"
 
         try:
-            self.command(command)
+            if len(repeat) > 0:
+                if gutils.parse_repeat(repeat)[0]:
+                    vrepeat = gutils.parse_repeat(repeat)[1]
+                    varspool = None
+                    for i in range(0, vrepeat[0]):
+                        if len(self.spool) > 0:
+                            self.spool = gutils.number_to_name(self.spool, i + 1)
+                            varspool = self.spool
+                        self.command(command)
+                        if i < vrepeat[0]-1:
+                            if varspool is not None:
+                                self.spool = gutils.number_to_name(varspool, i + 2)
+                            self.gLogging.info("-----------run:{}--------------\n".format(i+2))
+                            sleep(vrepeat[1])
+                else:
+                    self.gLogging.warning("Invalid format for repeat functionality. Command will run only once")
+                    self.command(command)
+            else:
+                self.command(command)
 
         except Exception:
             self.gLogging.error("cannot run command: %s" % command)
 
-
     #combine features of db2, db2I, db2I2
-    def db2(self, command, user="current", env="", shell="", placeholder="{}", level="DB", osmode=False):
+    def db2(self, command, user="current", env="", shell="", placeholder="{}", level="DB", osmode=False, repeat=""):
         """
         This method executes os command on a picked hosts in loaded json file.
 
@@ -895,7 +913,26 @@ class GcCommand:
             command = command[:-1]
 
         try:
-            self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
+            #self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
+            if len(repeat) > 0:
+                if gutils.parse_repeat(repeat)[0]:
+                    vrepeat = gutils.parse_repeat(repeat)[1]
+                    varspool = None
+                    for i in range(0, vrepeat[0]):
+                        if len(self.spool) > 0:
+                            self.spool = gutils.number_to_name(self.spool, i + 1)
+                            varspool = self.spool
+                            self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
+                        if i < vrepeat[0]-1:
+                            if varspool is not None:
+                                self.spool = gutils.number_to_name(varspool, i + 2)
+                            self.gLogging.info("-----------run:{}--------------\n".format(i+2))
+                            sleep(vrepeat[1])
+                else:
+                    self.gLogging.warning("Invalid format for repeat functionality. Command will run only once")
+                    self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
+            else:
+                self.command(command, db2=True, user=user, env=env, shell=shell, placeholder=placeholder, level=level, osmode=osmode)
         except Exception:
             self.gLogging.error("cannot run command: %s" % command)
 
