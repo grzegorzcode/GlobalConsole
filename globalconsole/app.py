@@ -8,8 +8,11 @@ import globalconsole.gcreds as gcreds
 import globalconsole.gvars as gvars
 import globalconsole.gcommands as gcomm
 import globalconsole.gconsole as gcon
+from signal import signal, SIGINT, SIG_IGN
 
 if __name__ == '__main__':
+    #disable CTRL+C exiting program
+    signal(SIGINT, SIG_IGN)
 
     #config
     gconf = gconfig.GcConfig()

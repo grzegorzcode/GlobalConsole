@@ -2,7 +2,9 @@
 GlobalConsole
 ----------------
 
-[![Build Status](https://travis-ci.com/grzegorzcode/GlobalConsole.svg?branch=master)](https://travis-ci.com/grzegorzcode/GlobalConsole)
+[![Build Status](https://travis-ci.com/grzegorzcode/GlobalConsole.svg?branch=master)](https://travis-ci.com/grzegorzcode/GlobalConsole) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
+
 
 GlobalConsole is a tool designed to run commands on many Linux/Unix machines at the same time.
 What distinguishes GlobalConsole from similar software is ability to handle DB2 database environments.
