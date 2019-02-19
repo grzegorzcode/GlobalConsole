@@ -282,8 +282,13 @@ class GcCommand:
         else:
             connections = [x for x in self.connections if x[0] == host]
 
+        pattern = re.compile("\\\\([a-z]|[A-Z])")
+        command = pattern.sub(r'\\\1', command)
+
         if db2 is True:
             command = command.replace("*", "\*")
+            if kwargs['osmode']:
+                command = command.replace("\(", "(").replace("\)", ")").replace("\*", "*")
 
         for conn in connections:
             try:
@@ -842,7 +847,7 @@ class GcCommand:
 
         if len(shell) > 0:
             shell = " -s " + shell
-            command = shell + " -c '" + command + "'"
+            command = shell + " -c $'" + cmd.replace("'", "\\'") + "'"
         else:
             shell = ""
 

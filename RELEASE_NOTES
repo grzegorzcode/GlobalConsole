@@ -1,9 +1,18 @@
 TODO:
-v3.0.2
 - rewrite scan method
 - add any/all condition to 'repeat' (+docs)
 - documentation review
 - fix config show/set
+
+v3.1.0
+NEW:
+- stop trying to use credential after number of invalid logins
+FIXED:
+- sed bugs related to a new os parsing mechanism
+
+v3.0.2
+FIXED:
+- bugs related to os command
 
 v3.0.1
 NEW:
