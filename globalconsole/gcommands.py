@@ -127,6 +127,7 @@ class GcCommand:
             return (host['hostname'], None)
 
         self.gLogging.debug("_connectOne host value: %s, host creds: %s, cred user: %s " % (host['host'], host['def_cred'], cred['username']))
+
         try:
             if cred['encrypted'] == 'yes':
                 passwds = self.gCreds.decryptPasswds(cred)
@@ -159,7 +160,11 @@ class GcCommand:
             else:
                 self.gLogging.warning("connection method unknown for host: %s" % host['hostname'])
         except Exception:
-            self.gLogging.error("cannot connect to: " + host['hostname'])
+            if int(self.gConfig['COMMAND']['stop_connect_when_failed']) == 1:
+                #self.gLogging.critical("ABORTED, cannot connect to: " + host['hostname'])
+                self.gLogging.error("cannot connect to: " + host['hostname'])
+            else:
+                self.gLogging.error("cannot connect to: " + host['hostname'])
             return (host['hostname'], None)
 
     def _connectOneCallback(self, conn):
@@ -193,7 +198,11 @@ class GcCommand:
             # fix to tinydb purging json
             self.connhosttempdict = self.gHosts.hosttable.all()
             self.conncredtempdict = self.gCreds.credtable.all()
+            self.credivalidattempts = {}
             #
+            for cred in self.conncredtempdict:
+                self.credivalidattempts.setdefault(cred['credname'], 0)
+
             self.close()
             pool = ThreadPool(processes=int(self.gConfig['COMMAND']['max_threads']))
             if len(hostnames) == 0:
