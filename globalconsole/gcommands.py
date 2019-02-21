@@ -16,9 +16,12 @@ import paramiko
 from scp import SCPClient
 from socket import timeout as SocketTimeout
 from time import sleep
+import threading
+from queue import Queue
 #
 from globalconsole.gutils import GcUtils as gutils
 
+my_queue = Queue(maxsize=0)
 
 class GcCommand:
     """This class features:
@@ -110,6 +113,10 @@ class GcCommand:
 
         """
         self.gLogging.debug("_connectOne invoked")
+        global my_queue
+        old_val = my_queue.get()
+        # print("old_start", old_val, threading.get_ident())
+        my_queue.put(old_val)
 
         #host = self.gHosts.searchHostName(hostname)[0]
         #cred = self.gCreds.searchCredName(host['def_cred'])[0]
@@ -127,6 +134,11 @@ class GcCommand:
             return (host['hostname'], None)
 
         self.gLogging.debug("_connectOne host value: %s, host creds: %s, cred user: %s " % (host['host'], host['def_cred'], cred['username']))
+
+        if int(self.gConfig['COMMAND']['stop_connect_when_failed']) == 1:
+            if int(self.gConfig['COMMAND']['max_cred_fails']) < int(old_val[cred['credname']]):
+                self.gLogging.warning("cannot connect to: " + host['hostname'] + " maximum number of attempts exceeded for: "  + cred['credname'])
+                return (host['hostname'], None)
 
         try:
             if cred['encrypted'] == 'yes':
@@ -161,10 +173,20 @@ class GcCommand:
                 self.gLogging.warning("connection method unknown for host: %s" % host['hostname'])
         except Exception:
             if int(self.gConfig['COMMAND']['stop_connect_when_failed']) == 1:
-                #self.gLogging.critical("ABORTED, cannot connect to: " + host['hostname'])
-                self.gLogging.error("cannot connect to: " + host['hostname'])
+                old_val = my_queue.get()
+                # print("old_exc", old_val, threading.get_ident())
+                old_val[cred['credname']] = old_val[cred['credname']] + 1
+                # print("new_val", old_val, threading.get_ident())
+                my_queue.put(old_val)
+                if int(self.gConfig['COMMAND']['max_cred_fails']) < int(old_val[cred['credname']]):
+                    self.gLogging.warning("cannot connect to: " + host['hostname'] + " maximum number of attempts exceeded for: " + cred['credname'])
+                    return (host['hostname'], None)
+                else:
+                    self.gLogging.warning("cannot connect to: " + host['hostname'] + "with credential: " + cred['credname'])
+                    return (host['hostname'], None)
+                #my_queue.task_done()
             else:
-                self.gLogging.error("cannot connect to: " + host['hostname'])
+                self.gLogging.warning("cannot connect to: " + host['hostname'] + "with credential: " + cred['credname'])
             return (host['hostname'], None)
 
     def _connectOneCallback(self, conn):
@@ -194,17 +216,25 @@ class GcCommand:
             >>> connect()
         """
         self.gLogging.debug("connect invoked")
+
+        global my_queue
+        my_queue = Queue(maxsize=0)
+
         try:
             # fix to tinydb purging json
             self.connhosttempdict = self.gHosts.hosttable.all()
             self.conncredtempdict = self.gCreds.credtable.all()
-            self.credivalidattempts = {}
+            credattempts = {}
             #
             for cred in self.conncredtempdict:
-                self.credivalidattempts.setdefault(cred['credname'], 0)
+                credattempts.setdefault(cred['credname'], 0)
 
             self.close()
             pool = ThreadPool(processes=int(self.gConfig['COMMAND']['max_threads']))
+
+            #
+            my_queue.put(credattempts)
+
             if len(hostnames) == 0:
                 for i in self.gHosts.hosttable.all():
                     if i['host_checked'] == self.gConfig['JSON']['pick_yes']:
