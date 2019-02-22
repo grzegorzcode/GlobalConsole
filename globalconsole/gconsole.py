@@ -13,6 +13,7 @@ import argparse
 import readline
 import atexit
 import sys
+from urllib.request import urlopen
 #
 from globalconsole.gutils import GcUtils as gutils
 
@@ -496,6 +497,25 @@ class GcConsole(cmd.Cmd):
         self.gLogging.show("".center(int(columns)))
         self.gLogging.show("".center(int(columns)))
 
+        try:
+            with urlopen("https://raw.githubusercontent.com/grzegorzcode/GlobalConsole/master/VERSION") as serv:
+                sversion = str(serv.readline()).split(".")
+                major = sversion[0].split("'")[1]
+                minor = sversion[1]
+                fix = sversion[2]
+                sversion = int("{major}{minor}{fix}".format(major=major, minor=minor, fix=fix))
+                sversionF = "{major}.{minor}.{fix}".format(major=major, minor=minor, fix=fix)
+
+                lversion = self.gConfig['LOGGING']['gversion'].split(".")
+                major = lversion[0]
+                minor = lversion[1]
+                fix = lversion[2]
+                lversion = int("{major}{minor}{fix}".format(major=major, minor=minor, fix=fix))
+
+                if sversion > lversion:
+                    self.gLogging.show(Fore.LIGHTYELLOW_EX + "!! A NEW VERSION {new} available !!".format(new=sversionF).center(int(columns)) + Style.RESET_ALL)
+        except Exception:
+            self.gLogging.warning("cannot connect to github.com to check for a new version")
 
     def emptyline(self):
         """
