@@ -307,6 +307,14 @@ class GcCommand:
 
             >>> command("df -h")
         """
+
+        """
+        query_pattern = re.compile("(select|insert|delete|truncate)(.+)(&&|;){1}", re.IGNORECASE)
+        statement = "db2 connect to {} && db2 SELECT * from SYSCAT.DBAUTH where grantee = 'PUBLIC' && db2 terminate"
+        statement[query_pattern.search(statement).start(1):query_pattern.search(statement).end(2)]
+        "SELECT * from SYSCAT.DBAUTH where grantee = 'PUBLIC' "
+        """
+
         self.gLogging.debug("command invoked")
         self.result = []
 
@@ -321,13 +329,22 @@ class GcCommand:
         else:
             connections = [x for x in self.connections if x[0] == host]
 
+        #fix for a sed regex
         pattern = re.compile("\\\\([a-z]|[A-Z])")
         command = pattern.sub(r'\\\1', command)
 
         if db2 is True:
-            command = command.replace("*", "\*")
-            if kwargs['osmode']:
-                command = command.replace("\(", "(").replace("\)", ")").replace("\*", "*")
+            #command = command.replace("\(", "(").replace("\)", ")").replace('"', "'")
+            if not kwargs['osmode']:
+                command = command.replace("\(", "(").replace("\)", ")").replace('"', "'")
+                command = '" ' + command + ' "'
+            else:
+                command = command.replace('"', "'")
+                query_pattern = re.compile("(select|insert|delete|truncate)(.+)(&&|;){1}", re.IGNORECASE)
+                try:
+                    command = re.sub(query_pattern, '" ' + command[query_pattern.search(command).start(1):query_pattern.search(command).end(2)] + ' " ' + query_pattern.search(command).group(3), command)
+                except AttributeError:
+                    pass
 
         for conn in connections:
             try:
@@ -356,11 +373,11 @@ class GcCommand:
                                             kwargs['shell'] = " -s " + kwargs['shell']
 
                                         if kwargs['user'] == "current":
-                                            cmd = kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], instance['instance_name']).replace("(", "\(").replace(")", "\)") + terstr[:-1]
+                                            cmd = kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], instance['instance_name']) + terstr[:-1]
                                         elif kwargs['user'] == "instance":
-                                            cmd = kwargs['env'] + ' sudo su - ' +instance["instance_name"] + kwargs['shell'] + " -c $'" + kwargs['env'] +' . ' +instance["instance_profile"]+ constr + command.replace(kwargs['placeholder'], instance['instance_name']).replace("(", "\(").replace(")", "\)").replace("'", "\\'")+terstr
+                                            cmd = kwargs['env'] + ' sudo su - ' +instance["instance_name"] + kwargs['shell'] + " -c $'" + kwargs['env'] +' . ' +instance["instance_profile"]+ constr + command.replace(kwargs['placeholder'], instance['instance_name']).replace("'", "\\'")+terstr
                                         else:
-                                            cmd = kwargs['env'] + ' sudo su - ' + kwargs['user'] + kwargs['shell'] + ' -c "' + kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], instance['instance_name']).replace("(","\(").replace(")", "\)").replace("'", "\\'") + terstr
+                                            cmd = kwargs['env'] + ' sudo su - ' + kwargs['user'] + kwargs['shell'] + ' -c "' + kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], instance['instance_name']).replace("'", "\\'") + terstr
                                         #print(host['hostname'], cmd)
 
                                         commands = self.gVars.parseString(cmd)
@@ -383,11 +400,11 @@ class GcCommand:
                                                 kwargs['shell'] = " -s " + kwargs['shell']
 
                                             if kwargs['user'] == "current":
-                                                cmd = kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], db['db_name']).replace("(", "\(").replace(")", "\)") + terstr[:-1]
+                                                cmd = kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], db['db_name']) + terstr[:-1]
                                             elif kwargs['user'] == "instance":
-                                                cmd = kwargs['env'] + ' sudo su - ' +instance["instance_name"] + kwargs['shell'] + " -c $'" + kwargs['env'] +' . ' +instance["instance_profile"]+ constr + command.replace(kwargs['placeholder'], db['db_name']).replace("(", "\(").replace(")", "\)").replace("'", "\\'")+terstr
+                                                cmd = kwargs['env'] + ' sudo su - ' +instance["instance_name"] + kwargs['shell'] + " -c $'" + kwargs['env'] +' . ' +instance["instance_profile"]+ constr + command.replace(kwargs['placeholder'], db['db_name']).replace("'", "\\'")+terstr
                                             else:
-                                                cmd = kwargs['env'] + ' sudo su - ' + kwargs['user'] + kwargs['shell'] + " -c $'" + kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], db['db_name']).replace("(","\(").replace(")", "\)").replace("'", "\\'") + terstr
+                                                cmd = kwargs['env'] + ' sudo su - ' + kwargs['user'] + kwargs['shell'] + " -c $'" + kwargs['env'] + ' . ' + instance["instance_profile"] + constr + command.replace(kwargs['placeholder'], db['db_name']).replace("'", "\\'") + terstr
 
                                             #print(host['hostname'], cmd)
                                             commands = self.gVars.parseString(cmd)
