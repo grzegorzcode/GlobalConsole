@@ -32,8 +32,25 @@ if __name__ == '__main__':
     # commands
     gcom = gcomm.GcCommand(gconf, glog, gvars, gcreds, ghosts)
 
-    #console
-    gcon = gcon.GcConsole(gconf, glog, gcom)
+
+
+    #enabling panaceum
+    #monkey patching of GcCommand
+    if gconf.config['PANACEUM']['enabled'] == 'YES':
+        try:
+            from plugins import panaceum
+            gcon.GcConsole.do_yaml = panaceum.do_testing
+            # console
+            gcon = gcon.GcConsole(gconf, glog, gcom)
+            gcon.gLogging.info("Panaceum plugin enabled!")
+            #adding to instance
+            # from plugins import panaceum
+            # import types
+            # gcon.do_testing = types.MethodType(panaceum.do_testing, gcon)
+        except Exception as e:
+            # console
+            gcon = gcon.GcConsole(gconf, glog, gcom)
+            gcon.gLogging.warning("Panaceum plugin cannot be enabled..")
 
     #start app
     gcon.app()

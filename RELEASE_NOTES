@@ -4,6 +4,18 @@ TODO:
 - documentation review
 - fix config show/set
 
+
+v3.5.0 (panaceum plugin)
+NEW:
+TODO:
+- cmd -> exception/desired -> try_to_solve (cmd) -> error/ok
+- github based knowledge
+- monkey patching of gcommands
+- adding address to knowledge
+- selecting hosts via db2 version
+(change version in docs, config, pip install pyyaml)
+
+
 v3.1.1
 FIXED:
 - bugs related to db2 command ('select *' with string in where condition)
