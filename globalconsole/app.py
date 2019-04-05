@@ -29,28 +29,29 @@ if __name__ == '__main__':
     #vars
     gvars = gvars.GcVars(gconf, glog)
 
-    # commands
-    gcom = gcomm.GcCommand(gconf, glog, gvars, gcreds, ghosts)
-
-
-
     #enabling panaceum
     #monkey patching of GcCommand
     if gconf.config['PANACEUM']['enabled'] == 'YES':
         try:
             from plugins import panaceum
-            gcon.GcConsole.do_yaml = panaceum.do_testing
+            gcomm.GcCommand.yamlExecutor = panaceum.yamlExecutor
+            gcon.GcConsole.do_yaml = panaceum.do_yaml
+            gcon.GcConsole.complete_yaml = panaceum.complete_yaml
+            # commands
+            gcom = gcomm.GcCommand(gconf, glog, gvars, gcreds, ghosts)
             # console
             gcon = gcon.GcConsole(gconf, glog, gcom)
-            gcon.gLogging.info("Panaceum plugin enabled!")
+            gcon.gLogging.info("Panaceum plugin version %s enabled!" % gconf.config['PANACEUM']['pversion'])
             #adding to instance
             # from plugins import panaceum
             # import types
             # gcon.do_testing = types.MethodType(panaceum.do_testing, gcon)
         except Exception as e:
+            # commands
+            gcom = gcomm.GcCommand(gconf, glog, gvars, gcreds, ghosts)
             # console
             gcon = gcon.GcConsole(gconf, glog, gcom)
-            gcon.gLogging.warning("Panaceum plugin cannot be enabled..")
+            gcon.gLogging.warning("Panaceum plugin version %s cannot be enabled.." % gconf.config['PANACEUM']['pversion'])
 
     #start app
     gcon.app()

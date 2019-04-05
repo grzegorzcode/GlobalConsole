@@ -6,3 +6,4 @@ pycryptodome
 scp>=0.13
 tabulate
 tinydb
+pyyaml

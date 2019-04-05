@@ -8,13 +8,16 @@ TODO:
 v3.5.0 (panaceum plugin)
 NEW:
 TODO:
-- cmd -> exception/desired -> try_to_solve (cmd) -> error/ok
-- github based knowledge
-- monkey patching of gcommands
+- github or localfile based knowledge (parameter)
 - adding address to knowledge
 - selecting hosts via db2 version
-(change version in docs, config, pip install pyyaml)
-
+- change docs
+(change version in docs, config)
+-step by step execution(report on every step finish)
+- crontab execution
+-update list of available hosts,dbs on every step ending
+- special log for panaceum + report
+- tests
 
 v3.1.1
 FIXED:
