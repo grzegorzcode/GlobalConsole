@@ -191,6 +191,8 @@ def yamlExecutor(self, source, stopping=True):
                             print("stopping flow...")
                             removeUuid(result[6])
                             break
+        if self.gCommand.gConfig['PANACEUM']['showpicked'] == 'YES':
+            self.gCommand.gHosts.pickHosts(_printing=True)
 
     if stopping:
         self.gLogging.show("--- press Enter to close active connections ---")
