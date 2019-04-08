@@ -107,6 +107,21 @@ def yamlExecutor(self, source, stopping=True):
     def runcmd(cmd):
         self.onecmd(cmd)
 
+    def removeUuid(uuid):
+        detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
+        self.gLogging.info("removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid))
+        self.gCommand.gHosts.pickHosts(manual=True, uuids=[uuid], _printing=False)
+
+    def runUuid(uuid):
+        #save picking status
+        #path to pick oone obj
+        #conn close
+        #conn connect
+        #runcmd
+        #restore picking status
+        #conn close
+        #conn connect
+
     def analyze(condition, result, verify=False):
         msg = condition.get('msg', None)
         expect = condition.get('expect', False)
@@ -143,10 +158,6 @@ def yamlExecutor(self, source, stopping=True):
                 self.gLogging.info("condition passed")
                 return True
 
-    def removeUuid(uuid):
-        detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
-        self.gLogging.info("removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid))
-        self.gCommand.gHosts.pickHosts(manual=True, uuids=[uuid], _printing=False)
 
     steps = [step['step'] for step in yfile if step.get('step', None) is not None]
 

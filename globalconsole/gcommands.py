@@ -255,7 +255,7 @@ class GcCommand:
             cmd_conn (tuple): ((hostname, ssh connection handler), command, instance name, database name)
 
         Returns:
-            tuple: (output of command, hostname, command, instance name, database name)
+            tuple: (output of command, hostname, command, instance name, database name, host/db/instance uuid - depends on command level)
 
         """
         self.gLogging.debug("_commandOne invoked")
