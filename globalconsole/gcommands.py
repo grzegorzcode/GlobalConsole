@@ -308,13 +308,6 @@ class GcCommand:
             >>> command("df -h")
         """
 
-        """
-        query_pattern = re.compile("(select|insert|delete|truncate)(.+)(&&|;){1}", re.IGNORECASE)
-        statement = "db2 connect to {} && db2 SELECT * from SYSCAT.DBAUTH where grantee = 'PUBLIC' && db2 terminate"
-        statement[query_pattern.search(statement).start(1):query_pattern.search(statement).end(2)]
-        "SELECT * from SYSCAT.DBAUTH where grantee = 'PUBLIC' "
-        """
-
         self.gLogging.debug("command invoked")
         self.result = []
 

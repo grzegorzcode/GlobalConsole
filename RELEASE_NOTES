@@ -3,21 +3,19 @@ TODO:
 - add any/all condition to 'repeat' (+docs)
 - documentation review
 - fix config show/set
-
+- crontab like execution
 
 v3.5.0 (panaceum plugin)
 NEW:
 TODO:
-- github or localfile based knowledge (parameter)
-- adding address to knowledge
 - selecting hosts via db2 version
 - change docs
 (change version in docs, config)
--step by step execution(report on every step finish)
-- crontab execution
--update list of available hosts,dbs on every step ending
-- special log for panaceum + report
+- report on every step finish
+- update list of available hosts,dbs on every step ending
+- special panaceum report
 - tests
+- examples
 
 v3.1.1
 FIXED:
