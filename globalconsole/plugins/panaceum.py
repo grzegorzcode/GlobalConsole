@@ -12,7 +12,7 @@ def complete_yaml(self, text, line, start_index, end_index):
     This method uses ``inlist`` variable to enable ``cmd`` module command autocompletion
 
     """
-    inlist = ['show', 'run']
+    inlist = ['run']
     if text:
         return [item for item in inlist if item.startswith(text)]
     else:
@@ -30,10 +30,6 @@ def do_yaml(self, args):
         parser = argparse.ArgumentParser(prog="yaml", add_help=True, epilog=self.epilog, description=description, usage="yaml <command> [<args>]")
         subparsers = parser.add_subparsers()
 
-        show_parser = subparsers.add_parser('show', description="show yaml", usage="yaml show <args>")
-        show_parser.set_defaults(which='show')
-        show_parser.add_argument('-v', '--verbose', action='store_true', help="yaml with logic analyzed")
-
         run_parser = subparsers.add_parser('run', description="run yaml file", usage="yaml run <args>")
         run_parser.set_defaults(which='run')
         run_parser.add_argument('-s', '--source', type=str, required=True, help="file to run, local or github")
@@ -42,11 +38,8 @@ def do_yaml(self, args):
         choice = vars(parser.parse_args(args.split()))
         if len(args) == 0:
             parser.print_help()
-        elif choice['which'] == 'show':
-            self.gLogging.show("yaml show " + str(choice['verbose']))
         elif choice['which'] == 'run':
-            #self.gLogging.show("yaml run " + str(choice['source']))
-            self.gCommand.yamlExecutor(source=choice['source'], stopping=choice['stopping'])
+            self.yamlExecutor(source=choice['source'], stopping=choice['stopping'])
         else:
             parser.print_help()
     except SystemExit:
@@ -89,42 +82,50 @@ def yamlExecutor(self, source, stopping=True):
     except Exception:
         self.gLogging.error("cannot parse as valid yaml file: %s" % source)
 
+    if stopping:
+        self.gLogging.show("--- press Enter to load host file ---")
+        input()
+
     try:
         hosts = [hosts['hosts'] for hosts in yfile if hosts.get('hosts', None) is not None][0]
+        self.gCommand.gHosts.importCsvAsHosts(hosts)
         self.gLogging.info("hosts loaded from a yaml, location: %s" % hosts)
     except Exception:
-        #TODO !!
-        hosts = 'aa'
         self.gLogging.info("hosts loaded from a GC")
 
+    if stopping:
+        self.gLogging.show("--- press Enter to load cred file ---")
+        input()
 
     try:
         creds = [creds['creds'] for creds in yfile if creds.get('creds', None) is not None][0]
+        self.gCommand.gCreds.importCsvAsCreds(creds)
         self.gLogging.info("creds loaded from a yaml, location: %s" % creds)
     except Exception:
-        # TODO !!
-        creds = 'aaa'
         self.gLogging.info("creds loaded from a GC")
 
     def runcmd(cmd):
-        print("running cmd: %s" % cmd)
+        self.onecmd(cmd)
 
     def analyze(condition, result, verify=False):
         msg = condition.get('msg', None)
         expect = condition.get('expect', False)
         failsolve = condition.get('failsolve', [None])
-        print("msg: ", msg)
-        print("expect: ", expect)
-        print("failsolve: ", failsolve)
+        self.gLogging.info("phrases to check: %s" % ",".join(msg))
+        self.gLogging.info("expected: %s" % expect)
+
+        if verify is False:
+            self.gLogging.info("trying to fix with: %s" % failsolve)
 
         if any(msg in result for msg in msg):
             if expect is True:
-                print("condition passed")
+                self.gLogging.info("condition passed")
                 return True
             else:
                 if verify is False:
                     for fixstep in failsolve:
-                        print("running fix step: ", fixstep)
+                        self.gLogging.info("running fix step: %s" % fixstep)
+                        # on a host!!!!
                         runcmd(fixstep)
                 else:
                     pass
@@ -133,64 +134,70 @@ def yamlExecutor(self, source, stopping=True):
             if expect is True:
                 if verify is False:
                     for fixstep in failsolve:
-                        print("running fix step (expect): ", fixstep)
+                        self.gLogging.info("running fix step (expect): %s" % fixstep)
                         runcmd(fixstep)
                 else:
                     pass
                 return False
             else:
-                print("condition passed")
+                self.gLogging.info("condition passed")
                 return True
 
+    def removeUuid(uuid):
+        detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
+        self.gLogging.info("removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid))
+        self.gCommand.gHosts.pickHosts(manual=True, uuids=[uuid], _printing=False)
 
     steps = [step['step'] for step in yfile if step.get('step', None) is not None]
 
     if len(steps) == 0:
-        self.gLogging.warning("no steps to run has been found")
+        self.gLogging.critical("no steps to run has been found")
     else:
         pass
-        #do connect to a hosts
-        #get a list of hosts, dbs etc.. uuids?
-
-    for step in steps:
-        #load hosts to use
-
-        for condition in step.get('fail', [None]):
-            cmd = step['cmd']
-            desc = step.get('desc', '')
-            #running command
-            runcmd(cmd)
-            #result = runcmd(cmd)
-            result = """
-                    command completed
-                    0 erWror, 1 warning. 
-                    closing
-                    """
-
-            print("with desc: %s" % desc)
-            if condition is not None:
-                if analyze(condition, result):
-                    pass
-                else:
-                    #rerun command
-                    # result = runcmd(cmd)
-                    runcmd(cmd)
-                    if analyze(condition, result, verify=True):
-                        pass
-                    else:
-                        print("stopping flow...")
-
-                        #remove this host path from next step execution list
-
-                        break
-
         if stopping:
-            print("--- press Enter to run a new step.. ---")
-            #self.gLogging.show("press any key to continue..")
+            self.gLogging.show("--- press Enter to connect to hosts ---")
             input()
 
-        print("---")
+        #do connect to a hosts
+        self.gCommand.close()
+        self.gCommand.connect()
+        # get list of active connections
+        self.gLogging.show("working on: %s hosts" % str(len(self.gCommand.connections)))
 
+    for step in steps:
+        if stopping:
+            self.gLogging.show(" ")
+            self.gLogging.show("--- press Enter to run a next step.. ---")
+            self.gLogging.show(" ")
+            input()
+
+        self.gLogging.show("--- cmd: %s ---" % step['cmd'])
+        self.gLogging.show("--- desc: %s ---" % step.get('desc', ''))
+
+        cmd = step['cmd']
+        # running command
+        runcmd(cmd)
+
+        for result in self.gCommand.result:
+            for condition in step.get('fail', [None]):
+                if condition is not None:
+                    if analyze(condition, result[0].decode()):
+                        pass
+                    else:
+                        runcmd(cmd)
+                        if analyze(condition, result[0].decode(), verify=True):
+                            pass
+                        else:
+                            print("stopping flow...")
+                            removeUuid(result[6])
+                            break
+
+    if stopping:
+        self.gLogging.show("--- press Enter to close active connections ---")
+        input()
+
+    # do connect to a hosts
+    self.gCommand.close()
 
 
 if __name__ == '__main__':

@@ -264,11 +264,11 @@ class GcCommand:
             stdin, stdout, stderr = cmd_conn[0][1].exec_command(cmd_conn[1], get_pty=True, timeout=int(self.gConfig['COMMAND']['ssh_cmd_timeout']))
             stdin.close()
             self.gLogging.debug("stopping thread for host: %s, instance: %s, db: %s" % (cmd_conn[0][0], cmd_conn[2], cmd_conn[3]))
-            return (stdout.read(), cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
+            return (stdout.read(), cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4], cmd_conn[5])
         except SocketTimeout:
-            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
+            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4], cmd_conn[5])
         except IOError:
-            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4])
+            return ("_GC: TIMEOUT OCCURED_", cmd_conn[0][0], cmd_conn[1], cmd_conn[2], cmd_conn[3], cmd_conn[4], cmd_conn[5])
         except Exception:
             print(type(Exception).__name__)
             self.gLogging.error("cannot run command %s at host: %s" % (cmd_conn[1], cmd_conn[0][0]))
@@ -343,12 +343,12 @@ class GcCommand:
             try:
                 if not db2:
                     commands = self.gVars.parseString(command)
+                    vhost = self.gHosts.searchHostName(conn[0])[0]
                     for cmd_parsed in commands:
-                        pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA"),), callback=self._commandOneCallback)
+                        pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA", vhost['host_uuid']),), callback=self._commandOneCallback)
                         self.gLogging.debug("%s executed command: %s " % (conn[0], cmd_parsed))
                 else:
                     vhost = self.gHosts.searchHostName(conn[0])
-
                     for host in vhost:
                         for install in host["installations"]:
                             for instance in install["instances"]:
@@ -376,7 +376,7 @@ class GcCommand:
                                         commands = self.gVars.parseString(cmd)
                                         for cmd_parsed in commands:
                                             #print(cmd_parsed)
-                                            pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], "NA", install['installation_name']),), callback=self._commandOneCallback)
+                                            pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], "NA", install['installation_name'], instance['instance_uuid']),), callback=self._commandOneCallback)
                                             self.gLogging.debug("%s(%s:%s) executed command: %s " % (host["hostname"], host["host"], host["port"], cmd_parsed))
                                 elif kwargs['level'] == 'DB':
                                     for db in instance["databases"]:
@@ -402,7 +402,7 @@ class GcCommand:
                                             #print(host['hostname'], cmd)
                                             commands = self.gVars.parseString(cmd)
                                             for cmd_parsed in commands:
-                                                pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], db['db_name'], install['installation_name']),), callback=self._commandOneCallback)
+                                                pool.apply_async(self._commandOne, args=((conn, cmd_parsed, instance['instance_name'], db['db_name'], install['installation_name'], db['db_uuid']),), callback=self._commandOneCallback)
                                                 self.gLogging.debug("%s(%s:%s) executed command: %s " % (host["hostname"], host["host"], host["port"], cmd_parsed))
                                 else:
                                     self.gLogging.info("not supported level")
