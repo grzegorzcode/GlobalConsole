@@ -117,27 +117,43 @@ def yamlExecutor(self, source, stopping=True):
         backupconnections = self.gCommand.connections
         ##
         detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
-        # print("-------detailed")
-        # print(detailedInfo)
         self.gCommand.connections = [(host, client) for host, client in backupconnections if host == detailedInfo[0][0]['hostname']]
-
         self.gCommand.gHosts.pickHosts(reset=True, _printing=False, resetOption='N')
-        self.gCommand.gHosts.hosttable.write_back(detailedInfo[0])
         if detailedInfo[1] == 'host':
-            print("---------------------------changed")
+            detailedInfo[0][0]['host_checked'] = self.gConfig['JSON']['pick_yes']
         elif detailedInfo[1] == 'instance':
-            pass
+            detailedInfo[0][0]['host_checked'] = self.gConfig['JSON']['pick_yes']
+
+            for key, value in detailedInfo[0][0].items():
+                if key == 'installations':
+                    for install in value:
+                        for ikey, ivalue in install.items():
+                            if ikey == 'instances':
+                                for instance in ivalue:
+                                    if instance['instance_uuid'] == uuid:
+                                        instance['instance_checked'] = self.gConfig['JSON']['pick_yes']
+
         elif detailedInfo[1] == 'db':
-            pass
+            detailedInfo[0][0]['host_checked'] = self.gConfig['JSON']['pick_yes']
+
+            for key, value in dinfo[0][0].items():
+                if key == 'installations':
+                    for install in value:
+                        for ikey, ivalue in install.items():
+                            if ikey == 'instances':
+                                for instance in ivalue:
+                                    for dkey, dvalue in instance.items():
+                                        if dkey == 'databases':
+                                            for db in dvalue:
+                                                if db['db_uuid'] == uuid:
+                                                    db['db_checked'] = self.gConfig['JSON']['pick_yes']
+
         else:
             pass
-        print("----------------------------------FIXCMD")
+        self.gCommand.gHosts.hosttable.write_back(detailedInfo[0])
         runcmd(fixcmd)
-        # print("---------------------------back")
         self.gCommand.gHosts.hosttable.write_back(backuphosts)
         self.gCommand.connections = backupconnections
-        # self.gCommand.gHosts.pickHosts(_printing=True)
-
 
     def analyze(condition, result, verify=False):
         msg = condition.get('msg', None)
