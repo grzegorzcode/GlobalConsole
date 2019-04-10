@@ -620,7 +620,7 @@ class GcCommand:
         #todo switch to Command method
         for conn in self.connections:
             try:
-                pool.apply_async(self._commandOne, args=((conn, command, "NA", "NA", "NA"),), callback=self._commandOneCallback)
+                pool.apply_async(self._commandOne, args=((conn, command, "NA", "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -647,7 +647,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c "' + x + '"'
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -672,7 +672,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c "cat /etc/passwd | grep ^' + x + ': | cut -d: -f6"'
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -698,7 +698,7 @@ class GcCommand:
             try:
                 for x in [x for x, y in input if y == conn[0]]:
                     cmd = 'sudo su - -c ". %s; db2 list db directory"' % x
-                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA"),), callback=self._commandOneCallback)
+                    pool.apply_async(self._commandOne, args=((conn, cmd, "NA", "NA", "NA", "NA"),), callback=self._commandOneCallback)
             except Exception:
                 self.gLogging.error("cannot run command, unhandled error ")
         pool.close()
@@ -715,9 +715,9 @@ class GcCommand:
                             #print(names.split("=")[1].split("Database")[0].split("\\r")[0].strip())
                             input.append((names.split("=")[1].split("Database")[0].split("\\r")[0].strip(), db[1]))
                             tempinstallations.append([db[1], db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip()])
-                            cmd = 'sudo su - -c ". %s; db2pd -d %s -hadr"' % (db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip())
+                            #cmd = 'sudo su - -c ". %s; db2pd -d %s -hadr"' % (db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip())
                             # pprint([db[1], db[2].split('"')[1].split(";")[0].replace(".", '').strip(), names.split("=")[1].split("Database")[0].split("\\r")[0].strip()])
-                            pprint(cmd)
+                           # pprint(cmd)
         # print("-------db-----------")
         # pprint(input)
         self.gLogging.show("step 4/4 completed..")

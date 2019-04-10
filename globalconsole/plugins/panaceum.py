@@ -112,27 +112,45 @@ def yamlExecutor(self, source, stopping=True):
         self.gLogging.info("removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid))
         self.gCommand.gHosts.pickHosts(manual=True, uuids=[uuid], _printing=False)
 
-    def runUuid(uuid):
-        #save picking status
-        #path to pick oone obj
-        #conn close
-        #conn connect
-        #runcmd
-        #restore picking status
-        #conn close
-        #conn connect
+    def runUuid(uuid, fixcmd):
+        backuphosts = self.gCommand.gHosts.hosttable.all()
+        backupconnections = self.gCommand.connections
+        ##
+        detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
+        # print("-------detailed")
+        # print(detailedInfo)
+        self.gCommand.connections = [(host, client) for host, client in backupconnections if host == detailedInfo[0][0]['hostname']]
+
+        self.gCommand.gHosts.pickHosts(reset=True, _printing=False, resetOption='N')
+        self.gCommand.gHosts.hosttable.write_back(detailedInfo[0])
+        if detailedInfo[1] == 'host':
+            print("---------------------------changed")
+        elif detailedInfo[1] == 'instance':
+            pass
+        elif detailedInfo[1] == 'db':
+            pass
+        else:
+            pass
+        print("----------------------------------FIXCMD")
+        runcmd(fixcmd)
+        # print("---------------------------back")
+        self.gCommand.gHosts.hosttable.write_back(backuphosts)
+        self.gCommand.connections = backupconnections
+        # self.gCommand.gHosts.pickHosts(_printing=True)
+
 
     def analyze(condition, result, verify=False):
         msg = condition.get('msg', None)
         expect = condition.get('expect', False)
         failsolve = condition.get('failsolve', [None])
+        output = result[0].decode()
         self.gLogging.info("phrases to check: %s" % ",".join(msg))
         self.gLogging.info("expected: %s" % expect)
 
         if verify is False:
             self.gLogging.info("trying to fix with: %s" % failsolve)
 
-        if any(msg in result for msg in msg):
+        if any(msg in output for msg in msg):
             if expect is True:
                 self.gLogging.info("condition passed")
                 return True
@@ -140,8 +158,7 @@ def yamlExecutor(self, source, stopping=True):
                 if verify is False:
                     for fixstep in failsolve:
                         self.gLogging.info("running fix step: %s" % fixstep)
-                        # on a host!!!!
-                        runcmd(fixstep)
+                        runUuid(result[6], fixstep)
                 else:
                     pass
                 return False
@@ -150,14 +167,13 @@ def yamlExecutor(self, source, stopping=True):
                 if verify is False:
                     for fixstep in failsolve:
                         self.gLogging.info("running fix step (expect): %s" % fixstep)
-                        runcmd(fixstep)
+                        runUuid(result[6], fixstep)
                 else:
                     pass
                 return False
             else:
                 self.gLogging.info("condition passed")
                 return True
-
 
     steps = [step['step'] for step in yfile if step.get('step', None) is not None]
 
@@ -192,11 +208,11 @@ def yamlExecutor(self, source, stopping=True):
         for result in self.gCommand.result:
             for condition in step.get('fail', [None]):
                 if condition is not None:
-                    if analyze(condition, result[0].decode()):
+                    if analyze(condition, result):
                         pass
                     else:
-                        runcmd(cmd)
-                        if analyze(condition, result[0].decode(), verify=True):
+                        runUuid(result[6], cmd)
+                        if analyze(condition, result, verify=True):
                             pass
                         else:
                             print("stopping flow...")
