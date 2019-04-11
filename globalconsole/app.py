@@ -39,7 +39,6 @@ if __name__ == '__main__':
             gcon.GcConsole.complete_yaml = panaceum.complete_yaml
             # console
             gcon = gcon.GcConsole(gconf, glog, gcom)
-            gcon.gLogging.info("Panaceum plugin version %s enabled!" % gconf.config['PANACEUM']['pversion'])
             #adding to instance
             # from plugins import panaceum
             # import types

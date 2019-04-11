@@ -344,9 +344,12 @@ class GcCommand:
                 if not db2:
                     commands = self.gVars.parseString(command)
                     vhost = self.gHosts.searchHostName(conn[0])[0]
-                    for cmd_parsed in commands:
-                        pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA", vhost['host_uuid']),), callback=self._commandOneCallback)
-                        self.gLogging.debug("%s executed command: %s " % (conn[0], cmd_parsed))
+                    if vhost['host_checked'] == self.gConfig['JSON']['pick_yes']:
+                        for cmd_parsed in commands:
+                            pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA", vhost['host_uuid']),), callback=self._commandOneCallback)
+                            self.gLogging.debug("%s executed command: %s " % (conn[0], cmd_parsed))
+                    else:
+                        self.gLogging.warning("no available connection to host: %s" % vhost['hostname'])
                 else:
                     vhost = self.gHosts.searchHostName(conn[0])
                     for host in vhost:

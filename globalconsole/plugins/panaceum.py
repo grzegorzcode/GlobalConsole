@@ -188,7 +188,7 @@ def yamlExecutor(self, source, stopping=True):
                     pass
                 return False
             else:
-                self.gLogging.info("condition passed")
+                self.gLogging.info("condition passed..")
                 return True
 
     steps = [step['step'] for step in yfile if step.get('step', None) is not None]
@@ -211,11 +211,14 @@ def yamlExecutor(self, source, stopping=True):
         if stopping:
             self.gLogging.show(" ")
             self.gLogging.show("--- press Enter to run a next step.. ---")
+            self.gLogging.show("--- cmd: %s ---" % step['cmd'])
+            self.gLogging.show("--- desc: %s ---" % step.get('desc', ''))
             self.gLogging.show(" ")
             input()
-
-        self.gLogging.show("--- cmd: %s ---" % step['cmd'])
-        self.gLogging.show("--- desc: %s ---" % step.get('desc', ''))
+        else:
+            self.gLogging.show("--- cmd: %s ---" % step['cmd'])
+            self.gLogging.show("--- desc: %s ---" % step.get('desc', ''))
+            self.gLogging.show(" ")
 
         cmd = step['cmd']
         # running command
@@ -228,10 +231,10 @@ def yamlExecutor(self, source, stopping=True):
                         pass
                     else:
                         runUuid(result[6], cmd)
-                        if analyze(condition, result, verify=True):
+                        if analyze(condition, self.gCommand.result[0], verify=True):
                             pass
                         else:
-                            print("stopping flow...")
+                            self.gLogging.show("stopping flow...")
                             removeUuid(result[6])
                             break
         if self.gCommand.gConfig['PANACEUM']['showpicked'] == 'YES':
@@ -244,6 +247,3 @@ def yamlExecutor(self, source, stopping=True):
     # do connect to a hosts
     self.gCommand.close()
 
-
-if __name__ == '__main__':
-    yamlExecutor(1, 'file.yaml', True)

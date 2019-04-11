@@ -497,6 +497,12 @@ class GcConsole(cmd.Cmd):
         self.gLogging.show("".center(int(columns)))
         self.gLogging.show("".center(int(columns)))
 
+        if 'do_yaml' in [func for func in dir(GcConsole) if callable(getattr(GcConsole, func)) and not func.startswith("__")]:
+            self.gLogging.show("plugins:".center(int(columns)))
+            self.gLogging.show("".center(int(columns)))
+            self.gLogging.show(Fore.LIGHTYELLOW_EX + "Panaceum".center(int(columns)) + Style.RESET_ALL)
+            self.gLogging.show(Fore.LIGHTWHITE_EX + self.gConfig['PANACEUM']['pversion'].center(int(columns)) + Style.RESET_ALL)
+
         try:
             with urlopen("https://raw.githubusercontent.com/grzegorzcode/GlobalConsole/master/VERSION") as serv:
                 sversion = str(serv.readline()).split(".")
