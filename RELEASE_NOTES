@@ -8,14 +8,13 @@ TODO:
 v3.5.0 (panaceum plugin)
 NEW:
 TODO:
-- selecting hosts via db2 version
 - change docs
 (change version in docs, config)
-- report on every step finish
-- update list of available hosts,dbs on every step ending
 - special panaceum report
 - tests
 - examples
+- continue yaml from tagged step
+- run only tagged steps from yaml file
 
 v3.1.1
 FIXED:

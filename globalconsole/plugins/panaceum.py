@@ -73,14 +73,14 @@ def yamlExecutor(self, source, stopping=True):
     try:
         gfile = open(source, 'r')
     except FileNotFoundError:
-        self.gLogging.error("file: %s not found" % source)
+        self.gLogging.critical("file: %s not found" % source)
     except Exception:
-        self.gLogging.error("cannot load source file: %s" % source)
+        self.gLogging.critical("cannot load source file: %s" % source)
 
     try:
         yfile = yaml.load(gfile, Loader=Loader)
     except Exception:
-        self.gLogging.error("cannot parse as valid yaml file: %s" % source)
+        self.gLogging.critical("cannot parse as valid yaml file: %s" % source)
 
     if stopping:
         self.gLogging.show("--- press Enter to load host file ---")
@@ -175,6 +175,13 @@ def yamlExecutor(self, source, stopping=True):
                     for fixstep in failsolve:
                         self.gLogging.info("running fix step: %s" % fixstep)
                         runUuid(result[6], fixstep)
+
+                    if self.gConfig['PANACEUM']['stopwhenfixed']:
+                        self.gLogging.show(" ")
+                        self.gLogging.show("--- fixes applied.. ---")
+                        self.gLogging.show("--- press Enter to continue.. ---")
+                        self.gLogging.show(" ")
+                        input()
                 else:
                     pass
                 return False
@@ -184,6 +191,13 @@ def yamlExecutor(self, source, stopping=True):
                     for fixstep in failsolve:
                         self.gLogging.info("running fix step (expect): %s" % fixstep)
                         runUuid(result[6], fixstep)
+
+                    if self.gConfig['PANACEUM']['stopwhenfixed']:
+                        self.gLogging.show(" ")
+                        self.gLogging.show("--- fixes applied.. ---")
+                        self.gLogging.show("--- press Enter to continue.. ---")
+                        self.gLogging.show(" ")
+                        input()
                 else:
                     pass
                 return False
