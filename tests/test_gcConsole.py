@@ -34,6 +34,8 @@ class TestGcConsole(TestCase):
             self.assertEqual(len(mock.getvalue().splitlines()), expectedlen, msg)
         #contains
         if expectedcontains:
+            print("expected")
+            print(expectedcontains)
             if expectedcontains in mock.getvalue():
                 res = expectedcontains
             else:
@@ -70,10 +72,10 @@ class TestGcConsole(TestCase):
         #DEBUGGING PURPOSES
         print("---------------LOG INFO---------------")
         import os
-        print(os.listdir('/home/travis/build/grzegorzcode/GlobalConsole/'))
-        with open('logs/global_console.log', 'r') as file:
-            for line in file.readlines():
-                print(line)
+        print(os.listdir('/home/travis/build/grzegorzcode/GlobalConsole/tests'))
+        # with open('logs/global_console.log', 'r') as file:
+        #     for line in file.readlines():
+        #         print(line)
 
     def test_do_conn(self):
         self.assert_stdout("conn connect -Y", self.gcon.onecmd, 2, "INFO", "ERROR", "connection test")
