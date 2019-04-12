@@ -10,7 +10,6 @@ NEW:
 TODO:
 - change docs
 (change version in docs, config)
-- special panaceum report
 - tests
 - examples
 - continue yaml from tagged step

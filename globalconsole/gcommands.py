@@ -8,6 +8,7 @@
 """
 import os
 import re
+import datetime
 from multiprocessing.pool import ThreadPool
 from pprint import pprint
 from openpyxl import Workbook
@@ -429,7 +430,12 @@ class GcCommand:
             >>> set_spool("result.csv")
 
         """
-        self.spool = val
+        if self.gConfig['COMMAND']['spooltime'] == 'YES':
+            currdate = datetime.date.today().strftime("%Y-%m-%d")
+            currtime = datetime.datetime.now().time().strftime("%H%M%p")
+            self.spool = currdate + '_' + currtime + '_' + val
+        else:
+            self.spool = val
 
     def _result_show(self, result):
         """
