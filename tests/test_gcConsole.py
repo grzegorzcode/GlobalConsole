@@ -96,7 +96,6 @@ class TestGcConsole(TestCase):
         self.assert_stdout("run db2 db2select +OS +USR instance +repeat 2 2", self.gcon.onecmd, 18, "IBMREQD", "ERROR", "db2 command with repetition test")
         self.assert_stdout("run db2 uname -a | sed 's%Linux\s*\(\w*\)%4\t\1%g' | awk '{print $1}' +OS +USR instance", self.gcon.onecmd, 5, "4", "ERROR", "db2 os sed regex test")
         self.assert_stdout("run scp -m put -s /home/travis/.ssh/id_rsa -d /home/travis/rsa -b", self.gcon.onecmd, 4, "id_rsa", "ERROR", "db2 scp test")
-        self.assert_stdout("yaml run -s /home/travis/build/grzegorzcode/GlobalConsole/tests/test.yaml -S", self.gcon.onecmd, 0, "passed", "ERROR", "yaml functionality test")
         try:
             with open('/home/travis/rsa', 'r') as file:
                 file.readlines()
@@ -113,6 +112,7 @@ class TestGcConsole(TestCase):
             val = 0
         self.assertEqual(val, 1, "db2 scp result test2")
 
+        self.assert_stdout("yaml run -s /home/travis/build/grzegorzcode/GlobalConsole/tests/test.yaml -S", self.gcon.onecmd, 0, "passed", "ERROR", "yaml functionality test")
     #
     # def test_do_cred(self):
     #     self.fail()

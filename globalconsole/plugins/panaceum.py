@@ -260,6 +260,12 @@ def yamlExecutor(self, source, stopping=True):
         self.gLogging.show("--- press Enter to close active connections ---")
         input()
 
-    # do connect to a hosts
+    # do close connections to a hosts
     self.gCommand.close()
+
+    try:
+        gfile.close()
+    except Exception:
+        pass
+
 
