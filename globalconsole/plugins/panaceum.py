@@ -5,7 +5,7 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 from urllib.request import urlopen
-
+from globalconsole.gutils import GcUtils as gutils
 
 def complete_yaml(self, text, line, start_index, end_index):
     """
@@ -109,7 +109,7 @@ def yamlExecutor(self, source, stopping=True):
 
     def removeUuid(uuid):
         detailedInfo = self.gCommand.gHosts.searchByUuid(uuid)
-        self.gLogging.info("removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid))
+        self.gLogging.info(gutils.color_pick(self.gConfig, "removing: %s with uuid %s from next step execution" % (detailedInfo[1], uuid), self.gConfig['JSON']['pick_no']))
         self.gCommand.gHosts.pickHosts(manual=True, uuids=[uuid], _printing=False)
 
     def runUuid(uuid, fixcmd):
@@ -168,7 +168,7 @@ def yamlExecutor(self, source, stopping=True):
 
         if any(msg in output for msg in msg):
             if expect is True:
-                self.gLogging.info("condition passed")
+                self.gLogging.info(gutils.color_pick(self.gConfig, "condition passed", self.gConfig['JSON']['pick_yes']))
                 return True
             else:
                 if verify is False:
@@ -176,7 +176,7 @@ def yamlExecutor(self, source, stopping=True):
                         self.gLogging.info("running fix step: %s" % fixstep)
                         runUuid(result[6], fixstep)
 
-                    if self.gConfig['PANACEUM']['stopwhenfixed']:
+                    if stopping:
                         self.gLogging.show(" ")
                         self.gLogging.show("--- fixes applied.. ---")
                         self.gLogging.show("--- press Enter to continue.. ---")
@@ -192,7 +192,7 @@ def yamlExecutor(self, source, stopping=True):
                         self.gLogging.info("running fix step (expect): %s" % fixstep)
                         runUuid(result[6], fixstep)
 
-                    if self.gConfig['PANACEUM']['stopwhenfixed']:
+                    if stopping:
                         self.gLogging.show(" ")
                         self.gLogging.show("--- fixes applied.. ---")
                         self.gLogging.show("--- press Enter to continue.. ---")
@@ -202,7 +202,7 @@ def yamlExecutor(self, source, stopping=True):
                     pass
                 return False
             else:
-                self.gLogging.info("condition passed..")
+                self.gLogging.info(gutils.color_pick(self.gConfig, "condition passed", self.gConfig['JSON']['pick_yes']))
                 return True
 
     steps = [step['step'] for step in yfile if step.get('step', None) is not None]
@@ -248,9 +248,11 @@ def yamlExecutor(self, source, stopping=True):
                         if analyze(condition, self.gCommand.result[0], verify=True):
                             pass
                         else:
-                            self.gLogging.show("stopping flow...")
+                            self.gLogging.show(gutils.color_pick(self.gConfig, "condition failed", self.gConfig['JSON']['pick_no']))
                             removeUuid(result[6])
                             break
+                else:
+                    self.gLogging.show(gutils.color_pick(self.gConfig, "no condition to check", self.gConfig['JSON']['pick_yes']))
         if self.gCommand.gConfig['PANACEUM']['showpicked'] == 'YES':
             self.gCommand.gHosts.pickHosts(_printing=True)
 

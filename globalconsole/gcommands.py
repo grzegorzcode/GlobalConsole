@@ -1085,9 +1085,11 @@ class GcCommand:
                 for conn in self.connections:
                     tempDest = dest
                     tempSrc = source
-                    for xdest in self.gVars.parseString(tempDest):
-                        for xsrc in self.gVars.parseString(tempSrc):
-                            pool.apply_async(self._scpOne, args=((conn, {'mode': mode, 'source': xsrc, 'dest': xdest, 'recursive': recursive, 'suffix': suffix, 'batch': batch}),))
+                    vhost = self.gHosts.searchHostName(conn[0])[0]
+                    if vhost['host_checked'] == self.gConfig['JSON']['pick_yes']:
+                        for xdest in self.gVars.parseString(tempDest):
+                            for xsrc in self.gVars.parseString(tempSrc):
+                                pool.apply_async(self._scpOne, args=((conn, {'mode': mode, 'source': xsrc, 'dest': xdest, 'recursive': recursive, 'suffix': suffix, 'batch': batch}),))
                 pool.close()
                 pool.join()
             except Exception:
