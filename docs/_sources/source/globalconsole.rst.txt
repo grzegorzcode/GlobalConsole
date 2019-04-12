@@ -68,4 +68,10 @@ globalconsole.gvars module
     :undoc-members:
     :show-inheritance:
 
+globalconsole.plugins module
+--------------------------------------
 
+.. automodule:: panaceum
+    :members:
+    :undoc-members:
+    :show-inheritance:

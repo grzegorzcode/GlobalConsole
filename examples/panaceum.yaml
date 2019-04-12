@@ -1,0 +1,37 @@
+- step:
+    desc: show linux date
+    cmd: run os date
+- step:
+    desc: remove /tmp/abc
+    cmd: run os rm -f /tmp/abc +SU
+- step:
+    desc: test of cat command
+    cmd: run os cat /tmp/abc
+    fail:
+      - msg:
+        - such
+        failsolve:
+          - run os echo "123" >> /tmp/abc
+          - run os ls -la /tmp/abc
+- step:
+    desc: test for some db2 instance level
+    cmd: run db2 db2 get dbm cfg | grep -i log +OS  +IN +USR
+- step:
+    desc: test for some db2 db level
+    cmd: run db2 select * from sysibm.sysdummy1 +USR instance
+- step:
+    desc: test for some db2 db level, part2
+    cmd: run db2 select count(*) from sysibm.sysdummy1 where upper('A') = upper('a') +USR instance
+- step:
+    desc: prepare scp functionality
+    cmd: run os rm -f /tmp/LICENSE +SU
+- step:
+    desc: test scp functionality
+    cmd: run scp -m put -s LICENSE -d /tmp -b
+- step:
+    desc: verify scp functionality
+    cmd: run os ls -la /tmp/LICENSE
+    fail:
+      - msg:
+        - /tmp/LICENSE
+        expect: True

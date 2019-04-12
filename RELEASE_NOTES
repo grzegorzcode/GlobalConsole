@@ -5,13 +5,11 @@ TODO:
 - fix config show/set
 - crontab like execution
 
-v3.5.0 (panaceum plugin)
+v3.2.1 (panaceum plugin)
 NEW:
 TODO:
-- change docs
-(change version in docs, config)
+- write docs
 - tests
-- examples
 - continue yaml from tagged step
 - run only tagged steps from yaml file
 
