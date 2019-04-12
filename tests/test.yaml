@@ -1,0 +1,18 @@
+- step:
+    desc: show linux date
+    cmd: run os date
+- step:
+    desc: remove /tmp/abc
+    cmd: run os rm -f /tmp/abc +SU
+- step:
+    desc: test of cat command
+    cmd: run os cat /tmp/abc
+    fail:
+      - msg:
+        - such
+        failsolve:
+          - run os echo "123" >> /tmp/abc
+          - run os ls -la /tmp/abc
+- step:
+    desc: show linux uname
+    cmd: run os uname +SU
