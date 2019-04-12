@@ -13,7 +13,7 @@ import globalconsole.gcreds as gcreds
 import globalconsole.gvars as gvars
 import globalconsole.gcommands as gcomm
 import globalconsole.gconsole as gcon
-
+from globalconsole.plugins import panaceum
 
 class TestGcConsole(TestCase):
 
@@ -62,7 +62,11 @@ class TestGcConsole(TestCase):
         self.ghosts.importCsvAsHosts('tests/hostsTEST.csv')
         self.gvars = gvars.GcVars(self.gconf, self.glog)
         self.gcom = gcomm.GcCommand(self.gconf, self.glog, self.gvars, self.gcreds, self.ghosts)
+        gcon.GcConsole.yamlExecutor = panaceum.yamlExecutor
+        gcon.GcConsole.do_yaml = panaceum.do_yaml
+        gcon.GcConsole.complete_yaml = panaceum.complete_yaml
         self.gcon = gcon.GcConsole(self.gconf, self.glog, self.gcom)
+
 
     def tearDown(self):
         #self.gcon.onecmd("exit")
@@ -70,9 +74,7 @@ class TestGcConsole(TestCase):
         self.gcreds.credfile.close()
         self.ghosts.hostfile.close()
         #DEBUGGING PURPOSES
-        print("---------------LOG INFO---------------")
-        import os
-        print(os.listdir('/home/travis/build/grzegorzcode/GlobalConsole/tests'))
+        # print("---------------LOG INFO---------------")
         # with open('logs/global_console.log', 'r') as file:
         #     for line in file.readlines():
         #         print(line)
