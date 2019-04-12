@@ -83,7 +83,7 @@ class TestGcConsole(TestCase):
         self.assert_stdout("run os whoami | awk '{print $1}' +SU", self.gcon.onecmd, 4, "root", "travis", "sudo os command with apostrophe test")
         self.assert_stdout("run os uname -a | sed 's%Linux\s*\(\w*\)%4\t\1%g' | awk '{print $1}' +SU", self.gcon.onecmd, 4, "4", "ERROR", "sed regex test")
         self.assert_stdout("run os whoami +repeat 2 2", self.gcon.onecmd, 10, "travis", "root", "os command with repetition test")
-        self.assert_stdout("run scan -Y", self.gcon.onecmd, 11, "TESTDB", "ERROR", "scanning functionality test")
+        self.assert_stdout("run scan -Y", self.gcon.onecmd, 10, "TESTDB", "ERROR", "scanning functionality test")
         self.assert_stdout("run db2 db2select +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command test")
         self.assert_stdout("run db2 db2select where upper\(colval\)='STG' +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command with where test")
         self.assert_stdout("run db2 db2select | awk '{print $1}' +OS +USR instance", self.gcon.onecmd, 8, "IBMREQD", "ERROR", "db2 command with awk test")
