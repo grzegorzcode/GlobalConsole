@@ -27,6 +27,8 @@ It's worth to mention, also:
 - docker scripts to build and run GlobalConsole are provided
 
 
+**to upgrade to version >= 3.2 with **yaml** support you have to run `` pip install -r requirements.txt`` because a new dependency has been introduced**
+
 ----------------
 Documentation
 ----------------
