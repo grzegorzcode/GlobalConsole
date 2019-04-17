@@ -20,6 +20,7 @@ It's worth to mention, also:
 - stored passwords can be encrypted
 - output of command can be saved within **excel** or **csv** file
 - local shell commands are supported
+- **yaml** files are supported (Panaceum plugin)
 - history of invoked commands is persistent over sessions
 - custom variables can be set to improve productivity
 - batch mode with checking output's results is available

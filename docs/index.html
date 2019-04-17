@@ -1670,6 +1670,209 @@ section: COMMAND option: csv_delimiter value: <span class="p">;</span>
 </pre></div>
 </div>
 </div>
+<div class="section" id="panaceum-plugin-yaml-engine">
+<h2>Panaceum Plugin - Yaml engine<a class="headerlink" href="#panaceum-plugin-yaml-engine" title="Permalink to this headline">¶</a></h2>
+<p>To use this plugin parameter <code class="docutils literal notranslate"><span class="pre">enabled</span> <span class="pre">=</span> <span class="pre">YES</span></code> has to be set in the <code class="docutils literal notranslate"><span class="pre">panaceum.ini</span></code> config file. This will enable additional command <code class="docutils literal notranslate"><span class="pre">yaml</span></code> in GC.</p>
+<div class="section" id="main-file-structure">
+<h3>main file structure<a class="headerlink" href="#main-file-structure" title="Permalink to this headline">¶</a></h3>
+<p><strong>required:</strong></p>
+<ul class="simple">
+<li>step: execution unit for a yaml engine.</li>
+</ul>
+<p><strong>not required:</strong></p>
+<p>A file will be executed with default GC definitions.
+You can provide them manually, however.</p>
+<ul class="simple">
+<li>hosts: you can specify csv file to load hosts</li>
+<li>creds: you can specify csv file to load credentials</li>
+</ul>
+<p><strong>Sections in a step :</strong></p>
+<p><strong>required:</strong></p>
+<ul class="simple">
+<li>cmd: valid GC command to run</li>
+</ul>
+<p><strong>not required:</strong></p>
+<ul class="simple">
+<li>desc: description of a command</li>
+<li>fail: definition how output should be handled. More info in the next section.</li>
+</ul>
+</div>
+<div class="section" id="fail-section-structure">
+<h3>fail section structure<a class="headerlink" href="#fail-section-structure" title="Permalink to this headline">¶</a></h3>
+<p>Inside <code class="docutils literal notranslate"><span class="pre">fail</span></code> section you can specify list of one or more <code class="docutils literal notranslate"><span class="pre">msg</span></code> sections.</p>
+<p>Within <code class="docutils literal notranslate"><span class="pre">msg</span></code> you can find list of phrases to check (<em>error</em>, <em>warning</em>, <em>severe</em> in the example below).</p>
+<p><code class="docutils literal notranslate"><span class="pre">failsolve</span></code> is a list of GC valid commands to met a condition.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">expect</span></code> you can specify is <code class="docutils literal notranslate"><span class="pre">msg</span></code> expected to be seen in a output or not (default)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="docutils literal notranslate"><span class="pre">failsolve</span></code> is not required. If <code class="docutils literal notranslate"><span class="pre">msg</span></code> is found in a command’s output and there is no <code class="docutils literal notranslate"><span class="pre">failsolve</span></code>, execution of a file will stop for this os/instance/db.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fail:
+  - msg:
+    - error
+    failsolve:
+      - run df -g *
+  - msg:
+    - warning
+    - severe
+    failsolve:
+      - run df -k *
+      - run du -ms *
+    expect: False
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample-file">
+<h3>sample file<a class="headerlink" href="#sample-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>- hosts: hosts/hosts.csv
+- creds: creds/creds.csv
+- step:
+    desc: show linux date
+    cmd: run os date
+- step:
+    desc: remove /tmp/abc
+    cmd: run os rm -f /tmp/abc +SU
+- step:
+    desc: <span class="nb">test</span> of cat <span class="nb">command</span>
+    cmd: run os cat /tmp/abc
+    fail:
+      - msg:
+        - such
+        failsolve:
+          - run os <span class="nb">echo</span> <span class="s2">&quot;123&quot;</span> &gt;&gt; /tmp/abc
+          - run os ls -la /tmp/abc
+- step:
+    desc: <span class="nb">test</span> <span class="k">for</span> some db2 instance level
+    cmd: run db2 db2 get dbm cfg <span class="p">|</span> grep -i log +OS  +IN +USR
+- step:
+    desc: <span class="nb">test</span> <span class="k">for</span> some db2 db level
+    cmd: run db2 <span class="k">select</span> * from sysibm.sysdummy1 +USR instance
+- step:
+    desc: <span class="nb">test</span> <span class="k">for</span> some db2 db level, part2
+    cmd: run db2 <span class="k">select</span> count<span class="o">(</span>*<span class="o">)</span> from sysibm.sysdummy1 where upper<span class="o">(</span><span class="s1">&#39;A&#39;</span><span class="o">)</span> <span class="o">=</span> upper<span class="o">(</span><span class="s1">&#39;a&#39;</span><span class="o">)</span> +USR instance
+- step:
+    desc: prepare scp functionality
+    cmd: run os rm -f /tmp/LICENSE +SU
+- step:
+    desc: <span class="nb">test</span> scp functionality
+    cmd: run scp -m put -s LICENSE -d /tmp -b
+- step:
+    desc: verify scp functionality
+    cmd: run os ls -la /tmp/LICENSE
+    fail:
+      - msg:
+        - /tmp/LICENSE
+        expect: True
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-this-engine-works">
+<h3>how this engine works<a class="headerlink" href="#how-this-engine-works" title="Permalink to this headline">¶</a></h3>
+<p>First, engine looks for a <code class="docutils literal notranslate"><span class="pre">hosts</span></code> and <code class="docutils literal notranslate"><span class="pre">creds</span></code> sections. If any is present and it’s a valid GC file creds/hosts are being loaded. Otherwise it takes already loaded GC definitions.</p>
+<p>Next is a regular execution step by step. Engine takes command to run (<code class="docutils literal notranslate"><span class="pre">cmd</span></code>).
+If <code class="docutils literal notranslate"><span class="pre">fail</span></code> section is available messages are being parsed.
+By default it creates a list of unwanted phrases. If <code class="docutils literal notranslate"><span class="pre">expected:</span> <span class="pre">True</span></code> this will be a list of wanted phrases.
+A <code class="docutils literal notranslate"><span class="pre">failsolve</span></code> section contains a list of steps to met condition.</p>
+<p>Flow goes like this:</p>
+<ol class="arabic simple">
+<li>run <code class="docutils literal notranslate"><span class="pre">cmd</span></code></li>
+</ol>
+<p>2a. if there is not <code class="docutils literal notranslate"><span class="pre">fail</span></code> section, run next step</p>
+<p>–</p>
+<p>2b. if there is <code class="docutils literal notranslate"><span class="pre">fail</span></code> section for a step, parse phrases.</p>
+<ol class="arabic simple" start="3">
+<li>if condition is not met, run fixing commands from <code class="docutils literal notranslate"><span class="pre">failsolve</span></code> within failing host/instance/db</li>
+<li>rerun <code class="docutils literal notranslate"><span class="pre">cmd</span></code> within failing host/instance/db</li>
+<li>check condition</li>
+</ol>
+<p>6a. if condition is met, run next step</p>
+<p>6b. if condition is not met, remove failing host/instance/db from next step’s execution list</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>if there is more than one phrase in a list, it parses to “if any message in a list..”
+(
+for example
+msg:</p>
+<blockquote>
+<div><ul class="simple">
+<li>warning</li>
+<li>severe</li>
+</ul>
+</div></blockquote>
+<p class="last">)</p>
+</div>
+</div>
+<div class="section" id="running">
+<h3>running<a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>you can use <strong>raw</strong> github location of a valid yaml file as a source. any web location with valid yaml file that do not requires authentication is valid, also.
+for example:</p>
+<blockquote class="last">
+<div>yaml run -s <a class="reference external" href="https://raw.githubusercontent.com/user/repo/branch/file.yaml">https://raw.githubusercontent.com/user/repo/branch/file.yaml</a></div></blockquote>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">set <code class="docutils literal notranslate"><span class="pre">showpicked</span> <span class="pre">=</span> <span class="pre">YES</span></code> in the <code class="docutils literal notranslate"><span class="pre">panaceum.ini</span></code> file to see list of objects being subject of a next step’s execution.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>-S</strong> parameter means GC won’t wait for an user action before every step execution.
+This is default and highly recommended with a new flows. It gives you a chance to verify correctness of results at every step’s level.
+Stopping of execution is also present after applying fix steps, so you gain ability to add additional fixes.</p>
+</div>
+<p>Running local yaml file without stopping after every step.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gc&gt; yaml run -s /home/pl55227/Documents/GlobalConsole/GlobalConsole2/globalconsole/plugins/file.yaml -S
+Globalconsole INFO - hosts loaded from a GC
+Globalconsole INFO - creds loaded from a GC
+Globalconsole INFO - successfully connected to: <span class="m">192</span>.168.56.102 using password
+Globalconsole INFO - successfully connected to: <span class="m">192</span>.168.57.101 using password
+working on: <span class="m">2</span> hosts
+--- cmd: run os date ---
+--- desc: show linux date ---
+
+...
+
+no condition to check
+no condition to check
+--- cmd: run os cat /tmp/abc ---
+--- desc: <span class="nb">test</span> of cat <span class="nb">command</span> ---
+
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - cat: /tmp/abc: No such file or directory
+
+...
+
+Globalconsole INFO - phrases to check: such
+Globalconsole INFO - expected: False
+Globalconsole INFO - trying to fix with: <span class="o">[</span><span class="s1">&#39;run os echo &quot;123&quot; &gt;&gt; /tmp/abc&#39;</span>, <span class="s1">&#39;run os ls -la /tmp/abc&#39;</span><span class="o">]</span>
+Globalconsole INFO - running fix step: run os <span class="nb">echo</span> <span class="s2">&quot;123&quot;</span> &gt;&gt; /tmp/abc
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+
+Globalconsole INFO - running fix step: run os ls -la /tmp/abc
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - -rw-r--r--. <span class="m">1</span> root root <span class="m">4</span> Apr <span class="m">17</span> <span class="m">07</span>:06 /tmp/abc
+
+Globalconsole INFO - --------myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>--------
+Globalconsole INFO -
+Globalconsole INFO - <span class="m">123</span>
+
+Globalconsole INFO - phrases to check: such
+Globalconsole INFO - expected: False
+Globalconsole INFO - condition passed
+
+...
+
+Globalconsole INFO - removed connection to: myhost2 <span class="o">(</span><span class="m">192</span>.168.56.102:22<span class="o">)</span>
+Globalconsole INFO - removed connection to: myhost1 <span class="o">(</span><span class="m">192</span>.168.57.101:22<span class="o">)</span>
+active connections: <span class="m">0</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
 <p>Looking at <em>Module Index</em> you should start with <code class="docutils literal notranslate"><span class="pre">GcConsole</span></code> as it’s an entry point for GlobalConsole.
@@ -1854,6 +2057,14 @@ grzegorz.cylny [at] gmail.com</p>
 </li>
 <li><a class="reference internal" href="#logging">Logging</a></li>
 <li><a class="reference internal" href="#config">Config</a></li>
+<li><a class="reference internal" href="#panaceum-plugin-yaml-engine">Panaceum Plugin - Yaml engine</a><ul>
+<li><a class="reference internal" href="#main-file-structure">main file structure</a></li>
+<li><a class="reference internal" href="#fail-section-structure">fail section structure</a></li>
+<li><a class="reference internal" href="#sample-file">sample file</a></li>
+<li><a class="reference internal" href="#how-this-engine-works">how this engine works</a></li>
+<li><a class="reference internal" href="#running">running</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#architecture">Architecture</a></li>
 <li><a class="reference internal" href="#q-a">Q&amp;A</a></li>
 <li><a class="reference internal" href="#help-commands-params">Help &amp; Commands params</a></li>

@@ -1,3 +1,12 @@
+"""
+.. module:: panaceum
+   :platform: Linux
+   :synopsis: Yaml Engine for GlobalConsole
+
+.. moduleauthor:: Grzegorz Cylny
+
+"""
+
 import argparse
 import yaml
 try:
