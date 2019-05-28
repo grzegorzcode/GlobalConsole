@@ -71,6 +71,9 @@ class GcCommand:
         self.check = ([], True)
         #should batch proceed, reset on every step in batch
         self.chain_proceed = 1
+        #variable to fix manual picking
+        self.ismanual = False
+
 
     def getConnections(self):
         """
@@ -240,9 +243,11 @@ class GcCommand:
                 for i in self.gHosts.hosttable.all():
                     if i['host_checked'] == self.gConfig['JSON']['pick_yes']:
                         pool.apply_async(self._connectOne, args=(i['hostname'],), callback=self._connectOneCallback)
+                self.ismanual = False
             else:
                 for i in hostnames:
                     pool.apply_async(self._connectOne, args=(i,), callback=self._connectOneCallback)
+                self.ismanual = True
             pool.close()
             pool.join()
         except Exception:
@@ -345,7 +350,7 @@ class GcCommand:
                 if not db2:
                     commands = self.gVars.parseString(command)
                     vhost = self.gHosts.searchHostName(conn[0])[0]
-                    if vhost['host_checked'] == self.gConfig['JSON']['pick_yes']:
+                    if vhost['host_checked'] == self.gConfig['JSON']['pick_yes'] or self.ismanual:
                         for cmd_parsed in commands:
                             pool.apply_async(self._commandOne, args=((conn, cmd_parsed, "NA", "NA", "NA", vhost['host_uuid']),), callback=self._commandOneCallback)
                             self.gLogging.debug("%s executed command: %s " % (conn[0], cmd_parsed))
@@ -357,7 +362,7 @@ class GcCommand:
                         for install in host["installations"]:
                             for instance in install["instances"]:
                                 if kwargs['level'] == 'IN':
-                                    if instance['instance_checked'] == self.gConfig['JSON']['pick_yes']:
+                                    if instance['instance_checked'] == self.gConfig['JSON']['pick_yes'] or self.ismanual:
                                         if kwargs['osmode']:
                                             constr = "; "
                                             terstr = "'"
@@ -384,7 +389,7 @@ class GcCommand:
                                             self.gLogging.debug("%s(%s:%s) executed command: %s " % (host["hostname"], host["host"], host["port"], cmd_parsed))
                                 elif kwargs['level'] == 'DB':
                                     for db in instance["databases"]:
-                                        if db["db_checked"] == self.gConfig['JSON']['pick_yes']:
+                                        if db["db_checked"] == self.gConfig['JSON']['pick_yes'] or self.ismanual:
                                             if kwargs['osmode']:
                                                 constr = "; "
                                                 terstr = "'"
