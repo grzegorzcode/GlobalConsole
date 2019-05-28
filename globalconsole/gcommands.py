@@ -186,7 +186,7 @@ class GcCommand:
                     self.gLogging.warning("cannot connect to: " + host['hostname'] + " maximum number of attempts exceeded for: " + cred['credname'])
                     return (host['hostname'], None)
                 else:
-                    self.gLogging.warning("cannot connect to: " + host['hostname'] + "with credential: " + cred['credname'])
+                    self.gLogging.warning("cannot connect to: " + host['hostname'] + " with credential: " + cred['credname'])
                     return (host['hostname'], None)
                 #my_queue.task_done()
             else:
