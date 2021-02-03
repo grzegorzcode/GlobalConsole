@@ -641,13 +641,14 @@ class GcCommand:
         pool.join()
 
         for install in self.result:
-            #print("--------", install[0], "--------")
+            # print("--------", install[0], "--------")
             for line1 in install[0].splitlines():
                 if 'TIMEOUT' not in str(line1):
                     if 'error' not in str(line1):
-                        if line1.startswith(bytearray("/", 'utf8')):
+                        if line1.startswith(bytearray("/", 'utf8')) and b'bashrc' not in line1:
                             input.append((line1.decode("utf-8").split(" ")[0] + '/bin/db2ilist', install[1]))
                             tempinstallations.append([install[1], install[2].split('"')[1], line1.decode("utf-8").split(" ")[0]])
+                            # print([install[1], install[2].split('"')[1], line1.decode("utf-8").split(" ")[0]])
 
         # print("-------install-----------")
         # pprint
@@ -669,9 +670,9 @@ class GcCommand:
 
         input = []
         for instance in self.result:
-            #print("--------", instance[1], "--------")
+            # print("--------", instance[1], "--------")
             for line2 in instance[0].splitlines():
-                if not line2.startswith(bytearray("[", 'utf8')):
+                if not line2.startswith(bytearray("[", 'utf8')) and b'bashrc' not in line2:
                     input.append((line2.decode("utf-8"), instance[1]))
                     tempinstallations.append([instance[1], instance[2].split('"')[1].split("bin")[0][:-1], line2.decode("utf-8")])
         # print("-------instance-----------")
@@ -695,9 +696,9 @@ class GcCommand:
         input = []
 
         for profile in self.result:
-            #print("--------", profile[1], "--------")
+            # print("--------", profile[1], "--------")
             for line3 in profile[0].splitlines():
-                if '[YOU' not in line3.decode("utf-8"):
+                if '[YOU' not in line3.decode("utf-8") and b'bashrc' not in line3:
                     input.append((line3.decode("utf-8") + '/sqllib/db2profile', profile[1]))
                     tempinstallations.append([profile[1], profile[2].split('"')[1].split("|")[1].replace("grep", '').replace("^", '').replace(":", '').strip(), line3.decode("utf-8") + '/sqllib/db2profile'])
         # print("-------profile-----------")
@@ -721,7 +722,7 @@ class GcCommand:
         input = []
 
         for db in self.result:
-            #print("--------", db[1], "--------")
+            # print("--------", db[1], "--------")
             for line4 in re.findall('entry.*?Catalog', str(db[0]), re.DOTALL): #db[0]:
                 if "Indirect" in line4:
                     for names in line4.splitlines():

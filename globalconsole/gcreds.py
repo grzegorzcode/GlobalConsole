@@ -153,7 +153,10 @@ class GcCreds:
         """
         self.gLogging.debug("purgeCreds invoked")
         try:
-            self.credtable.purge()
+            try:
+                self.credtable.purge()
+            except Exception:
+                self.credtable.truncate()
         except Exception:
             self.gLogging.error("cannot purge credentials " )
 
