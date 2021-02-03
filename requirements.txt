@@ -2,7 +2,6 @@ wheel
 colorama
 openpyxl
 paramiko
-pycrypto
 pycryptodome
 scp>=0.13
 tabulate
