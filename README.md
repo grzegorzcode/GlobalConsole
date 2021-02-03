@@ -2,7 +2,8 @@
 GlobalConsole
 ----------------
 
-[![Build Status](https://travis-ci.com/grzegorzcode/GlobalConsole.svg?branch=master)](https://travis-ci.com/grzegorzcode/GlobalConsole) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+[comment]: <> ([![Build Status]&#40;https://travis-ci.com/grzegorzcode/GlobalConsole.svg?branch=master&#41;]&#40;https://travis-ci.com/grzegorzcode/GlobalConsole&#41; )
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
 
 

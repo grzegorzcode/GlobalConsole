@@ -135,7 +135,10 @@ class GcVars:
         """
         self.gLogging.debug("purgeVars invoked")
         try:
-            self.varstable.purge()
+            try:
+                self.varstable.purge()
+            except Exception:
+                self.varstable.truncate()
             self.allvars = []
         except Exception:
             self.gLogging.error("cannot purge variables ")

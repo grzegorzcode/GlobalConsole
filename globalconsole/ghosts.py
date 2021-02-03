@@ -164,7 +164,10 @@ class GcHosts:
         """
         self.gLogging.debug("purgeHosts invoked")
         try:
-            self.hosttable.purge()
+            try:
+                self.hosttable.purge()
+            except Exception:
+                self.hosttable.truncate()
             self.hosts_idx = []
         except Exception:
             self.gLogging.error("cannot purge hostnames " )
